@@ -20,6 +20,7 @@ import styles from './styles.module.scss'
 
 import { C, type T } from '@deltachat/jsonrpc-client'
 import { openMapWebxdc } from '../../system-integration/webxdc'
+import { useRovingTabindex } from '../../contexts/RovingTabindex'
 
 type Props = {
   account: T.Account
@@ -185,9 +186,14 @@ export default function AccountItem({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSelected, window.__screen])
 
+  const rovingTabindex = useRovingTabindex(ref)
+  // TODO `rovingTabindex.setAsActiveElement()` when the active account
+  // gets switched, e.g. via clicking on a message notification
+  // for a different account, and upon initial render.
+
   return (
     <button
-      className={classNames(styles.account, {
+      className={classNames(styles.account, 'roving-tabindex', {
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
       })}
@@ -197,6 +203,9 @@ export default function AccountItem({
       onMouseLeave={() => updateAccountForHoverInfo(account, false)}
       x-account-sidebar-account-id={account.id}
       ref={ref}
+      tabIndex={rovingTabindex.tabIndex}
+      onFocus={rovingTabindex.setAsActiveElement}
+      onKeyDown={rovingTabindex.onKeydown}
     >
       {account.kind == 'Configured' ? (
         <div className={styles.avatar}>
