@@ -6,6 +6,7 @@
 - Added support for selecting multiple files in the attachment file picker. #4278
 - browser edition:
   - support for selecting custom chat wallpaper #4306
+  - make backup and key export work in browser #4303
 
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
