@@ -336,7 +336,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
 
   return (
     <button
-      className='navbar-heading navbar-heading__button no-drag'
+      className='navbar-heading navbar-heading--button no-drag'
       onClick={onTitleClick}
     >
       <Avatar
