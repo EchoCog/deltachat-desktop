@@ -1,9 +1,10 @@
 .main-screen {
   flex-grow: 1;
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   position: relative;
-  overflow: hidden;
+  // TODO why is this needed?
+  // overflow: hidden;
 
   .backButton {
     $backBtnText: white;
@@ -37,6 +38,34 @@
     }
   }
 
+  .chat-list-and-navbar {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    // TODO update .chat-list
+    min-width: 295px; /* don't forget to update .chat-list */
+
+    .chat-list-navbar {
+      height: var(--navBarHeight);
+      display: flex;
+      align-items: center;
+      padding: 0px 10px;
+    }
+  }
+  .chat-and-navbar {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .chat-navbar {
+      height: var(--navBarHeight);
+      display: flex;
+      align-items: center;
+      padding: 0px;
+    }
+  }
+
+  // TODO remove this guy.
   .main-app-content {
     display: flex;
     flex-grow: 1;

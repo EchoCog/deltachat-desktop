@@ -2,12 +2,14 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  // TODO move these.
   background-color: var(--navBarBackground);
   color: var(--navBarText);
   border-bottom: var(--outlineProperties);
 }
 
 .navbarGroupLeft {
+  // TODO this has been moved
   width: 30%;
   height: var(--navBarHeight);
   display: flex;
@@ -22,6 +24,7 @@
   width: 0;
   flex-grow: 1;
 
+  // This has been moved.
   height: var(--navBarHeight);
   display: flex;
   align-items: center;
