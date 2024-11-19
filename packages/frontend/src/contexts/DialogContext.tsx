@@ -58,11 +58,17 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
         // From this point on we are only interested in the `DialogProps`
         dialogElement as DialogElementConstructor<DialogProps>,
         {
-          key: `dialog-${newDialogId}`,
-          onClose: () => {
-            closeDialog(newDialogId)
-          },
+          // set additionalProps first so we don't override onClose,
+          // cause we need to combine additionalProps.onClose with our own dialog management
           ...additionalProps,
+          key: `dialog-${newDialogId}`,
+          onClose: (value: string) => {
+            closeDialog(newDialogId)
+
+            if (value !== 'cancel') {
+              additionalProps && additionalProps.onClose()
+            }
+          },
         }
       )
 
