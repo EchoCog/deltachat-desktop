@@ -15,7 +15,10 @@
     "watch:ts": "pnpm build:ts -- -w",
     "watch:types": "npx tsc --noEmit --pretty -w --preserveWatchOutput",
     "watch:static": "node ../../bin/copy.js ../../static ./html-dist -w & node ../../bin/copy.js ./static ./html-dist -w & node ../../bin/copy.js ../../images ./html-dist/images -w",
-    "watch:scss": "pnpm build:scss --watch"
+    "watch:scss": "pnpm build:scss --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "browser": {
     "path": "path-browserify"
@@ -69,6 +72,14 @@
     "sass": "catalog:",
     "source-map-support": "^0.5.21",
     "typescript": "catalog:",
-    "typescript-plugin-css-modules": "catalog:"
+    "typescript-plugin-css-modules": "catalog:",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/jest": "^29.5.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "ts-jest": "^29.1.0"
   }
 }
