@@ -23,6 +23,7 @@ import { ChatProvider, UnselectChat } from './contexts/ChatContext'
 import { ContextMenuProvider } from './contexts/ContextMenuContext'
 import { InstantOnboardingProvider } from './contexts/InstantOnboardingContext'
 import { SmallScreenModeMacOSTitleBar } from './components/SmallScreenModeMacOSTitleBar'
+import DeepTreeEchoBot from './components/chat/DeepTreeEchoBot'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -347,6 +348,9 @@ export default class ScreenController extends Component {
   }
 
   render() {
+    // Get bot settings from the settings store
+    const botEnabled = SettingsStoreInstance.get().desktopSettings.botEnabled || false
+    
     return (
       <div data-testid={`selected-account:${this.selectedAccountId}`}>
         {this.state.message && (
@@ -374,6 +378,7 @@ export default class ScreenController extends Component {
               <ContextMenuProvider>
                 <DialogContextProvider>
                   <RuntimeAdapter accountId={this.selectedAccountId} />
+                  {this.selectedAccountId && <DeepTreeEchoBot enabled={botEnabled} />}
                   <KeybindingsContextProvider>
                     <div className='main-container-container'>
                       {this.state.smallScreenMode &&

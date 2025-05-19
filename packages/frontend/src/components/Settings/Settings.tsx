@@ -17,6 +17,7 @@ import EditProfileDialog from '../dialogs/EditProfileDialog'
 import SettingsSeparator from './SettingsSeparator'
 import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import BotSettings from './BotSettings'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
@@ -26,6 +27,7 @@ type SettingsView =
   | 'notifications'
   | 'appearance'
   | 'advanced'
+  | 'bot_settings'
 
 export default function Settings({ onClose }: DialogProps) {
   const { openDialog, closeDialog, openDialogIds } = useDialog()
@@ -67,6 +69,26 @@ export default function Settings({ onClose }: DialogProps) {
       window.__settingsOpened = false
     }
   }, [])
+
+  useEffect(() => {
+    try {
+      const dialogDiv = document.querySelector('div.dc-settings-dialog')
+      if (!dialogDiv) return
+
+      if (openDialogIds.length === 0) {
+        dialogDiv.classList.remove('on-top')
+      } else if (
+        openDialogIds.length > 0 &&
+        openDialogIds[0] === 'dc-settings-dialog'
+      ) {
+        dialogDiv.classList.add('on-top')
+      } else {
+        dialogDiv.classList.remove('on-top')
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }, [openDialogIds])
 
   return (
     <Dialog onClose={onClose} fixed width={400} dataTestid='settings-dialog'>
@@ -118,6 +140,13 @@ export default function Settings({ onClose }: DialogProps) {
               {tx('multidevice_title')}
             </SettingsIconButton>
             <ConnectivityButton />
+            <SettingsIconButton
+              icon='robot'
+              onClick={() => setSettingsMode('bot_settings')}
+              dataTestid='open-bot-settings'
+            >
+              Deep Tree Echo Bot
+            </SettingsIconButton>
             <SettingsIconButton
               icon='code-tags'
               onClick={() => setSettingsMode('advanced')}
@@ -200,6 +229,19 @@ export default function Settings({ onClose }: DialogProps) {
           />
           <DialogBody>
             <Advanced settingsStore={settingsStore} />
+          </DialogBody>
+        </>
+      )}
+      {settingsMode === 'bot_settings' && (
+        <>
+          <DialogHeader
+            title='Deep Tree Echo Bot'
+            onClickBack={() => setSettingsMode('main')}
+            onClose={onClose}
+            dataTestid='settings-bot'
+          />
+          <DialogBody>
+            <BotSettings settingsStore={settingsStore} />
           </DialogBody>
         </>
       )}
