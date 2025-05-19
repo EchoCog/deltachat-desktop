@@ -69,6 +69,8 @@ export interface DesktopSettingsType {
   deepTreeEchoBotPersonaState?: string
   deepTreeEchoBotMemories?: string
   deepTreeEchoBotReflections?: string
+  /** JSON-stringified cognitive function API keys */
+  deepTreeEchoBotCognitiveKeys?: string
 }
 
 export interface RC_Config {

@@ -1,6 +1,6 @@
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote } from '../../backend-com'
-import { LLMService } from './LLMService'
+import { LLMService, CognitiveFunctionType } from './LLMService'
 import { RAGMemoryStore } from './RAGMemoryStore'
 import { PersonaCore } from './PersonaCore'
 import { SelfReflection } from './SelfReflection'
@@ -19,6 +19,8 @@ export interface DeepTreeEchoBotOptions {
   visionEnabled: boolean
   webAutomationEnabled: boolean
   embodimentEnabled: boolean
+  cognitiveKeys?: Record<string, {apiKey: string, apiEndpoint?: string}>
+  useParallelProcessing?: boolean
 }
 
 /**
@@ -32,14 +34,19 @@ export class DeepTreeEchoBot {
   private selfReflection: SelfReflection
   
   constructor(options: DeepTreeEchoBotOptions) {
-    this.options = {
+    // Set default options, then override with provided options
+    const defaultOptions: DeepTreeEchoBotOptions = {
       enabled: false,
       memoryEnabled: false,
       visionEnabled: false,
       webAutomationEnabled: false,
       embodimentEnabled: false,
-      ...options
+      useParallelProcessing: true,
+      apiKey: '',
+      apiEndpoint: '',
     }
+    
+    this.options = {...defaultOptions, ...options}
     
     this.llmService = LLMService.getInstance()
     this.memoryStore = RAGMemoryStore.getInstance()
@@ -49,10 +56,26 @@ export class DeepTreeEchoBot {
     // Configure components based on options
     this.memoryStore.setEnabled(this.options.memoryEnabled)
     
+    // Configure the main LLM service API key
     if (this.options.apiKey) {
       this.llmService.setConfig({
         apiKey: this.options.apiKey,
         apiEndpoint: this.options.apiEndpoint || 'https://api.openai.com/v1/chat/completions'
+      })
+    }
+    
+    // Configure specialized cognitive function keys if provided
+    if (this.options.cognitiveKeys) {
+      Object.entries(this.options.cognitiveKeys).forEach(([funcType, config]) => {
+        if (Object.values(CognitiveFunctionType).includes(funcType as CognitiveFunctionType)) {
+          this.llmService.setFunctionConfig(
+            funcType as CognitiveFunctionType, 
+            {
+              apiKey: config.apiKey,
+              apiEndpoint: config.apiEndpoint
+            }
+          )
+        }
       })
     }
     
@@ -62,8 +85,10 @@ export class DeepTreeEchoBot {
       visionEnabled: this.options.visionEnabled,
       webAutomationEnabled: this.options.webAutomationEnabled,
       embodimentEnabled: this.options.embodimentEnabled,
+      useParallelProcessing: this.options.useParallelProcessing,
       hasApiKey: !!this.options.apiKey,
-      hasApiEndpoint: !!this.options.apiEndpoint
+      hasApiEndpoint: !!this.options.apiEndpoint,
+      configuredCognitiveKeys: this.options.cognitiveKeys ? Object.keys(this.options.cognitiveKeys).length : 0
     })
   }
   
@@ -94,6 +119,16 @@ export class DeepTreeEchoBot {
       if (messageText.startsWith('/')) {
         await this.processCommand(accountId, chatId, messageText, message)
         return
+      }
+      
+      // Store user message in memory if enabled
+      if (this.options.memoryEnabled) {
+        await this.memoryStore.storeMemory({
+          chatId,
+          messageId: msgId,
+          sender: 'user',
+          text: messageText
+        })
       }
       
       // Otherwise, generate a regular response
@@ -166,6 +201,10 @@ export class DeepTreeEchoBot {
         await this.sendVersionInfo(accountId, chatId)
         break
         
+      case '/cognitive':
+        await this.processCognitiveCommand(accountId, chatId, args)
+        break
+        
       default:
         await this.sendMessage(accountId, chatId, `Unknown command: ${command}. Type /help for available commands.`)
     }
@@ -187,12 +226,48 @@ Available commands:
 - **/memory [status|clear|search]** - Manage conversation memory ${this.options.memoryEnabled ? '' : '(disabled)'}
 - **/embodiment [start|stop|status|evaluate]** - Physical awareness training ${this.options.embodimentEnabled ? '' : '(disabled)'}
 - **/reflect [aspect]** - Ask me to reflect on an aspect of myself
+- **/cognitive [status]** - Show status of my cognitive functions
 - **/version** - Display bot version information
 
 You can also just chat with me normally and I'll respond!
     `
     
     await this.sendMessage(accountId, chatId, helpMessage)
+  }
+  
+  /**
+   * Process cognitive command to show cognitive function status
+   */
+  private async processCognitiveCommand(accountId: number, chatId: number, args: string): Promise<void> {
+    const subCommand = args.split(' ')[0] || 'status'
+    
+    switch (subCommand) {
+      case 'status':
+        const activeFunctions = this.llmService.getActiveFunctions()
+        
+        let statusMessage = `
+**Cognitive Function Status**
+
+Parallel processing: ${this.options.useParallelProcessing ? 'Enabled' : 'Disabled'}
+Active cognitive functions: ${activeFunctions.length}
+
+`
+        
+        if (activeFunctions.length > 0) {
+          statusMessage += '**Active Functions:**\n'
+          activeFunctions.forEach(func => {
+            statusMessage += `- ${func.name}: ${func.usage.requestCount} requests\n`
+          })
+        } else {
+          statusMessage += 'No specialized cognitive functions are currently active. I am operating with my general processing capability only.'
+        }
+        
+        await this.sendMessage(accountId, chatId, statusMessage)
+        break
+        
+      default:
+        await this.sendMessage(accountId, chatId, 'Unknown cognitive command. Available options: status')
+    }
   }
   
   /**
@@ -233,7 +308,7 @@ You can also just chat with me normally and I'll respond!
    * Process memory commands for memory management
    */
   private async processMemoryCommand(accountId: number, chatId: number, args: string): Promise<void> {
-    const subCommand = args.split(' ')[0]
+    const subCommand = args.split(' ')[0] || ''
     
     switch (subCommand) {
       case 'status':
@@ -309,6 +384,7 @@ ${searchResults.length > 0 ?
   private async sendVersionInfo(accountId: number, chatId: number): Promise<void> {
     const preferences = this.personaCore.getPreferences()
     const dominantEmotion = this.personaCore.getDominantEmotion()
+    const activeFunctions = this.llmService.getActiveFunctions()
     
     const versionMessage = `
 **Deep Tree Echo Bot Status**
@@ -319,6 +395,8 @@ Memory: ${this.options.memoryEnabled ? 'Enabled' : 'Disabled'}
 Vision: ${this.options.visionEnabled ? 'Enabled' : 'Disabled'}
 Web Automation: ${this.options.webAutomationEnabled ? 'Enabled' : 'Disabled'}
 Embodiment: ${this.options.embodimentEnabled ? 'Enabled' : 'Disabled'}
+Parallel processing: ${this.options.useParallelProcessing ? 'Enabled' : 'Disabled'}
+Active cognitive functions: ${activeFunctions.length}
 
 Current mood: ${dominantEmotion.emotion} (${Math.round(dominantEmotion.intensity * 100)}%)
 Self-perception: ${this.personaCore.getSelfPerception()}
@@ -342,8 +420,22 @@ I'm here to assist you with various tasks and engage in meaningful conversations
         context = chatMemories.map(m => `${m.sender === 'user' ? 'User' : 'Bot'}: ${m.text}`)
       }
       
-      // Generate response
-      const response = await this.llmService.generateResponse(messageText, context)
+      // Decide between parallel processing and regular processing
+      let response: string
+      if (this.options.useParallelProcessing) {
+        // Use parallel processing with all available cognitive functions
+        const result = await this.llmService.generateFullParallelResponse(messageText, context)
+        response = result.integratedResponse
+        
+        log.info(`Generated response using parallel processing with ${Object.keys(result.processing).length} functions`)
+      } else {
+        // Use regular processing with the general function
+        response = await this.llmService.generateResponse(messageText, context)
+        log.info('Generated response using general processing')
+      }
+      
+      // Send typing indicator (simulate thinking)
+      await this.sendMessage(accountId, chatId, '*Thinking...*')
       
       // Send the response
       await this.sendMessage(accountId, chatId, response)
@@ -370,7 +462,8 @@ I'm here to assist you with various tasks and engage in meaningful conversations
    */
   private async sendMessage(accountId: number, chatId: number, text: string): Promise<void> {
     try {
-      await BackendRemote.rpc.sendMessage(accountId, chatId, text)
+      // Use correct method from BackendRemote.rpc
+      await BackendRemote.rpc.miscSendTextMessage(accountId, chatId, text)
     } catch (error) {
       log.error('Error sending message:', error)
     }
@@ -390,10 +483,26 @@ I'm here to assist you with various tasks and engage in meaningful conversations
       this.memoryStore.setEnabled(options.memoryEnabled)
     }
     
-    if (options.apiKey || options.apiEndpoint) {
+    // Configure the main LLM service API key if provided
+    if (options.apiKey) {
       this.llmService.setConfig({
-        apiKey: options.apiKey || this.options.apiKey || '',
+        apiKey: options.apiKey,
         apiEndpoint: options.apiEndpoint || this.options.apiEndpoint || 'https://api.openai.com/v1/chat/completions'
+      })
+    }
+    
+    // Configure specialized cognitive function keys if provided
+    if (options.cognitiveKeys) {
+      Object.entries(options.cognitiveKeys).forEach(([funcType, config]) => {
+        if (Object.values(CognitiveFunctionType).includes(funcType as CognitiveFunctionType)) {
+          this.llmService.setFunctionConfig(
+            funcType as CognitiveFunctionType, 
+            {
+              apiKey: config.apiKey,
+              apiEndpoint: config.apiEndpoint
+            }
+          )
+        }
       })
     }
     
