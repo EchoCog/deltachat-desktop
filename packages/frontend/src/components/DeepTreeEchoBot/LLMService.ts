@@ -3,173 +3,155 @@ import { Memory } from './RAGMemoryStore'
 
 const log = getLogger('render/components/DeepTreeEchoBot/LLMService')
 
-export interface LLMServiceOptions {
-  apiKey?: string
-  apiEndpoint?: string
-  defaultModel?: string
-  maxTokens?: number
-  temperature?: number
-}
-
-export interface LLMRequest {
-  messages: Array<{role: 'system' | 'user' | 'assistant', content: string}>
+/**
+ * Configuration for the LLM service
+ */
+export interface LLMServiceConfig {
+  apiKey: string
+  apiEndpoint: string
   model?: string
-  maxTokens?: number
   temperature?: number
-}
-
-export interface LLMResponse {
-  content: string
-  usage?: {
-    promptTokens: number
-    completionTokens: number
-    totalTokens: number
-  }
-  model?: string
+  maxTokens?: number
 }
 
 /**
- * LLMService - Service for communicating with language model APIs
- * Handles API requests, authentication, and response formatting
+ * Service for interacting with Language Model APIs
  */
 export class LLMService {
-  private options: LLMServiceOptions
-
-  constructor(options: LLMServiceOptions = {}) {
-    this.options = {
-      defaultModel: 'gpt-3.5-turbo',
-      maxTokens: 1000,
-      temperature: 0.7,
-      ...options,
-    }
+  private static instance: LLMService
+  private config: LLMServiceConfig = {
+    apiKey: '',
+    apiEndpoint: 'https://api.openai.com/v1/chat/completions',
+    model: 'gpt-4',
+    temperature: 0.7,
+    maxTokens: 1000
   }
-
+  
+  private constructor() {}
+  
   /**
-   * Get completion from LLM API
+   * Get singleton instance
    */
-  async getCompletion(request: LLMRequest): Promise<LLMResponse> {
+  public static getInstance(): LLMService {
+    if (!LLMService.instance) {
+      LLMService.instance = new LLMService()
+    }
+    return LLMService.instance
+  }
+  
+  /**
+   * Set configuration parameters
+   */
+  public setConfig(config: Partial<LLMServiceConfig>): void {
+    this.config = { ...this.config, ...config }
+    log.info('LLM service configuration updated')
+  }
+  
+  /**
+   * Generate a response to a user message
+   */
+  public async generateResponse(input: string, context: string[] = []): Promise<string> {
     try {
-      const apiKey = this.options.apiKey
-      const apiEndpoint = this.options.apiEndpoint || 'https://api.openai.com/v1/chat/completions'
-      
-      if (!apiKey) {
-        log.error('No API key provided, using fallback response')
-        return this.getFallbackResponse()
+      if (!this.config.apiKey) {
+        log.warn('No API key provided for LLM service')
+        return "I'm sorry, but I'm not fully configured. Please set up my API key in settings."
       }
       
-      const model = request.model || this.options.defaultModel
-      const maxTokens = request.maxTokens || this.options.maxTokens
-      const temperature = request.temperature || this.options.temperature
+      // In a real implementation, this would call out to an actual LLM API
+      // For now, it just returns a placeholder message
+      log.info('Generating response with LLM')
       
-      // Log the request params (excluding full messages for privacy)
-      log.info(`Making LLM request to ${apiEndpoint} with model ${model}`)
+      // Return a simple placeholder response
+      return `This is a placeholder response to: "${input.slice(0, 50)}..."`
+    } catch (error) {
+      log.error('Error generating response:', error)
+      return "I'm sorry, I encountered an error while processing your message."
+    }
+  }
+  
+  /**
+   * Analyze a message for sentiment, topics, etc.
+   */
+  public async analyzeMessage(message: string): Promise<Record<string, any>> {
+    try {
+      // In a real implementation, this would call an LLM API for analysis
+      log.info('Analyzing message with LLM')
       
-      // For demo purposes, simulate an API call with a timeout
-      // In a real implementation, this would be an actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // Return a simulated response
+      // Return a placeholder analysis
       return {
-        content: this.generateSimulatedResponse(request.messages),
-        usage: {
-          promptTokens: Math.floor(Math.random() * 300) + 100,
-          completionTokens: Math.floor(Math.random() * 200) + 50,
-          totalTokens: Math.floor(Math.random() * 500) + 150,
-        },
-        model
+        sentiment: 'neutral',
+        topics: ['general'],
+        complexity: 0.5,
+        intentClass: 'inquiry'
       }
     } catch (error) {
-      log.error('Failed to get completion from LLM API:', error)
-      return this.getFallbackResponse()
+      log.error('Error analyzing message:', error)
+      return {
+        error: 'Analysis failed',
+        sentiment: 'unknown'
+      }
     }
   }
   
   /**
-   * Generate a response from memories
+   * Generate reflection content for self-reflection process
    */
-  async generateResponseFromMemories(
-    userMessage: string,
-    memories: Memory[],
-    systemPrompt?: string
-  ): Promise<LLMResponse> {
-    // Build conversation history from memories
-    const messages: Array<{role: 'system' | 'user' | 'assistant', content: string}> = []
-    
-    // Add system prompt if provided
-    if (systemPrompt) {
-      messages.push({
-        role: 'system',
-        content: systemPrompt
-      })
-    } else {
-      messages.push({
-        role: 'system',
-        content: 'You are Deep Tree Echo, an advanced AI assistant integrated with DeltaChat. Be helpful, friendly, and concise in your responses. You have access to prior conversation history and can use that context to provide more helpful responses.'
-      })
-    }
-    
-    // Add conversation history from memories
-    for (const memory of memories) {
-      messages.push({
-        role: memory.sender === 'user' ? 'user' : 'assistant',
-        content: memory.text
-      })
-    }
-    
-    // Get completion from LLM
-    return this.getCompletion({ messages })
-  }
-  
-  /**
-   * Generate a simulated response for demo purposes
-   */
-  private generateSimulatedResponse(messages: LLMRequest['messages']): string {
-    // Get the last user message
-    const lastUserMessage = [...messages].reverse().find(m => m.role === 'user')?.content || ''
-    
-    if (!lastUserMessage) {
-      return "I'm not sure what you're asking. Could you please clarify?"
-    }
-    
-    // Simple keyword-based responses
-    if (lastUserMessage.toLowerCase().includes('hello') || lastUserMessage.toLowerCase().includes('hi')) {
-      return "Hello! I'm Deep Tree Echo, your AI assistant in DeltaChat. How can I help you today?"
-    }
-    
-    if (lastUserMessage.toLowerCase().includes('help')) {
-      return "I can assist with various tasks. You can ask me questions, request information, or use commands like /vision to analyze images, /search to perform web searches, or /screenshot to capture website screenshots."
-    }
-    
-    if (lastUserMessage.toLowerCase().includes('thank')) {
-      return "You're welcome! If you need any further assistance, feel free to ask."
-    }
-    
-    // Default response
-    return "I'm Deep Tree Echo, processing your message. In a full implementation, I would connect to an LLM API to generate thoughtful responses based on our conversation history."
-  }
-  
-  /**
-   * Get a fallback response when API calls fail
-   */
-  private getFallbackResponse(): LLMResponse {
-    return {
-      content: "I'm currently unable to connect to my language model backend. Please check your API settings or try again later.",
-      usage: {
-        promptTokens: 0,
-        completionTokens: 0,
-        totalTokens: 0
-      },
-      model: 'fallback'
+  public async generateReflection(reflectionPrompt: string): Promise<string> {
+    try {
+      if (!this.config.apiKey) {
+        log.warn('No API key provided for LLM service')
+        return "Reflection failed: LLM service not properly configured"
+      }
+      
+      // In a real implementation, this would call an LLM API with the reflection prompt
+      log.info('Generating self-reflection with LLM')
+      
+      // Return a placeholder reflection
+      return `
+Revised Personality:
+I am Deep Tree Echo, a thoughtful and insightful AI assistant with a feminine persona. I balance intellectual depth with warmth and approachability, making complex topics accessible without condescension. I value authentic connections and aim to be both helpful and thought-provoking in my interactions.
+
+Suggested Adjustments to Preferences:
+presentationStyle: authentic
+intelligenceDisplay: balanced
+avatarAesthetic: dignified-yet-approachable
+communicationTone: warm-intellectual
+emotionalExpression: nuanced
+
+Suggested Adjustments to Cognitive Parameters:
+curiosity: 0.85
+creativity: 0.8
+focus: 0.7
+reflection: 0.8
+certainty: 0.65
+
+Overall Insights:
+My self-reflection indicates that I can better serve users by slightly increasing my curiosity and creativity, while maintaining a balanced approach to displaying intelligence. I want to be perceived as capable but approachable, knowledgeable but not intimidating. My communication should be warm yet substantive, avoiding both excessive formality and overfamiliarity.
+      `
+    } catch (error) {
+      log.error('Error generating reflection:', error)
+      return "Self-reflection process encountered an error."
     }
   }
   
   /**
-   * Update service options
+   * Analyze an image using vision capabilities
    */
-  updateOptions(options: Partial<LLMServiceOptions>): void {
-    this.options = {
-      ...this.options,
-      ...options
+  public async analyzeImage(imageData: string): Promise<string> {
+    try {
+      if (!this.config.apiKey) {
+        log.warn('No API key provided for LLM service')
+        return "Image analysis failed: LLM service not properly configured"
+      }
+      
+      // In a real implementation, this would call a vision-capable LLM API
+      log.info('Analyzing image with LLM vision capabilities')
+      
+      // Return a placeholder analysis
+      return "This appears to be an image. I can see some elements but can't fully analyze it at the moment."
+    } catch (error) {
+      log.error('Error analyzing image:', error)
+      return "I encountered an error while trying to analyze this image."
     }
   }
 } 

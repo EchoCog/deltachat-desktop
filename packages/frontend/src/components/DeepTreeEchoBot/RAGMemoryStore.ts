@@ -1,202 +1,244 @@
 import { getLogger } from '../../../../shared/logger'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 const log = getLogger('render/components/DeepTreeEchoBot/RAGMemoryStore')
 
+/**
+ * Structure for a conversation memory
+ */
 export interface Memory {
   id: string
-  text: string
   timestamp: number
-  sender: 'user' | 'bot'
   chatId: number
-  messageId: number | null
-  metadata?: {
-    [key: string]: any
-  }
-}
-
-export interface MemoryStoreOptions {
-  maxMemories?: number
-  persistToDisk?: boolean
-  dbPath?: string
+  messageId: number
+  sender: 'user' | 'bot'
+  text: string
+  embedding?: number[] // Vector embedding for semantic search
 }
 
 /**
- * RAGMemoryStore - A Retrieval-Augmented Generation Memory Store for the Deep Tree Echo Bot
- * Stores conversation history and provides retrieval capabilities for context-aware responses
+ * Structure for a reflection memory
+ */
+export interface ReflectionMemory {
+  id: string
+  timestamp: number
+  content: string
+  type: 'periodic' | 'focused'
+  aspect?: string // For focused reflections
+}
+
+/**
+ * RAGMemoryStore manages conversation memories using a Retrieval Augmented Generation approach
+ * It stores message history, generates embeddings, and retrieves relevant context
  */
 export class RAGMemoryStore {
-  private memories: Map<string, Memory> = new Map()
-  private chatMemories: Map<number, string[]> = new Map()
-  private options: MemoryStoreOptions
-
-  constructor(options: MemoryStoreOptions = {}) {
-    this.options = {
-      maxMemories: 1000,
-      persistToDisk: true,
-      dbPath: 'deepTreeEchoMemory.json',
-      ...options,
-    }
-    
-    this.loadFromDisk().catch(err => {
-      log.error('Failed to load memories from disk:', err)
-    })
+  private static instance: RAGMemoryStore
+  private memories: Memory[] = []
+  private reflections: ReflectionMemory[] = []
+  private enabled: boolean = false
+  
+  private constructor() {
+    this.loadMemories()
   }
-
+  
   /**
-   * Add a new memory to the store
+   * Get the singleton instance
    */
-  async addMemory(memory: Omit<Memory, 'id' | 'timestamp'>): Promise<Memory> {
-    const id = `memory_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
-    const timestamp = Date.now()
-    
-    const newMemory: Memory = {
-      ...memory,
-      id,
-      timestamp,
+  public static getInstance(): RAGMemoryStore {
+    if (!RAGMemoryStore.instance) {
+      RAGMemoryStore.instance = new RAGMemoryStore()
     }
-    
-    this.memories.set(id, newMemory)
-    
-    // Add to chat memories
-    if (!this.chatMemories.has(memory.chatId)) {
-      this.chatMemories.set(memory.chatId, [])
-    }
-    this.chatMemories.get(memory.chatId)?.push(id)
-    
-    // Enforce max memories limit if needed
-    if (this.options.maxMemories && this.memories.size > this.options.maxMemories) {
-      // Remove oldest memories
-      const sortedMemories = Array.from(this.memories.values())
-        .sort((a, b) => a.timestamp - b.timestamp)
+    return RAGMemoryStore.instance
+  }
+  
+  /**
+   * Enable or disable the memory storage
+   */
+  public setEnabled(enabled: boolean): void {
+    this.enabled = enabled
+    log.info(`Memory system ${enabled ? 'enabled' : 'disabled'}`)
+  }
+  
+  /**
+   * Check if memory system is enabled
+   */
+  public isEnabled(): boolean {
+    return this.enabled
+  }
+  
+  /**
+   * Load memories from persistent storage
+   */
+  private async loadMemories(): Promise<void> {
+    try {
+      const desktopSettings = await runtime.getDesktopSettings()
       
-      const memoriesToRemove = sortedMemories.slice(0, this.memories.size - this.options.maxMemories)
-      
-      for (const memory of memoriesToRemove) {
-        this.memories.delete(memory.id)
-        
-        // Also remove from chat memories
-        const chatMemoryIds = this.chatMemories.get(memory.chatId) || []
-        const updatedChatMemoryIds = chatMemoryIds.filter(id => id !== memory.id)
-        this.chatMemories.set(memory.chatId, updatedChatMemoryIds)
+      // Load conversation memories
+      if (desktopSettings.deepTreeEchoBotMemories) {
+        try {
+          this.memories = JSON.parse(desktopSettings.deepTreeEchoBotMemories)
+          log.info(`Loaded ${this.memories.length} conversation memories`)
+        } catch (error) {
+          log.error('Failed to parse conversation memories:', error)
+          this.memories = []
+        }
       }
+      
+      // Load reflection memories
+      if (desktopSettings.deepTreeEchoBotReflections) {
+        try {
+          this.reflections = JSON.parse(desktopSettings.deepTreeEchoBotReflections)
+          log.info(`Loaded ${this.reflections.length} reflection memories`)
+        } catch (error) {
+          log.error('Failed to parse reflection memories:', error)
+          this.reflections = []
+        }
+      }
+      
+      // Load memory enabled setting
+      this.enabled = desktopSettings.deepTreeEchoBotMemoryEnabled || false
+      
+    } catch (error) {
+      log.error('Failed to load memories:', error)
+      this.memories = []
+      this.reflections = []
     }
-    
-    // Persist to disk if enabled
-    if (this.options.persistToDisk) {
-      await this.saveToDisk()
+  }
+  
+  /**
+   * Save memories to persistent storage
+   */
+  private async saveMemories(): Promise<void> {
+    try {
+      // Save conversation memories - limit to last 1000 to prevent excessive storage
+      const trimmedMemories = this.memories.slice(-1000)
+      await runtime.setDesktopSetting('deepTreeEchoBotMemories', JSON.stringify(trimmedMemories))
+      
+      // Save reflection memories - limit to last 100
+      const trimmedReflections = this.reflections.slice(-100)
+      await runtime.setDesktopSetting('deepTreeEchoBotReflections', JSON.stringify(trimmedReflections))
+      
+      log.info('Saved memories to persistent storage')
+    } catch (error) {
+      log.error('Failed to save memories:', error)
     }
+  }
+  
+  /**
+   * Store a new memory
+   */
+  public async storeMemory(memory: Omit<Memory, 'id' | 'timestamp' | 'embedding'>): Promise<void> {
+    if (!this.enabled) return
     
-    return newMemory
+    try {
+      const newMemory: Memory = {
+        ...memory,
+        id: `mem_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+        timestamp: Date.now(),
+        embedding: [] // In a real implementation, this would be generated
+      }
+      
+      this.memories.push(newMemory)
+      await this.saveMemories()
+      
+      log.info(`Stored new memory: ${newMemory.id}`)
+    } catch (error) {
+      log.error('Failed to store memory:', error)
+    }
   }
-
+  
   /**
-   * Get memories by chat ID
+   * Store a reflection memory
    */
-  getMemoriesByChatId(chatId: number): Memory[] {
-    const memoryIds = this.chatMemories.get(chatId) || []
-    return memoryIds.map(id => this.memories.get(id)).filter(Boolean) as Memory[]
+  public async storeReflection(content: string, type: 'periodic' | 'focused' = 'periodic', aspect?: string): Promise<void> {
+    if (!this.enabled) return
+    
+    try {
+      const reflection: ReflectionMemory = {
+        id: `ref_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+        timestamp: Date.now(),
+        content,
+        type,
+        aspect
+      }
+      
+      this.reflections.push(reflection)
+      await this.saveMemories()
+      
+      log.info(`Stored new ${type} reflection${aspect ? ` on ${aspect}` : ''}`)
+    } catch (error) {
+      log.error('Failed to store reflection:', error)
+    }
   }
-
+  
   /**
-   * Get the latest N messages from a chat
+   * Retrieve all memories for a specific chat
    */
-  getLatestChatMemories(chatId: number, limit: number = 10): Memory[] {
-    const memories = this.getMemoriesByChatId(chatId)
-    return memories
+  public getMemoriesByChat(chatId: number): Memory[] {
+    return this.memories.filter(mem => mem.chatId === chatId)
+      .sort((a, b) => a.timestamp - b.timestamp)
+  }
+  
+  /**
+   * Retrieve recent memories across all chats, ordered by timestamp
+   */
+  public retrieveRecentMemories(count: number = 10): string[] {
+    return this.memories
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .slice(0, count)
+      .map(mem => `[${new Date(mem.timestamp).toLocaleString()}] ${mem.sender}: ${mem.text}`)
+  }
+  
+  /**
+   * Retrieve recent reflections, ordered by timestamp
+   */
+  public getRecentReflections(count: number = 5): ReflectionMemory[] {
+    return this.reflections
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .slice(0, count)
+  }
+  
+  /**
+   * Clear all memories
+   */
+  public async clearAllMemories(): Promise<void> {
+    this.memories = []
+    await this.saveMemories()
+    log.info('Cleared all conversation memories')
+  }
+  
+  /**
+   * Clear memories for a specific chat
+   */
+  public async clearChatMemories(chatId: number): Promise<void> {
+    this.memories = this.memories.filter(mem => mem.chatId !== chatId)
+    await this.saveMemories()
+    log.info(`Cleared memories for chat ${chatId}`)
+  }
+  
+  /**
+   * Search memories using semantic search (simplified implementation)
+   * In a real implementation, this would use vector similarity search
+   */
+  public searchMemories(query: string, limit: number = 5): Memory[] {
+    // Simple keyword-based search as a placeholder
+    // In a real implementation, this would use vector embeddings and similarity search
+    const normalizedQuery = query.toLowerCase()
+    
+    return this.memories
+      .filter(mem => mem.text.toLowerCase().includes(normalizedQuery))
       .sort((a, b) => b.timestamp - a.timestamp)
       .slice(0, limit)
-      .reverse() // Return in chronological order
   }
-
+  
   /**
-   * Search for memories by text content
+   * Get conversation context for a specific chat
    */
-  searchMemories(query: string, limit: number = 5): Memory[] {
-    const matches: Array<{memory: Memory, score: number}> = []
-    
-    for (const memory of this.memories.values()) {
-      // Simple matching algorithm - count occurrences of words
-      const queryWords = query.toLowerCase().split(/\s+/)
-      const memoryText = memory.text.toLowerCase()
-      
-      let score = 0
-      for (const word of queryWords) {
-        if (word.length < 3) continue // Skip short words
-        
-        const regex = new RegExp(word, 'g')
-        const occurrences = (memoryText.match(regex) || []).length
-        score += occurrences
-      }
-      
-      if (score > 0) {
-        matches.push({ memory, score })
-      }
-    }
-    
-    return matches
-      .sort((a, b) => b.score - a.score)
-      .slice(0, limit)
-      .map(match => match.memory)
-  }
-
-  /**
-   * Delete all memories for a specific chat
-   */
-  async deleteChatMemories(chatId: number): Promise<void> {
-    const memoryIds = this.chatMemories.get(chatId) || []
-    
-    for (const id of memoryIds) {
-      this.memories.delete(id)
-    }
-    
-    this.chatMemories.delete(chatId)
-    
-    if (this.options.persistToDisk) {
-      await this.saveToDisk()
-    }
-  }
-
-  /**
-   * Save memories to disk
-   */
-  private async saveToDisk(): Promise<void> {
-    if (!this.options.persistToDisk || !this.options.dbPath) {
-      return
-    }
-    
-    try {
-      // In a real implementation, this would use proper storage APIs
-      // For now we'll just log that we would save to disk
-      log.info(`Would save ${this.memories.size} memories to disk at ${this.options.dbPath}`)
-    } catch (error) {
-      log.error('Failed to save memories to disk:', error)
-    }
-  }
-
-  /**
-   * Load memories from disk
-   */
-  private async loadFromDisk(): Promise<void> {
-    if (!this.options.persistToDisk || !this.options.dbPath) {
-      return
-    }
-    
-    try {
-      // In a real implementation, this would load from a file or database
-      // For now, we'll just log that we'd load from disk
-      log.info(`Would load memories from ${this.options.dbPath}`)
-    } catch (error) {
-      log.error('Failed to load memories from disk:', error)
-    }
-  }
-
-  /**
-   * Get memory statistics
-   */
-  getStats(): { totalMemories: number, chatCount: number } {
-    return {
-      totalMemories: this.memories.size,
-      chatCount: this.chatMemories.size
-    }
+  public getConversationContext(chatId: number, messageLimit: number = 10): Memory[] {
+    return this.memories
+      .filter(mem => mem.chatId === chatId)
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .slice(0, messageLimit)
+      .sort((a, b) => a.timestamp - b.timestamp)
   }
 } 

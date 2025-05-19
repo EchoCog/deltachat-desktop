@@ -65,6 +65,10 @@ export interface DesktopSettingsType {
   deepTreeEchoBotVisionEnabled: boolean
   deepTreeEchoBotWebAutomationEnabled: boolean
   deepTreeEchoBotEmbodimentEnabled: boolean
+  /** Deep Tree Echo Bot extended settings */
+  deepTreeEchoBotPersonaState?: string
+  deepTreeEchoBotMemories?: string
+  deepTreeEchoBotReflections?: string
 }
 
 export interface RC_Config {

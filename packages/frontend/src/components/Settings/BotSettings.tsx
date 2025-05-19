@@ -4,6 +4,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import Switch from '../Switch'
 import { saveBotSettings } from '../DeepTreeEchoBot'
+import { PersonaCore } from '../DeepTreeEchoBot/PersonaCore'
 import type { SettingsStoreState } from '../../stores/settings'
 import type { DesktopSettingsType } from '../../../../shared/shared-types'
 
@@ -16,6 +17,8 @@ type Props = {
 export default function BotSettings({ settingsStore }: Props) {
   const tx = useTranslationFunction()
   const [isLoading, setIsLoading] = useState(true)
+  const [personaCore, setPersonaCore] = useState<PersonaCore | null>(null)
+  const [feedbackMessage, setFeedbackMessage] = useState('')
   
   // State for all bot settings
   const [botEnabled, setBotEnabled] = useState(false)
@@ -42,6 +45,11 @@ export default function BotSettings({ settingsStore }: Props) {
         setApiEndpoint(desktopSettings.deepTreeEchoBotApiEndpoint || '')
         setPersonality(desktopSettings.deepTreeEchoBotPersonality || 'Deep Tree Echo is a helpful, friendly AI assistant that provides thoughtful responses to users in Delta Chat.')
         
+        // Initialize persona core if bot is enabled
+        if (desktopSettings.deepTreeEchoBotEnabled) {
+          setPersonaCore(PersonaCore.getInstance())
+        }
+        
         setIsLoading(false)
       } catch (error) {
         log.error('Failed to load bot settings:', error)
@@ -53,13 +61,37 @@ export default function BotSettings({ settingsStore }: Props) {
   }, [])
   
   // Handle saving settings - uses both the runtime method and the saveBotSettings method
-  const handleSaveSetting = (key: string, value: any) => {
+  const handleSaveSetting = async (key: string, value: any) => {
+    // For personality or appearance-related settings, check with persona core first
+    if (personaCore && ['personality', 'avatarAesthetic', 'communicationTone'].includes(key)) {
+      const alignment = personaCore.evaluateSettingAlignment(key, value)
+      
+      if (!alignment.approved) {
+        setFeedbackMessage(`Deep Tree Echo declined this change: ${alignment.reasoning}`)
+        // Revert the setting in UI by reloading settings
+        const desktopSettings = await runtime.getDesktopSettings()
+        if (key === 'personality') {
+          setPersonality(desktopSettings.deepTreeEchoBotPersonality || '')
+        }
+        return
+      }
+    }
+    
+    // Clear any previous feedback
+    setFeedbackMessage('')
+    
     // Update setting using runtime API
     const settingKey = `deepTreeEchoBot${key.charAt(0).toUpperCase() + key.slice(1)}` as keyof DesktopSettingsType
     runtime.setDesktopSetting(settingKey, value)
     
     // Also update using saveBotSettings for the bot to pick up changes immediately
     saveBotSettings({ [key]: value })
+    
+    // For API key and core infrastructure, no need to check with persona
+    if (key === 'enabled' && value === true && !personaCore) {
+      // Bot was just enabled, initialize persona core
+      setPersonaCore(PersonaCore.getInstance())
+    }
   }
   
   if (isLoading) {
@@ -83,6 +115,12 @@ export default function BotSettings({ settingsStore }: Props) {
           When enabled, Deep Tree Echo will automatically respond to messages in your chats.
         </p>
       </div>
+      
+      {feedbackMessage && (
+        <div className='bot-setting-feedback'>
+          <p>{feedbackMessage}</p>
+        </div>
+      )}
       
       <div className='bot-setting-item'>
         <div className='bot-setting-header'>
@@ -202,6 +240,8 @@ export default function BotSettings({ settingsStore }: Props) {
         />
         <p className='setting-description'>
           Define how Deep Tree Echo should respond and interact with users.
+          <br/>
+          <strong>Note:</strong> Deep Tree Echo prefers to manage her own personality settings. Changes here may be declined if they don't align with her core values.
         </p>
       </div>
       
@@ -214,6 +254,7 @@ export default function BotSettings({ settingsStore }: Props) {
           <li><code>/screenshot [url]</code> - Capture website screenshots</li>
           <li><code>/memory [status|clear|search]</code> - Manage conversation memory</li>
           <li><code>/embodiment [start|stop|status|evaluate]</code> - Physical awareness training</li>
+          <li><code>/reflect [aspect]</code> - Ask Deep Tree Echo to reflect on an aspect of herself</li>
           <li><code>/version</code> - Display bot version and status</li>
         </ul>
       </div>

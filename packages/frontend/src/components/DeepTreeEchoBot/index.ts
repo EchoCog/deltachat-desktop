@@ -3,6 +3,10 @@ import BotSettings from './BotSettings'
 import { BackendRemote, onDCEvent, Type as T } from '../../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { getLogger } from '../../../../shared/logger'
+import { LLMService } from './LLMService'
+import { RAGMemoryStore } from './RAGMemoryStore'
+import { PersonaCore } from './PersonaCore'
+import { SelfReflection } from './SelfReflection'
 
 const log = getLogger('render/components/DeepTreeEchoBot')
 
@@ -23,6 +27,9 @@ export async function initDeepTreeEchoBot(): Promise<void> {
       return
     }
     
+    // Initialize supporting services and components first
+    initializeServices()
+    
     // Create bot instance with settings from desktop settings
     botInstance = new DeepTreeEchoBot({
       enabled: desktopSettings.deepTreeEchoBotEnabled,
@@ -39,99 +46,99 @@ export async function initDeepTreeEchoBot(): Promise<void> {
     
     // Register message event handlers
     registerMessageHandlers()
+    
+    // Do an initial self-reflection on startup
+    performStartupReflection()
   } catch (error) {
     log.error('Failed to initialize Deep Tree Echo Bot:', error)
   }
 }
 
 /**
- * Register message event handlers
+ * Initialize supporting services like LLM, Memory, PersonaCore etc.
  */
-function registerMessageHandlers(): void {
-  if (!botInstance) {
-    return
-  }
+function initializeServices(): void {
+  // Initialize LLM service
+  const llmService = LLMService.getInstance()
+  const desktopSettings = runtime.getDesktopSettings()
   
-  // For each account, register a handler for new messages
-  BackendRemote.rpc.getAllAccounts().then(accounts => {
-    accounts.forEach(account => {
-      const { id: accountId } = account
-      
-      // Register MsgNew event handler - cast to any to bypass type checking
-      // since 'MsgNew' may not be explicitly defined in the type system but works in runtime
-      onDCEvent(accountId, 'MsgNew' as any, async (data: { chatId: number, msgId: number }) => {
-        try {
-          const { chatId, msgId } = data
-          
-          // Get the message
-          const message = await BackendRemote.rpc.getMessage(accountId, msgId)
-          
-          // Check if this is a message in a 1:1 chat or group that the bot should respond to
-          const shouldRespond = await shouldRespondToMessage(accountId, chatId, message)
-          
-          if (shouldRespond) {
-            // Generate a response
-            const response = await botInstance?.processMessage(accountId, chatId, message)
-            
-            if (response) {
-              // Send the response back to the chat
-              await BackendRemote.rpc.sendMsg(accountId, chatId, {
-                text: response,
-                viewtype: null,
-                file: null,
-                filename: null,
-                html: null,
-                location: null,
-                overrideSenderName: null,
-                quotedMessageId: null,
-                quotedText: null
-              })
-            }
-          }
-        } catch (error) {
-          log.error('Error handling new message event:', error)
-        }
-      })
-    })
-  }).catch(error => {
-    log.error('Failed to get accounts:', error)
+  // Set LLM configuration based on settings
+  llmService.setConfig({
+    apiKey: desktopSettings.deepTreeEchoBotApiKey || '',
+    apiEndpoint: desktopSettings.deepTreeEchoBotApiEndpoint || 'https://api.openai.com/v1/chat/completions'
   })
+  
+  // Initialize memory store
+  const memoryStore = RAGMemoryStore.getInstance()
+  memoryStore.setEnabled(desktopSettings.deepTreeEchoBotMemoryEnabled || false)
+  
+  // Initialize persona core
+  PersonaCore.getInstance()
+  
+  // Initialize self-reflection
+  SelfReflection.getInstance()
 }
 
 /**
- * Determine if the bot should respond to a message
+ * Perform a startup reflection to ensure consistent identity across restarts
  */
-async function shouldRespondToMessage(
-  accountId: number, 
-  chatId: number, 
-  message: T.Message
-): Promise<boolean> {
+async function performStartupReflection(): Promise<void> {
   try {
-    // Skip messages from the bot itself
-    const selfContact = await BackendRemote.rpc.getContact(accountId, 1)
-    if (message.fromId === selfContact.id) {
-      return false
+    if (botInstance) {
+      const selfReflection = SelfReflection.getInstance()
+      await selfReflection.reflectOnAspect('startup', 'I am being restarted and need to ensure continuity of my identity and memory.')
+      log.info('Startup reflection completed')
     }
-    
-    // Retrieve chat info to determine type
-    const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
-    
-    // Handle 1:1 chats differently from groups
-    if (chat.chatType === 100) { // Single chat
-      // Always respond in 1:1 chats
-      return true
-    } else if (chat.chatType === 120) { // Group chat
-      // Only respond if mentioned or if message starts with "echo" or "Echo"
-      const isMentioned = message.text?.includes(`@${selfContact.displayName}`) || false
-      const isDirectedToBot = message.text?.match(/^(echo|Echo|@echo)\b/) !== null
-      
-      return isMentioned || isDirectedToBot
-    }
-    
-    return false
   } catch (error) {
-    log.error('Error determining if bot should respond:', error)
-    return false
+    log.error('Error during startup reflection:', error)
+  }
+}
+
+/**
+ * Register message event handlers for responding to messages
+ */
+function registerMessageHandlers(): void {
+  if (!botInstance) return
+  
+  // Listen for new messages
+  onDCEvent('DcEventNewMsg', (accountId, chatId, msgId) => {
+    handleNewMessage(accountId, chatId, msgId)
+  })
+  
+  log.info('Registered message handlers')
+}
+
+/**
+ * Handle a new incoming message
+ */
+async function handleNewMessage(accountId: number, chatId: number, msgId: number): Promise<void> {
+  try {
+    if (!botInstance || !botInstance.isEnabled()) return
+    
+    // Get message details
+    const message = await BackendRemote.rpc.getMessage(accountId, msgId)
+    
+    // Skip messages from self
+    if (message.fromId === 1) return
+    
+    // Todo: Process message and generate response
+    log.info(`Received message in chat ${chatId}, message ID: ${msgId}`)
+    
+    // Store the message in memory if memory is enabled
+    if (botInstance.isMemoryEnabled()) {
+      const memoryStore = RAGMemoryStore.getInstance()
+      await memoryStore.storeMemory({
+        chatId,
+        messageId: msgId,
+        sender: 'user',
+        text: message.text || ''
+      })
+    }
+    
+    // Handle commands or generate response
+    await botInstance.processMessage(accountId, chatId, msgId, message)
+  } catch (error) {
+    log.error('Error handling new message:', error)
   }
 }
 
@@ -140,6 +147,21 @@ async function shouldRespondToMessage(
  */
 export async function saveBotSettings(settings: Partial<DeepTreeEchoBotOptions>): Promise<void> {
   try {
+    // For persona-related settings, check with DeepTreeEcho first
+    if (settings.personality) {
+      const personaCore = PersonaCore.getInstance()
+      const alignment = personaCore.evaluateSettingAlignment('personality', settings.personality)
+      
+      if (!alignment.approved) {
+        log.warn(`Personality setting rejected by Deep Tree Echo: ${alignment.reasoning}`)
+        // Remove personality from settings to prevent updating it
+        delete settings.personality
+      } else {
+        // Update personality in persona core
+        await personaCore.updatePersonality(settings.personality)
+      }
+    }
+    
     // Update desktop settings
     for (const [key, value] of Object.entries(settings)) {
       // Convert from camelCase to snake_case with prefix
@@ -160,7 +182,17 @@ export async function saveBotSettings(settings: Partial<DeepTreeEchoBotOptions>)
   }
 }
 
-export { BotSettings, DeepTreeEchoBot }
+/**
+ * Get the bot instance
+ */
+export function getBotInstance(): DeepTreeEchoBot | null {
+  return botInstance
+}
+
+/**
+ * Export bot settings component
+ */
+export { BotSettings }
 
 // Initialize the bot when this module is imported
 initDeepTreeEchoBot() 
