@@ -15,6 +15,16 @@ import {
   cleanup as cleanupTestUtil
 } from './DeepTreeEchoTestUtil'
 
+// Main DeepTreeEchoBot component
+import DeepTreeEchoBot from './DeepTreeEchoBot'
+
+// Core cognitive modules
+import { HyperDimensionalMemory } from './HyperDimensionalMemory'
+import { AdaptivePersonality } from './AdaptivePersonality'
+import { QuantumBeliefPropagation } from './QuantumBeliefPropagation'
+import { EmotionalIntelligence } from './EmotionalIntelligence'
+import { SecureIntegration } from './SecureIntegration'
+
 export {
   DeepTreeEchoBot,
   BotSettings,
@@ -40,4 +50,14 @@ export {
 
 export type { DeepTreeEchoBotOptions }
 
-export default DeepTreeEchoBot 
+// Export the main component as default
+export default DeepTreeEchoBot
+
+// Export the cognitive modules for advanced usage
+export {
+  HyperDimensionalMemory,
+  AdaptivePersonality,
+  QuantumBeliefPropagation,
+  EmotionalIntelligence,
+  SecureIntegration
+} 
