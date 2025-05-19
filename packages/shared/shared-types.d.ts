@@ -56,6 +56,15 @@ export interface DesktopSettingsType {
   contentProtectionEnabled: boolean
   /** whether to start with system on supported platforms */
   autostart: boolean
+  /** Deep Tree Echo Bot settings */
+  deepTreeEchoBotEnabled: boolean
+  deepTreeEchoBotApiKey?: string
+  deepTreeEchoBotApiEndpoint?: string
+  deepTreeEchoBotMemoryEnabled: boolean
+  deepTreeEchoBotPersonality?: string
+  deepTreeEchoBotVisionEnabled: boolean
+  deepTreeEchoBotWebAutomationEnabled: boolean
+  deepTreeEchoBotEmbodimentEnabled: boolean
 }
 
 export interface RC_Config {

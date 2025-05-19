@@ -141,7 +141,7 @@ export default function Settings({ onClose }: DialogProps) {
             </SettingsIconButton>
             <ConnectivityButton />
             <SettingsIconButton
-              icon='robot'
+              icon='message-text'
               onClick={() => setSettingsMode('bot_settings')}
               dataTestid='open-bot-settings'
             >

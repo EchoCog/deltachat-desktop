@@ -38,6 +38,21 @@
   color: var(--colorNone);
   font-size: 14px;
   margin-top: 5px;
+  
+  &.bot-command {
+    margin-top: 10px;
+    padding: 8px;
+    background-color: var(--chatListItemBgHover);
+    border-radius: 4px;
+    font-family: monospace;
+    
+    code {
+      background-color: var(--bgPrimary);
+      padding: 2px 5px;
+      border-radius: 3px;
+      color: var(--colorAccent);
+    }
+  }
 }
 
 .bot-setting-input {
@@ -83,6 +98,26 @@ button.destructive-button {
   
   &:hover {
     background-color: var(--dangerColor-darken-5);
+  }
+  
+  &:disabled {
+    background-color: var(--separatorColor);
+    cursor: not-allowed;
+  }
+}
+
+button.action-button {
+  background-color: var(--colorPrimary);
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 10px;
+  
+  &:hover {
+    background-color: var(--colorPrimary-darken-5);
   }
   
   &:disabled {

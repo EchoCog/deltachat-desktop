@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { BackendRemote, Type, onDCEvent } from '../../backend-com'
+import React, { useEffect } from 'react'
+import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { useSettingsStore } from '../../stores/settings'
 import { getLogger } from '../../../../shared/logger'
 import useMessage from '../../hooks/chat/useMessage'
 import { LLMService } from '../../utils/LLMService'
+import { VisionCapabilities } from './VisionCapabilities'
+import { PlaywrightAutomation } from './PlaywrightAutomation'
 
 const log = getLogger('render/DeepTreeEchoBot')
 
@@ -93,6 +95,8 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
   const settingsStore = useSettingsStore()[0]
   const memory = RAGMemoryStore.getInstance()
   const llmService = LLMService.getInstance()
+  const visionCapabilities = VisionCapabilities.getInstance()
+  const playwrightAutomation = PlaywrightAutomation.getInstance()
   
   // Configure LLM service when settings change
   useEffect(() => {
@@ -125,7 +129,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
           text: message.text,
           timestamp: message.timestamp,
           sender: message.sender.displayName,
-          isOutgoing: message.isOutgoing
+          isOutgoing: false
         })
         
         // Get chat info
@@ -134,8 +138,27 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
         // Skip if chat is a contact request
         if (chatInfo.isContactRequest) return
 
-        // Generate bot response based on message content
-        const response = await generateBotResponse(message.text, chatId)
+        // Process special commands
+        let response: string | null = null
+        
+        // Check if it's a vision command
+        if (message.text.startsWith('/vision') && message.file && message.file.includes('image')) {
+          response = await handleVisionCommand(message.file, message.text)
+        } 
+        // Check if it's a web search command
+        else if (message.text.startsWith('/search')) {
+          const query = message.text.substring('/search'.length).trim()
+          response = await handleSearchCommand(query)
+        }
+        // Check if it's a screenshot command
+        else if (message.text.startsWith('/screenshot')) {
+          const url = message.text.substring('/screenshot'.length).trim()
+          response = await handleScreenshotCommand(url, chatId)
+        }
+        // Generate normal response for regular messages
+        else {
+          response = await generateBotResponse(message.text, chatId)
+        }
         
         // Send the response
         if (response) {
@@ -144,17 +167,14 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
           })
           
           // Store the bot's response in memory too
-          const sentMsgId = await BackendRemote.rpc.getLastMessageId(accountId, chatId)
-          if (sentMsgId) {
-            memory.addEntry({
-              chatId,
-              messageId: sentMsgId,
-              text: response,
-              timestamp: Math.floor(Date.now() / 1000),
-              sender: 'Deep Tree Echo',
-              isOutgoing: true
-            })
-          }
+          memory.addEntry({
+            chatId,
+            messageId: Math.floor(Math.random() * 100000), // Generate a random ID since we don't need exact message ID
+            text: response,
+            timestamp: Math.floor(Date.now() / 1000),
+            sender: 'Deep Tree Echo',
+            isOutgoing: true
+          })
         }
       } catch (error) {
         log.error('Error handling incoming message:', error)
@@ -172,6 +192,65 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
     
     return () => clearInterval(intervalId)
   }, [enabled, settingsStore?.desktopSettings?.botEnabled, settingsStore?.desktopSettings?.botLearningEnabled])
+  
+  /**
+   * Process vision commands to analyze images
+   */
+  const handleVisionCommand = async (imagePath: string, messageText: string): Promise<string> => {
+    try {
+      const description = await visionCapabilities.generateImageDescription(imagePath)
+      return description
+    } catch (error) {
+      log.error('Error handling vision command:', error)
+      return "I'm sorry, I couldn't analyze this image. Vision capabilities might not be available in this environment."
+    }
+  }
+  
+  /**
+   * Process web search commands
+   */
+  const handleSearchCommand = async (query: string): Promise<string> => {
+    try {
+      if (!query) {
+        return "Please provide a search query after the /search command."
+      }
+      
+      return await playwrightAutomation.searchWeb(query)
+    } catch (error) {
+      log.error('Error handling search command:', error)
+      return "I couldn't perform that web search. Playwright automation might not be available in this environment."
+    }
+  }
+  
+  /**
+   * Process screenshot commands
+   */
+  const handleScreenshotCommand = async (url: string, chatId: number): Promise<string> => {
+    try {
+      if (!url) {
+        return "Please provide a URL after the /screenshot command."
+      }
+      
+      // Validate URL
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url
+      }
+      
+      // Capture the webpage
+      const screenshotPath = await playwrightAutomation.captureWebpage(url)
+      
+      // Send the screenshot as a file
+      await sendMessage(accountId, chatId, {
+        text: `Screenshot of ${url}`,
+        file: screenshotPath
+      })
+      
+      return `I've captured a screenshot of ${url}.`
+    } catch (error) {
+      log.error('Error handling screenshot command:', error)
+      return "I couldn't capture a screenshot of that webpage. Playwright automation might not be available."
+    }
+  }
   
   const generateBotResponse = async (inputText: string, chatId: number): Promise<string> => {
     try {
