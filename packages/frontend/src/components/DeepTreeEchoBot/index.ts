@@ -1,4 +1,14 @@
+// Core cognitive modules
+import { HyperDimensionalMemory } from './HyperDimensionalMemory'
+import { AdaptivePersonality } from './AdaptivePersonality'
+import { QuantumBeliefPropagation } from './QuantumBeliefPropagation'
+import { EmotionalIntelligence } from './EmotionalIntelligence'
+import { SecureIntegration } from './SecureIntegration'
+
+// Import main component and its types
 import { DeepTreeEchoBot, DeepTreeEchoBotOptions } from './DeepTreeEchoBot'
+
+// Import utility modules
 import { LLMService, CognitiveFunctionType } from './LLMService'
 import { PersonaCore } from './PersonaCore'
 import { RAGMemoryStore } from './RAGMemoryStore'
@@ -14,16 +24,6 @@ import {
   runDemo,
   cleanup as cleanupTestUtil
 } from './DeepTreeEchoTestUtil'
-
-// Main DeepTreeEchoBot component
-import DeepTreeEchoBot from './DeepTreeEchoBot'
-
-// Core cognitive modules
-import { HyperDimensionalMemory } from './HyperDimensionalMemory'
-import { AdaptivePersonality } from './AdaptivePersonality'
-import { QuantumBeliefPropagation } from './QuantumBeliefPropagation'
-import { EmotionalIntelligence } from './EmotionalIntelligence'
-import { SecureIntegration } from './SecureIntegration'
 
 export {
   DeepTreeEchoBot,

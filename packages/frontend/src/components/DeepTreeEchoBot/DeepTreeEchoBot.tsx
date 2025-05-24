@@ -32,8 +32,19 @@ enum CognitiveState {
   ERROR = 'error',
 }
 
+// Types of cognitive data that need protection
+enum CognitiveDataType {
+  MEMORY = 'memory',
+  PERSONALITY = 'personality',
+  BELIEF = 'belief',
+  EMOTIONAL = 'emotional',
+  USER_DATA = 'user_data',
+  CONVERSATION = 'conversation',
+  MODEL_PARAMETER = 'model_parameter'
+}
+
 // Interface for bot configuration
-interface DeepTreeEchoBotConfig {
+export interface DeepTreeEchoBotOptions {
   enabledModules: {
     hyperMemory: boolean;
     adaptivePersonality: boolean;
@@ -103,7 +114,7 @@ const DeepTreeEchoBot: React.FC = () => {
   });
   
   // Bot configuration
-  const [botConfig, setBotConfig] = useState<DeepTreeEchoBotConfig>({
+  const [botConfig, setBotConfig] = useState<DeepTreeEchoBotOptions>({
     enabledModules: {
       hyperMemory: true,
       adaptivePersonality: true,
@@ -589,7 +600,7 @@ Your conversations with me are protected with end-to-end encryption, and my cogn
       if (botConfig.securitySettings.allowSelfModification && 
           botConfig.cognitiveParameters.autonomyLevel > 0.7) {
         // Evolve identity based on new insights
-        const newIdentityInsights = [];
+        const newIdentityInsights: string[] = [];
         
         if (personalityAnalysis.emergentPatterns.length > 0) {
           const pattern = personalityAnalysis.emergentPatterns[0];
@@ -789,4 +800,6 @@ Self-reflection complete:
   );
 };
 
+// Add a named export alongside the default export
+export { DeepTreeEchoBot };
 export default DeepTreeEchoBot; 

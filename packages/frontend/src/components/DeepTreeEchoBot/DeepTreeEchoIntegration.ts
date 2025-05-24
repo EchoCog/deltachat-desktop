@@ -1,7 +1,7 @@
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote, onDCEvent, Type as T } from '../../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { DeepTreeEchoBot } from './DeepTreeEchoBot'
+import { DeepTreeEchoBot, DeepTreeEchoBotOptions } from './DeepTreeEchoBot'
 
 const log = getLogger('render/components/DeepTreeEchoBot/DeepTreeEchoIntegration')
 
