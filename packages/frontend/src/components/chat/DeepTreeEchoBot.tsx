@@ -112,7 +112,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
   useEffect(() => {
     if (!enabled || !settingsStore?.desktopSettings?.botEnabled) return
 
-    return onDCEvent(accountId, 'IncomingMsg', async (event) => {
+    const cleanup = onDCEvent(accountId, 'IncomingMsg', async (event) => {
       try {
         const { chatId, msgId } = event
         
@@ -180,6 +180,8 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
         log.error('Error handling incoming message:', error)
       }
     })
+    
+    return cleanup // Ensure onDCEvent returns a cleanup function
   }, [accountId, enabled, sendMessage, memory, settingsStore?.desktopSettings?.botEnabled])
   
   // Periodically run learning exercises to improve the bot
