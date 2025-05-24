@@ -24,6 +24,7 @@ import { ContextMenuProvider } from './contexts/ContextMenuContext'
 import { InstantOnboardingProvider } from './contexts/InstantOnboardingContext'
 import { SmallScreenModeMacOSTitleBar } from './components/SmallScreenModeMacOSTitleBar'
 import DeepTreeEchoBot from './components/chat/DeepTreeEchoBot'
+import AINeighborhoodDashboard from './components/screens/AINeighborhoodDashboard'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -39,6 +40,7 @@ export enum Screens {
   Loading = 'loading',
   DeleteAccount = 'deleteAccount',
   NoAccountSelected = 'noAccountSelected',
+  AINeighborhood = 'aiNeighborhood',
 }
 
 const BREAKPOINT_FOR_SMALLSCREEN_MODE = 720
@@ -342,6 +344,8 @@ export default class ScreenController extends Component {
         )
       case Screens.NoAccountSelected:
         return <NoAccountSelectedScreen />
+      case Screens.AINeighborhood:
+        return <AINeighborhoodDashboard />
       default:
         return null
     }

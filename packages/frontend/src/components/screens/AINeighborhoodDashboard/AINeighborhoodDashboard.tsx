@@ -19,7 +19,6 @@ import {
   BookOpen
 } from 'lucide-react'
 import { DeepTreeEchoConnector, AIPlatformConnector, AICompanionConfig } from '../../AICompanionHub/AIPlatformConnector'
-import './AINeighborhoodDashboard.scss'
 
 interface AICompanionHome {
   id: string
