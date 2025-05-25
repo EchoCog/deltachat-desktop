@@ -6,6 +6,7 @@ import Switch from '../Switch'
 import { saveBotSettings } from '../DeepTreeEchoBot'
 import { PersonaCore } from '../DeepTreeEchoBot/PersonaCore'
 import type { SettingsStoreState } from '../../stores/settings'
+import SettingsStoreInstance from '../../stores/settings'
 import type { DesktopSettingsType } from '../../../../shared/shared-types'
 
 const log = getLogger('render/components/Settings/BotSettings')
@@ -62,35 +63,48 @@ export default function BotSettings({ settingsStore }: Props) {
   
   // Handle saving settings - uses both the runtime method and the saveBotSettings method
   const handleSaveSetting = async (key: string, value: any) => {
-    // For personality or appearance-related settings, check with persona core first
-    if (personaCore && ['personality', 'avatarAesthetic', 'communicationTone'].includes(key)) {
-      const alignment = personaCore.evaluateSettingAlignment(key, value)
+    try {
+      log.info(`Saving bot setting: ${key} = ${value}`)
       
-      if (!alignment.approved) {
-        setFeedbackMessage(`Deep Tree Echo declined this change: ${alignment.reasoning}`)
-        // Revert the setting in UI by reloading settings
-        const desktopSettings = await runtime.getDesktopSettings()
-        if (key === 'personality') {
-          setPersonality(desktopSettings.deepTreeEchoBotPersonality || '')
+      // For personality or appearance-related settings, check with persona core first
+      if (personaCore && ['personality', 'avatarAesthetic', 'communicationTone'].includes(key)) {
+        const alignment = personaCore.evaluateSettingAlignment(key, value)
+        
+        if (!alignment.approved) {
+          setFeedbackMessage(`Deep Tree Echo declined this change: ${alignment.reasoning}`)
+          // Revert the setting in UI by reloading settings
+          const desktopSettings = await runtime.getDesktopSettings()
+          if (key === 'personality') {
+            setPersonality(desktopSettings.deepTreeEchoBotPersonality || '')
+          }
+          return
         }
-        return
       }
-    }
-    
-    // Clear any previous feedback
-    setFeedbackMessage('')
-    
-    // Update setting using runtime API
-    const settingKey = `deepTreeEchoBot${key.charAt(0).toUpperCase() + key.slice(1)}` as keyof DesktopSettingsType
-    runtime.setDesktopSetting(settingKey, value)
-    
-    // Also update using saveBotSettings for the bot to pick up changes immediately
-    saveBotSettings({ [key]: value })
-    
-    // For API key and core infrastructure, no need to check with persona
-    if (key === 'enabled' && value === true && !personaCore) {
-      // Bot was just enabled, initialize persona core
-      setPersonaCore(PersonaCore.getInstance())
+      
+      // Clear any previous feedback
+      setFeedbackMessage('')
+      
+      // Update setting using runtime API
+      const settingKey = `deepTreeEchoBot${key.charAt(0).toUpperCase() + key.slice(1)}` as keyof DesktopSettingsType
+      log.info(`Setting desktop setting: ${settingKey} = ${value}`)
+      await runtime.setDesktopSetting(settingKey, value)
+      
+      // Also update using saveBotSettings for the bot to pick up changes immediately
+      saveBotSettings({ [key]: value })
+      
+      // Force update the settings store to reflect changes immediately
+      SettingsStoreInstance.effect.load()
+      
+      // For API key and core infrastructure, no need to check with persona
+      if (key === 'enabled' && value === true && !personaCore) {
+        // Bot was just enabled, initialize persona core
+        setPersonaCore(PersonaCore.getInstance())
+      }
+      
+      log.info(`Successfully saved bot setting: ${key}`)
+    } catch (error) {
+      log.error(`Failed to save bot setting ${key}:`, error)
+      setFeedbackMessage(`Failed to save setting: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }
   
