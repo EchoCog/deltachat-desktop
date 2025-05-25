@@ -105,14 +105,14 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
     if (!settingsStore?.desktopSettings) return
     
     llmService.setConfig({
-      apiKey: settingsStore.desktopSettings.botApiKey || '',
-      apiEndpoint: settingsStore.desktopSettings.botApiEndpoint || 'https://api.openai.com/v1/chat/completions'
+      apiKey: settingsStore.desktopSettings.deepTreeEchoBotApiKey || '',
+      apiEndpoint: settingsStore.desktopSettings.deepTreeEchoBotApiEndpoint || 'https://api.openai.com/v1/chat/completions'
     })
-  }, [settingsStore?.desktopSettings?.botApiKey, settingsStore?.desktopSettings?.botApiEndpoint])
+  }, [settingsStore?.desktopSettings?.deepTreeEchoBotApiKey, settingsStore?.desktopSettings?.deepTreeEchoBotApiEndpoint])
   
   // Listen for incoming messages
   useEffect(() => {
-    if (!enabled || !settingsStore?.desktopSettings?.botEnabled) return
+    if (!enabled || !settingsStore?.desktopSettings?.deepTreeEchoBotEnabled) return
 
     const cleanup = onDCEvent(accountId, 'IncomingMsg', async (event) => {
       try {
@@ -121,8 +121,8 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
         // Get message details
         const message = await BackendRemote.rpc.getMessage(accountId, msgId)
         
-        // Skip messages sent by bot itself
-        if (message.isInfo || message.isOutgoing) return
+        // Skip messages sent by bot itself (fromId === 1 means it's from self)
+        if (message.isInfo || message.fromId === 1) return
         
         // Store message in RAG memory
         memory.addEntry({
@@ -184,18 +184,18 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
     })
     
     return cleanup // Ensure onDCEvent returns a cleanup function
-  }, [accountId, enabled, sendMessage, memory, settingsStore?.desktopSettings?.botEnabled])
+  }, [accountId, enabled, sendMessage, memory, settingsStore?.desktopSettings?.deepTreeEchoBotEnabled])
   
   // Periodically run learning exercises to improve the bot
   useEffect(() => {
-    if (!enabled || !settingsStore?.desktopSettings?.botEnabled || !settingsStore?.desktopSettings?.botLearningEnabled) return
+    if (!enabled || !settingsStore?.desktopSettings?.deepTreeEchoBotEnabled || !settingsStore?.desktopSettings?.deepTreeEchoBotMemoryEnabled) return
     
     const intervalId = setInterval(() => {
       runLearningExercise()
     }, 24 * 60 * 60 * 1000) // Once a day
     
     return () => clearInterval(intervalId)
-  }, [enabled, settingsStore?.desktopSettings?.botEnabled, settingsStore?.desktopSettings?.botLearningEnabled])
+  }, [enabled, settingsStore?.desktopSettings?.deepTreeEchoBotEnabled, settingsStore?.desktopSettings?.deepTreeEchoBotMemoryEnabled])
   
   /**
    * Process vision commands to analyze images
@@ -269,7 +269,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
         .join('\n')
       
       // Get bot personality from settings
-      const personality = settingsStore?.desktopSettings?.botPersonality || 
+      const personality = settingsStore?.desktopSettings?.deepTreeEchoBotPersonality || 
         'Deep Tree Echo is a helpful, friendly AI assistant that provides thoughtful responses to users in Delta Chat.'
       
       // Call the LLM service to generate a response
