@@ -20,6 +20,12 @@ export default function Switch({ ...props }: PropsWithChildren<Props>) {
 
   const toggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     const v = event.target.checked
+    console.log('Switch toggle clicked:', { 
+      newValue: v, 
+      currentChecked: checked, 
+      propsChecked: props.checked,
+      disabled: props.disabled 
+    })
     props.onChange(v)
     setChecked(v)
   }

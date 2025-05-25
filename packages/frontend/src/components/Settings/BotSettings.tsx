@@ -35,7 +35,13 @@ export default function BotSettings({ settingsStore }: Props) {
   useEffect(() => {
     const loadSettings = async () => {
       try {
+        console.log('BotSettings: Loading desktop settings...')
         const desktopSettings = await runtime.getDesktopSettings()
+        console.log('BotSettings: Desktop settings loaded:', {
+          deepTreeEchoBotEnabled: desktopSettings.deepTreeEchoBotEnabled,
+          deepTreeEchoBotMemoryEnabled: desktopSettings.deepTreeEchoBotMemoryEnabled,
+          deepTreeEchoBotVisionEnabled: desktopSettings.deepTreeEchoBotVisionEnabled
+        })
         
         setBotEnabled(desktopSettings.deepTreeEchoBotEnabled || false)
         setMemoryEnabled(desktopSettings.deepTreeEchoBotMemoryEnabled || false)
@@ -45,6 +51,11 @@ export default function BotSettings({ settingsStore }: Props) {
         setApiKey(desktopSettings.deepTreeEchoBotApiKey || '')
         setApiEndpoint(desktopSettings.deepTreeEchoBotApiEndpoint || '')
         setPersonality(desktopSettings.deepTreeEchoBotPersonality || 'Deep Tree Echo is a helpful, friendly AI assistant that provides thoughtful responses to users in Delta Chat.')
+        
+        console.log('BotSettings: State set to:', {
+          botEnabled: desktopSettings.deepTreeEchoBotEnabled || false,
+          memoryEnabled: desktopSettings.deepTreeEchoBotMemoryEnabled || false
+        })
         
         // Initialize persona core if bot is enabled
         if (desktopSettings.deepTreeEchoBotEnabled) {
@@ -117,13 +128,25 @@ export default function BotSettings({ settingsStore }: Props) {
       <div className='bot-setting-item'>
         <div className='bot-setting-header'>
           <h3>Enable Deep Tree Echo Bot</h3>
-          <Switch 
-            checked={botEnabled}
-            onChange={value => {
-              setBotEnabled(value)
-              handleSaveSetting('enabled', value)
-            }}
-          />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Switch 
+              checked={botEnabled}
+              onChange={value => {
+                console.log('BotSettings: Enable toggle onChange called with value:', value)
+                setBotEnabled(value)
+                handleSaveSetting('enabled', value)
+              }}
+            />
+            <button 
+              onClick={() => {
+                console.log('Test button clicked! Current botEnabled:', botEnabled)
+                setBotEnabled(!botEnabled)
+              }}
+              style={{ padding: '4px 8px', fontSize: '12px' }}
+            >
+              Test Toggle
+            </button>
+          </div>
         </div>
         <p className='setting-description'>
           When enabled, Deep Tree Echo will automatically respond to messages in your chats.
