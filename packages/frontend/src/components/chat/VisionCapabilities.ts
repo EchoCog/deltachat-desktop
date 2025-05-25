@@ -8,13 +8,16 @@ const log = getLogger('renderer/VisionCapabilities')
  */
 export class VisionCapabilities {
   private static instance: VisionCapabilities
+  private static DISABLED = false // Can be set via environment or config
   private tensorflowLoaded: boolean = false
   private modelLoaded: boolean = false
   private model: any = null
   private labels: string[] = []
+  private initializationPromise: Promise<void> | null = null
 
   private constructor() {
-    this.initialize()
+    // Remove automatic initialization - wait until first use
+    // this.initialize()
   }
 
   public static getInstance(): VisionCapabilities {
@@ -25,10 +28,30 @@ export class VisionCapabilities {
   }
 
   /**
+   * Disable vision capabilities entirely (useful for performance)
+   */
+  public static disable(): void {
+    VisionCapabilities.DISABLED = true
+    log.info('Vision capabilities disabled - TensorFlow.js will not be loaded')
+  }
+
+  /**
    * Initialize TensorFlow.js and load the MobileNet model for image recognition
    */
   private async initialize(): Promise<void> {
+    // Prevent multiple initialization attempts
+    if (this.initializationPromise) {
+      return this.initializationPromise
+    }
+    
+    this.initializationPromise = this.doInitialize()
+    return this.initializationPromise
+  }
+
+  private async doInitialize(): Promise<void> {
     try {
+      log.info('Starting lazy load of TensorFlow.js...')
+      
       // Dynamic import of TensorFlow.js to avoid loading it if not needed
       const tf = await import('@tensorflow/tfjs')
       this.tensorflowLoaded = true
@@ -43,6 +66,7 @@ export class VisionCapabilities {
       log.info('MobileNet model loaded successfully')
     } catch (error) {
       log.error('Failed to initialize vision capabilities:', error)
+      this.initializationPromise = null // Allow retry on error
     }
   }
 

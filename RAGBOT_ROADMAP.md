@@ -17,6 +17,8 @@ Transform DeltaChat Desktop from a traditional messaging app into a revolutionar
 - [x] Built AI Neighborhood Dashboard UI
 - [x] Implemented Deep Tree Echo connector prototype
 - [x] Designed beautiful, modern interface
+- [x] Identified and optimized TensorFlow.js performance issue
+- [x] Implemented lazy loading for vision capabilities
 
 ### 🔄 In Progress
 - [ ] Integrate AI Neighborhood into main app navigation
@@ -29,6 +31,8 @@ Transform DeltaChat Desktop from a traditional messaging app into a revolutionar
 - [ ] Implement API key management UI
 - [ ] Create personality customization controls
 - [ ] Add basic memory search functionality
+- [ ] Add feature flags for heavy components (TensorFlow.js, etc.)
+- [ ] Move TensorFlow.js to Web Worker for better performance
 
 ## Phase 2: AI Integration (Next 2-4 weeks)
 ### Real AI Connectors

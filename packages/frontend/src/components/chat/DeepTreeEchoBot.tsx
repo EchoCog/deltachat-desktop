@@ -5,7 +5,8 @@ import { useSettingsStore } from '../../stores/settings'
 import { getLogger } from '../../../../shared/logger'
 import useMessage from '../../hooks/chat/useMessage'
 import { LLMService } from '../../utils/LLMService'
-import { VisionCapabilities } from './VisionCapabilities'
+// Import conditionally
+// import { VisionCapabilities } from './VisionCapabilities'
 import { PlaywrightAutomation } from './PlaywrightAutomation'
 
 const log = getLogger('render/DeepTreeEchoBot')
@@ -95,7 +96,8 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
   const settingsStore = useSettingsStore()[0]
   const memory = RAGMemoryStore.getInstance()
   const llmService = LLMService.getInstance()
-  const visionCapabilities = VisionCapabilities.getInstance()
+  // Don't create instance until needed
+  // const visionCapabilities = VisionCapabilities.getInstance()
   const playwrightAutomation = PlaywrightAutomation.getInstance()
   
   // Configure LLM service when settings change
@@ -200,6 +202,9 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
    */
   const handleVisionCommand = async (imagePath: string, messageText: string): Promise<string> => {
     try {
+      // Only load VisionCapabilities when actually needed
+      const { VisionCapabilities } = await import('./VisionCapabilities')
+      const visionCapabilities = VisionCapabilities.getInstance()
       const description = await visionCapabilities.generateImageDescription(imagePath)
       return description
     } catch (error) {

@@ -77,6 +77,12 @@ pnpm test
    - Rebuild the project: `pnpm clean && pnpm build`
    - Check console for errors
 
+4. **Performance Issues / High CPU Usage**
+   - TensorFlow.js may be consuming significant resources
+   - This loads automatically with Deep Tree Echo Bot
+   - See PERFORMANCE_OPTIMIZATION.md for detailed solutions
+   - Quick fix: Add `VisionCapabilities.disable()` to your initialization
+
 ### Development Tips
 
 - Use `pnpm dev` for hot-reloading during development
