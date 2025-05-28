@@ -18,7 +18,9 @@ import SettingsSeparator from './SettingsSeparator'
 import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import BotSettings from './BotSettings'
+import AICompanionSettings from '../Settings/AICompanionSettings'
 
+import { Brain } from 'lucide-react'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 type SettingsView =
@@ -28,6 +30,7 @@ type SettingsView =
   | 'appearance'
   | 'advanced'
   | 'bot_settings'
+  | 'ai_companion_settings'
 
 export default function Settings({ onClose }: DialogProps) {
   const { openDialog, closeDialog, openDialogIds } = useDialog()
@@ -141,11 +144,18 @@ export default function Settings({ onClose }: DialogProps) {
             </SettingsIconButton>
             <ConnectivityButton />
             <SettingsIconButton
-              icon='message-text'
+              customIcon={<div className='material-icons'>message</div>}
               onClick={() => setSettingsMode('bot_settings')}
               dataTestid='open-bot-settings'
             >
               Deep Tree Echo Bot
+            </SettingsIconButton>
+            <SettingsIconButton
+              customIcon={<Brain size={20} />}
+              onClick={() => setSettingsMode('ai_companion_settings')}
+              dataTestid='open-ai-companion-settings'
+            >
+              AI Companion Neighborhood
             </SettingsIconButton>
             <SettingsIconButton
               icon='code-tags'
@@ -242,6 +252,19 @@ export default function Settings({ onClose }: DialogProps) {
           />
           <DialogBody>
             <BotSettings settingsStore={settingsStore} />
+          </DialogBody>
+        </>
+      )}
+      {settingsMode === 'ai_companion_settings' && (
+        <>
+          <DialogHeader
+            title='AI Companion Neighborhood'
+            onClickBack={() => setSettingsMode('main')}
+            onClose={onClose}
+            dataTestid='settings-ai-companions'
+          />
+          <DialogBody>
+            <AICompanionSettings />
           </DialogBody>
         </>
       )}
