@@ -1,7 +1,12 @@
-// Import Deep Tree Echo component styles
+// ====== AI Companion Components ======
+
+// Deep Tree Echo Styles
 @use 'components/deep-tree-echo';
+@import "components/deep-tree-echo";
 
-// No need to import the same component styles twice
+// AI Neighborhood Styles
+@use 'components/ai_neighborhood_dashboard';
+@import "components/ai_neighborhood_nav";
 
-// Add Deep Tree Echo Bot component styles
-@import "components/deep-tree-echo"; 
+// ====== Future AI Components ======
+// Additional AI components will be imported here

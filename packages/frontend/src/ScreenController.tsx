@@ -24,7 +24,8 @@ import { ContextMenuProvider } from './contexts/ContextMenuContext'
 import { InstantOnboardingProvider } from './contexts/InstantOnboardingContext'
 import { SmallScreenModeMacOSTitleBar } from './components/SmallScreenModeMacOSTitleBar'
 import DeepTreeEchoBot from './components/chat/DeepTreeEchoBot'
-import AINeighborhoodDashboard from './components/screens/AINeighborhoodDashboard'
+import AINeighborhoodDashboard from './components/screens/AINeighborhoodDashboard/AINeighborhoodDashboard'
+import { Brain } from 'lucide-react'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -365,6 +366,17 @@ export default class ScreenController extends Component {
             <p>{this.state.message.text}</p>
           </div>
         )}
+        {/* AI Neighborhood Navigation Button */}
+        <div className="ai-neighborhood-nav">
+          <button 
+            className={`ai-neighborhood-button ${this.state.screen === Screens.AINeighborhood ? 'active' : ''}`}
+            onClick={() => this.changeScreen(Screens.AINeighborhood)}
+            title="Open AI Neighborhood"
+          >
+            <Brain size={24} />
+            <span>AI Neighborhood</span>
+          </button>
+        </div>
         <ScreenContext.Provider
           value={{
             userFeedback: this.userFeedback,
