@@ -13,12 +13,18 @@ import {
   Search,
   Sparkles,
   AlertCircle,
-  Loader
+  Loader,
+  Network,
+  Zap,
+  HomeIcon,
+  X as XIcon
 } from 'lucide-react'
 
 import { AICompanionProvider, useAICompanion } from './AICompanionController'
 import { ConnectorInfo, ConnectorRegistryEvent } from './ConnectorRegistry'
 import { AIMemory } from './MemoryPersistenceLayer'
+import MemoryVisualization from './MemoryVisualization'
+import AICompanionCreator from './AICompanionCreator'
 
 // Companion Card Component
 const CompanionCard: React.FC<{ 
@@ -151,7 +157,8 @@ const AICompanionHubContent: React.FC = () => {
   const [isSearching, setIsSearching] = useState(false)
   const [chatInput, setChatInput] = useState('')
   const [isSending, setIsSending] = useState(false)
-  const [view, setView] = useState<'chat' | 'memories' | 'settings'>('chat')
+  const [view, setView] = useState<'chat' | 'memories' | 'settings' | 'visualization' | 'create'>('chat')
+  const [isCreatingCompanion, setIsCreatingCompanion] = useState(false)
   
   // Get current conversation messages
   const currentMessages = activeConversationId && conversations[activeConversationId]
@@ -225,13 +232,57 @@ const AICompanionHubContent: React.FC = () => {
       </div>
     )
   }
+  
+  // If we're in full-screen visualization view, render only the visualization with a small return button
+  if (view === 'visualization') {
+    return (
+      <div className="ai-companion-hub visualization-mode">
+        <div className="visualization-overlay">
+          <button 
+            className="return-to-hub"
+            onClick={() => setView('chat')}
+            title="Return to Hub"
+          >
+            <HomeIcon size={20} />
+          </button>
+        </div>
+        <div className="full-visualization">
+          <MemoryVisualization />
+        </div>
+      </div>
+    )
+  }
+  
+  // If we're in companion creation view, render only the creator component
+  if (view === 'create') {
+    return (
+      <div className="ai-companion-hub creator-mode">
+        <div className="creator-overlay">
+          <button 
+            className="return-to-hub"
+            onClick={() => setView('chat')}
+            title="Return to Hub"
+          >
+            <HomeIcon size={20} />
+          </button>
+        </div>
+        <div className="full-creator">
+          <AICompanionCreator onClose={() => setView('chat')} />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="ai-companion-hub">
       <div className="companions-sidebar">
         <div className="sidebar-header">
           <h2>AI Companions</h2>
-          <button className="add-companion-btn">
+          <button 
+            className="add-companion-btn"
+            onClick={() => setView('create')}
+            title="Create New Companion"
+          >
             <PlusCircle size={20} />
           </button>
         </div>
@@ -240,7 +291,10 @@ const AICompanionHubContent: React.FC = () => {
           {companions.length === 0 ? (
             <div className="no-companions">
               <p>No AI companions found</p>
-              <button className="create-first">Create Your First Companion</button>
+              <button 
+                className="create-first"
+                onClick={() => setView('create')}
+              >Create Your First Companion</button>
             </div>
           ) : (
             companions.map(companion => (
@@ -267,25 +321,32 @@ const AICompanionHubContent: React.FC = () => {
                   onClick={() => setView('chat')}
                 >
                   <MessageSquare size={18} />
-                  Chat
+                  <span>Chat</span>
                 </button>
                 <button 
                   className={`tab ${view === 'memories' ? 'active' : ''}`}
                   onClick={() => setView('memories')}
                 >
                   <Database size={18} />
-                  Memories
+                  <span>Memories</span>
+                </button>
+                <button 
+                  className={`tab ${view === 'visualization' ? 'active' : ''}`}
+                  onClick={() => setView('visualization')}
+                >
+                  <Network size={18} />
+                  <span>Memory Web</span>
                 </button>
                 <button 
                   className={`tab ${view === 'settings' ? 'active' : ''}`}
                   onClick={() => setView('settings')}
                 >
                   <Settings size={18} />
-                  Settings
+                  <span>Settings</span>
                 </button>
               </div>
             </>
-          )}
+          )}        
         </div>
         
         <div className="content-body">
@@ -391,7 +452,11 @@ const AICompanionHubContent: React.FC = () => {
                 )}
               </div>
             </>
-          ) : (
+          ) : view === 'visualization' ? (
+            <div className="memory-visualization-container">
+              <MemoryVisualization />
+            </div>
+          ) : view === 'settings' ? (
             <div className="companion-settings">
               <h3>Companion Settings</h3>
               <p>Configure your AI companion's personality, capabilities, and more.</p>
@@ -400,11 +465,11 @@ const AICompanionHubContent: React.FC = () => {
                 <p>Advanced settings coming soon...</p>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 // Wrapped with provider
@@ -413,5 +478,84 @@ const AICompanionHub: React.FC = () => (
     <AICompanionHubContent />
   </AICompanionProvider>
 )
+
+// Add additional CSS for the memory visualization integration
+const styles = `
+.memory-visualization-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.ai-companion-hub.visualization-mode,
+.ai-companion-hub.creator-mode {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.visualization-overlay,
+.creator-overlay {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 100;
+}
+
+.return-to-hub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.1);
+  transition: all 0.2s ease;
+}
+
+.return-to-hub:hover {
+  background-color: #ffffff;
+  color: #3b82f6;
+  transform: scale(1.05);
+}
+
+.full-visualization,
+.full-creator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.companion-creator-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 16px;
+}
+
+.content-tabs .tab span {
+  display: inline-block;
+  margin-left: 6px;
+}
+`;
+
+// Add styles to document
+if (typeof document !== 'undefined') {
+  const styleEl = document.createElement('style');
+  styleEl.textContent = styles;
+  document.head.appendChild(styleEl);
+}
 
 export default AICompanionHub
