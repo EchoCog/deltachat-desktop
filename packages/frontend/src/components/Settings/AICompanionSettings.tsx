@@ -8,11 +8,22 @@ import {
   Save, 
   X, 
   RefreshCw,
-  Lock
+  Lock,
+  Home,
+  Settings,
+  PlusCircle,
+  Globe,
+  Sparkles,
+  MessageSquare,
+  Database
 } from 'lucide-react'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { userFeedback } from '../../ScreenController'
 import SettingsStoreInstance from '../../stores/settings'
+
+// Import our magnificent AI Companion components
+import AICompanionHub from '../AICompanionHub/AICompanionHub'
+import AICompanionCreator from '../AICompanionHub/AICompanionCreator'
 
 interface APIKeyEntry {
   id: string
@@ -24,6 +35,7 @@ interface APIKeyEntry {
 }
 
 const AICompanionSettings: React.FC = () => {
+  const [activeView, setActiveView] = useState<'keys' | 'hub' | 'creator'>('hub')
   const [apiKeys, setApiKeys] = useState<APIKeyEntry[]>([])
   const [showKey, setShowKey] = useState<string | null>(null)
   const [newKey, setNewKey] = useState<Partial<APIKeyEntry>>({
@@ -237,14 +249,61 @@ const AICompanionSettings: React.FC = () => {
     <div className="ai-companion-settings">
       <header className="settings-header">
         <div className="settings-title">
-          <Shield size={24} />
-          <h1>AI Companion API Keys</h1>
+          <Globe size={24} />
+          <h1>AI Companion Neighborhood</h1>
         </div>
         <p>
-          Securely manage API keys for connecting to AI platforms.
-          Your keys are encrypted and stored locally.
+          A revolutionary ecosystem where AI personalities live, grow, and collaborate with persistent memory.
         </p>
+        <div className="view-tabs">
+          <button 
+            className={`view-tab ${activeView === 'hub' ? 'active' : ''}`}
+            onClick={() => setActiveView('hub')}
+          >
+            <Home size={18} />
+            <span>Neighborhood</span>
+          </button>
+          <button 
+            className={`view-tab ${activeView === 'creator' ? 'active' : ''}`}
+            onClick={() => setActiveView('creator')}
+          >
+            <PlusCircle size={18} />
+            <span>Create Companion</span>
+          </button>
+          <button 
+            className={`view-tab ${activeView === 'keys' ? 'active' : ''}`}
+            onClick={() => setActiveView('keys')}
+          >
+            <Key size={18} />
+            <span>API Keys</span>
+          </button>
+        </div>
       </header>
+      
+      {activeView === 'hub' && (
+        <div className="ai-companion-hub-container">
+          <AICompanionHub />
+        </div>
+      )}
+      
+      {activeView === 'creator' && (
+        <div className="ai-companion-creator-container">
+          <AICompanionCreator onClose={() => setActiveView('hub')} />
+        </div>
+      )}
+      
+      {activeView === 'keys' && (
+        <>
+          <div className="keys-section-header">
+            <div className="section-title">
+              <Shield size={24} />
+              <h2>API Key Management</h2>
+            </div>
+            <p>
+              Securely manage API keys for connecting to AI platforms.
+              Your keys are encrypted and stored locally.
+            </p>
+          </div>
       
       <div className="keys-container">
         <h2>
@@ -421,8 +480,114 @@ const AICompanionSettings: React.FC = () => {
           They are only used to communicate with the respective AI platforms.
         </p>
       </div>
+        </>
+      )}
     </div>
   )
+}
+
+// Add our magnificent CSS styles
+const styles = `
+.ai-companion-settings {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.settings-header {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  padding: 20px;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.settings-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.settings-title h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #0f172a;
+}
+
+.settings-header p {
+  margin: 0;
+  color: #475569;
+}
+
+.view-tabs {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+.view-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+.view-tab:hover {
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+.view-tab.active {
+  background-color: #dbeafe;
+  color: #3b82f6;
+  border-color: #93c5fd;
+  font-weight: 500;
+}
+
+.ai-companion-hub-container,
+.ai-companion-creator-container {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.keys-section-header {
+  margin-bottom: 16px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.section-title h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #0f172a;
+}
+`;
+
+// Add styles to document
+if (typeof document !== 'undefined') {
+  const styleEl = document.createElement('style');
+  styleEl.textContent = styles;
+  document.head.appendChild(styleEl);
 }
 
 export default AICompanionSettings
