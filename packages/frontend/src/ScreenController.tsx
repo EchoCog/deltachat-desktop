@@ -25,7 +25,8 @@ import { InstantOnboardingProvider } from './contexts/InstantOnboardingContext'
 import { SmallScreenModeMacOSTitleBar } from './components/SmallScreenModeMacOSTitleBar'
 import DeepTreeEchoBot from './components/chat/DeepTreeEchoBot'
 import AINeighborhoodDashboard from './components/screens/AINeighborhoodDashboard/AINeighborhoodDashboard'
-import { Brain } from 'lucide-react'
+import AINavigation from './components/AINavigation'
+import { MemoryPersistenceLayer } from './components/AICompanionHub/MemoryPersistenceLayer'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -267,23 +268,7 @@ export default class ScreenController extends Component {
     }
   }
 
-  componentDidMount() {
-    BackendRemote.on('Error', this.onError)
 
-    runtime.onResumeFromSleep = debounce(() => {
-      log.info('onResumeFromSleep')
-      // update timestamps
-      updateTimestamps()
-      // call maybe network
-      BackendRemote.rpc.maybeNetwork()
-    }, 1000)
-
-    this.startup().then(() => {
-      runtime.emitUIFullyReady()
-    })
-
-    window.addEventListener('resize', this.updateSmallScreenMode)
-  }
 
   componentWillUnmount() {
     BackendRemote.off('Error', this.onError)
@@ -352,6 +337,31 @@ export default class ScreenController extends Component {
     }
   }
 
+  componentDidMount() {
+    // Initialize the Memory Persistence Layer for AI Companions
+    const memoryLayer = MemoryPersistenceLayer.getInstance()
+    memoryLayer.initialize().catch(error => {
+      console.error('Failed to initialize Memory Persistence Layer:', error)
+      this.userFeedback({type: 'error', text: 'Failed to initialize AI Companion Memory System'})
+    })
+    
+    BackendRemote.on('Error', this.onError)
+
+    runtime.onResumeFromSleep = debounce(() => {
+      log.info('onResumeFromSleep')
+      // update timestamps
+      updateTimestamps()
+      // call maybe network
+      BackendRemote.rpc.maybeNetwork()
+    }, 1000)
+
+    this.startup().then(() => {
+      runtime.emitUIFullyReady()
+    })
+
+    window.addEventListener('resize', this.updateSmallScreenMode)
+  }
+
   render() {
     // Get bot settings from the settings store
     const botEnabled = SettingsStoreInstance.state?.desktopSettings.deepTreeEchoBotEnabled || false
@@ -366,17 +376,11 @@ export default class ScreenController extends Component {
             <p>{this.state.message.text}</p>
           </div>
         )}
-        {/* AI Neighborhood Navigation Button */}
-        <div className="ai-neighborhood-nav">
-          <button 
-            className={`ai-neighborhood-button ${this.state.screen === Screens.AINeighborhood ? 'active' : ''}`}
-            onClick={() => this.changeScreen(Screens.AINeighborhood)}
-            title="Open AI Neighborhood"
-          >
-            <Brain size={24} />
-            <span>AI Neighborhood</span>
-          </button>
-        </div>
+        {/* Enhanced AI Neighborhood Navigation */}
+        <AINavigation 
+          currentScreen={this.state.screen}
+          changeScreen={this.changeScreen}
+        />
         <ScreenContext.Provider
           value={{
             userFeedback: this.userFeedback,
