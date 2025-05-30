@@ -5226,7 +5226,7 @@ init_cjs_shim();
 
 // src/get-build-info.ts
 init_cjs_shim();
-var BuildInfo = JSON.parse('{"VERSION":"1.58.2","BUILD_TIMESTAMP":1748541156682,"GIT_REF":"v1.48.0-665-g48c6bbfe2"}');
+var BuildInfo = JSON.parse('{"VERSION":"1.58.2","BUILD_TIMESTAMP":1748561365744,"GIT_REF":"v1.48.0-667-g9bf1a82b5"}');
 
 // src/deltachat/stdio_server.ts
 import { spawn } from "child_process";
