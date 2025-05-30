@@ -1,21 +1,21 @@
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __commonJS = (cb, mod) => function __require() {
+const __create = Object.create;
+const __defProp = Object.defineProperty;
+const __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+const __getOwnPropNames = Object.getOwnPropertyNames;
+const __getProtoOf = Object.getPrototypeOf;
+const __hasOwnProp = Object.prototype.hasOwnProperty;
+const __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
-var __copyProps = (to, from, except, desc) => {
+const __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
+    for (const key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
         __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+const __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
   // If the importer is in node compatibility mode or this is not an ESM
   // file that has been converted to a CommonJS file using a Babel-
   // compatible transform (i.e. "__esModule" has not been set), then set
@@ -25,7 +25,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 ));
 
 // ../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js
-var require_stackframe = __commonJS({
+const require_stackframe = __commonJS({
   "../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js"(exports, module) {
     (function(root, factory) {
       "use strict";
@@ -49,16 +49,16 @@ var require_stackframe = __commonJS({
           return this[p];
         };
       }
-      var booleanProps = ["isConstructor", "isEval", "isNative", "isToplevel"];
-      var numericProps = ["columnNumber", "lineNumber"];
-      var stringProps = ["fileName", "functionName", "source"];
-      var arrayProps = ["args"];
-      var objectProps = ["evalOrigin"];
-      var props = booleanProps.concat(numericProps, stringProps, arrayProps, objectProps);
+      const booleanProps = ["isConstructor", "isEval", "isNative", "isToplevel"];
+      const numericProps = ["columnNumber", "lineNumber"];
+      const stringProps = ["fileName", "functionName", "source"];
+      const arrayProps = ["args"];
+      const objectProps = ["evalOrigin"];
+      const props = booleanProps.concat(numericProps, stringProps, arrayProps, objectProps);
       function StackFrame(obj) {
         if (!obj)
           return;
-        for (var i2 = 0; i2 < props.length; i2++) {
+        for (let i2 = 0; i2 < props.length; i2++) {
           if (obj[props[i2]] !== void 0) {
             this["set" + _capitalize(props[i2])](obj[props[i2]]);
           }
@@ -87,10 +87,10 @@ var require_stackframe = __commonJS({
           }
         },
         toString: function() {
-          var fileName = this.getFileName() || "";
-          var lineNumber = this.getLineNumber() || "";
-          var columnNumber = this.getColumnNumber() || "";
-          var functionName = this.getFunctionName() || "";
+          const fileName = this.getFileName() || "";
+          const lineNumber = this.getLineNumber() || "";
+          const columnNumber = this.getColumnNumber() || "";
+          const functionName = this.getFunctionName() || "";
           if (this.getIsEval()) {
             if (fileName) {
               return "[eval] (" + fileName + ":" + lineNumber + ":" + columnNumber + ")";
@@ -104,13 +104,13 @@ var require_stackframe = __commonJS({
         }
       };
       StackFrame.fromString = function StackFrame$$fromString(str) {
-        var argsStartIndex = str.indexOf("(");
-        var argsEndIndex = str.lastIndexOf(")");
-        var functionName = str.substring(0, argsStartIndex);
-        var args = str.substring(argsStartIndex + 1, argsEndIndex).split(",");
-        var locationString = str.substring(argsEndIndex + 1);
+        const argsStartIndex = str.indexOf("(");
+        const argsEndIndex = str.lastIndexOf(")");
+        const functionName = str.substring(0, argsStartIndex);
+        const args = str.substring(argsStartIndex + 1, argsEndIndex).split(",");
+        const locationString = str.substring(argsEndIndex + 1);
         if (locationString.indexOf("@") === 0) {
-          var parts = /@(.+?)(?::(\d+))?(?::(\d+))?$/.exec(locationString, "");
+          const parts = /@(.+?)(?::(\d+))?(?::(\d+))?$/.exec(locationString, "");
           var fileName = parts[1];
           var lineNumber = parts[2];
           var columnNumber = parts[3];
@@ -123,7 +123,7 @@ var require_stackframe = __commonJS({
           columnNumber: columnNumber || void 0
         });
       };
-      for (var i = 0; i < booleanProps.length; i++) {
+      for (let i = 0; i < booleanProps.length; i++) {
         StackFrame.prototype["get" + _capitalize(booleanProps[i])] = _getter(booleanProps[i]);
         StackFrame.prototype["set" + _capitalize(booleanProps[i])] = /* @__PURE__ */ function(p) {
           return function(v) {
@@ -131,7 +131,7 @@ var require_stackframe = __commonJS({
           };
         }(booleanProps[i]);
       }
-      for (var j = 0; j < numericProps.length; j++) {
+      for (let j = 0; j < numericProps.length; j++) {
         StackFrame.prototype["get" + _capitalize(numericProps[j])] = _getter(numericProps[j]);
         StackFrame.prototype["set" + _capitalize(numericProps[j])] = /* @__PURE__ */ function(p) {
           return function(v) {
@@ -142,7 +142,7 @@ var require_stackframe = __commonJS({
           };
         }(numericProps[j]);
       }
-      for (var k = 0; k < stringProps.length; k++) {
+      for (let k = 0; k < stringProps.length; k++) {
         StackFrame.prototype["get" + _capitalize(stringProps[k])] = _getter(stringProps[k]);
         StackFrame.prototype["set" + _capitalize(stringProps[k])] = /* @__PURE__ */ function(p) {
           return function(v) {
@@ -156,7 +156,7 @@ var require_stackframe = __commonJS({
 });
 
 // ../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js
-var require_error_stack_parser = __commonJS({
+const require_error_stack_parser = __commonJS({
   "../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js"(exports, module) {
     (function(root, factory) {
       "use strict";
@@ -169,9 +169,9 @@ var require_error_stack_parser = __commonJS({
       }
     })(exports, function ErrorStackParser(StackFrame) {
       "use strict";
-      var FIREFOX_SAFARI_STACK_REGEXP = /(^|@)\S+:\d+/;
-      var CHROME_IE_STACK_REGEXP = /^\s*at .*(\S+:\d+|\(native\))/m;
-      var SAFARI_NATIVE_CODE_REGEXP = /^(eval@)?(\[native code])?$/;
+      const FIREFOX_SAFARI_STACK_REGEXP = /(^|@)\S+:\d+/;
+      const CHROME_IE_STACK_REGEXP = /^\s*at .*(\S+:\d+|\(native\))/m;
+      const SAFARI_NATIVE_CODE_REGEXP = /^(eval@)?(\[native code])?$/;
       return {
         /**
          * Given an Error object, extract the most information from it.
@@ -195,24 +195,24 @@ var require_error_stack_parser = __commonJS({
           if (urlLike.indexOf(":") === -1) {
             return [urlLike];
           }
-          var regExp = /(.+?)(?::(\d+))?(?::(\d+))?$/;
-          var parts = regExp.exec(urlLike.replace(/[()]/g, ""));
+          const regExp = /(.+?)(?::(\d+))?(?::(\d+))?$/;
+          const parts = regExp.exec(urlLike.replace(/[()]/g, ""));
           return [parts[1], parts[2] || void 0, parts[3] || void 0];
         },
         parseV8OrIE: function ErrorStackParser$$parseV8OrIE(error) {
-          var filtered = error.stack.split("\n").filter(function(line) {
+          const filtered = error.stack.split("\n").filter(function(line) {
             return !!line.match(CHROME_IE_STACK_REGEXP);
           }, this);
           return filtered.map(function(line) {
             if (line.indexOf("(eval ") > -1) {
               line = line.replace(/eval code/g, "eval").replace(/(\(eval at [^()]*)|(,.*$)/g, "");
             }
-            var sanitizedLine = line.replace(/^\s+/, "").replace(/\(eval code/g, "(").replace(/^.*?\s+/, "");
-            var location = sanitizedLine.match(/ (\(.+\)$)/);
+            let sanitizedLine = line.replace(/^\s+/, "").replace(/\(eval code/g, "(").replace(/^.*?\s+/, "");
+            const location = sanitizedLine.match(/ (\(.+\)$)/);
             sanitizedLine = location ? sanitizedLine.replace(location[0], "") : sanitizedLine;
-            var locationParts = this.extractLocation(location ? location[1] : sanitizedLine);
-            var functionName = location && sanitizedLine || void 0;
-            var fileName = ["eval", "<anonymous>"].indexOf(locationParts[0]) > -1 ? void 0 : locationParts[0];
+            const locationParts = this.extractLocation(location ? location[1] : sanitizedLine);
+            const functionName = location && sanitizedLine || void 0;
+            const fileName = ["eval", "<anonymous>"].indexOf(locationParts[0]) > -1 ? void 0 : locationParts[0];
             return new StackFrame({
               functionName,
               fileName,
@@ -223,7 +223,7 @@ var require_error_stack_parser = __commonJS({
           }, this);
         },
         parseFFOrSafari: function ErrorStackParser$$parseFFOrSafari(error) {
-          var filtered = error.stack.split("\n").filter(function(line) {
+          const filtered = error.stack.split("\n").filter(function(line) {
             return !line.match(SAFARI_NATIVE_CODE_REGEXP);
           }, this);
           return filtered.map(function(line) {
@@ -235,10 +235,10 @@ var require_error_stack_parser = __commonJS({
                 functionName: line
               });
             } else {
-              var functionNameRegex = /((.*".+"[^@]*)?[^@]*)(?:@)/;
-              var matches = line.match(functionNameRegex);
-              var functionName = matches && matches[1] ? matches[1] : void 0;
-              var locationParts = this.extractLocation(line.replace(functionNameRegex, ""));
+              const functionNameRegex = /((.*".+"[^@]*)?[^@]*)(?:@)/;
+              const matches = line.match(functionNameRegex);
+              const functionName = matches && matches[1] ? matches[1] : void 0;
+              const locationParts = this.extractLocation(line.replace(functionNameRegex, ""));
               return new StackFrame({
                 functionName,
                 fileName: locationParts[0],
@@ -259,11 +259,11 @@ var require_error_stack_parser = __commonJS({
           }
         },
         parseOpera9: function ErrorStackParser$$parseOpera9(e) {
-          var lineRE = /Line (\d+).*script (?:in )?(\S+)/i;
-          var lines = e.message.split("\n");
-          var result = [];
-          for (var i = 2, len = lines.length; i < len; i += 2) {
-            var match = lineRE.exec(lines[i]);
+          const lineRE = /Line (\d+).*script (?:in )?(\S+)/i;
+          const lines = e.message.split("\n");
+          const result = [];
+          for (let i = 2, len = lines.length; i < len; i += 2) {
+            const match = lineRE.exec(lines[i]);
             if (match) {
               result.push(new StackFrame({
                 fileName: match[2],
@@ -275,11 +275,11 @@ var require_error_stack_parser = __commonJS({
           return result;
         },
         parseOpera10: function ErrorStackParser$$parseOpera10(e) {
-          var lineRE = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
-          var lines = e.stacktrace.split("\n");
-          var result = [];
-          for (var i = 0, len = lines.length; i < len; i += 2) {
-            var match = lineRE.exec(lines[i]);
+          const lineRE = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
+          const lines = e.stacktrace.split("\n");
+          const result = [];
+          for (let i = 0, len = lines.length; i < len; i += 2) {
+            const match = lineRE.exec(lines[i]);
             if (match) {
               result.push(
                 new StackFrame({
@@ -295,19 +295,19 @@ var require_error_stack_parser = __commonJS({
         },
         // Opera 10.65+ Error.stack very similar to FF/Safari
         parseOpera11: function ErrorStackParser$$parseOpera11(error) {
-          var filtered = error.stack.split("\n").filter(function(line) {
+          const filtered = error.stack.split("\n").filter(function(line) {
             return !!line.match(FIREFOX_SAFARI_STACK_REGEXP) && !line.match(/^Error created at/);
           }, this);
           return filtered.map(function(line) {
-            var tokens = line.split("@");
-            var locationParts = this.extractLocation(tokens.pop());
-            var functionCall = tokens.shift() || "";
-            var functionName = functionCall.replace(/<anonymous function(: (\w+))?>/, "$2").replace(/\([^)]*\)/g, "") || void 0;
-            var argsRaw;
+            const tokens = line.split("@");
+            const locationParts = this.extractLocation(tokens.pop());
+            const functionCall = tokens.shift() || "";
+            const functionName = functionCall.replace(/<anonymous function(: (\w+))?>/, "$2").replace(/\([^)]*\)/g, "") || void 0;
+            let argsRaw;
             if (functionCall.match(/\(([^)]*)\)/)) {
               argsRaw = functionCall.replace(/^[^(]+\(([^)]*)\)$/, "$1");
             }
-            var args = argsRaw === void 0 || argsRaw === "[arguments not available]" ? void 0 : argsRaw.split(",");
+            const args = argsRaw === void 0 || argsRaw === "[arguments not available]" ? void 0 : argsRaw.split(",");
             return new StackFrame({
               functionName,
               args,
@@ -468,17 +468,17 @@ async function migrateAccountsIfNeeded(cwd, log3, treatFailedMigrationAsError = 
 }
 
 // ../shared/logger.ts
-var import_error_stack_parser = __toESM(require_error_stack_parser(), 1);
-var startTime = Date.now();
-var colorize = (light, code) => (str) => "\x1B[" + light + ";" + code + "m" + str + "\x1B[0m";
-var blue = colorize(1, 34);
-var red = colorize(1, 31);
-var yellow = colorize(1, 33);
-var grey = colorize(0, 37);
-var green = colorize(1, 37);
-var cyan = colorize(1, 36);
-var emojiFontCss = 'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;';
-var LoggerVariants = [
+const import_error_stack_parser = __toESM(require_error_stack_parser(), 1);
+const startTime = Date.now();
+const colorize = (light, code) => (str) => "\x1B[" + light + ";" + code + "m" + str + "\x1B[0m";
+const blue = colorize(1, 34);
+const red = colorize(1, 31);
+const yellow = colorize(1, 33);
+const grey = colorize(0, 37);
+const green = colorize(1, 37);
+const cyan = colorize(1, 36);
+const emojiFontCss = 'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;';
+const LoggerVariants = [
   {
     log: console.debug,
     level: "DEBUG" /* DEBUG */,
@@ -510,8 +510,8 @@ var LoggerVariants = [
     symbol: red("[C]")
   }
 ];
-var handler;
-var rc = {};
+let handler;
+let rc = {};
 function setLogHandler(LogHandler, rcObject) {
   handler = LogHandler;
   rc = rcObject;
@@ -550,7 +550,7 @@ ${s.toString()}`).join() : stacktrace
     }
   }
 }
-var Logger = class {
+const Logger = class {
   constructor(channel) {
     this.channel = channel;
     //@ts-ignore
@@ -607,8 +607,8 @@ if (!("toJSON" in Error.prototype))
 
 // migration-tests/migration_function.test.ts
 import { startDeltaChat as startDeltaChat2 } from "@deltachat/stdio-rpc-server";
-var __dirname = dirname(fileURLToPath(import.meta.url));
-var log2 = getLogger("test");
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const log2 = getLogger("test");
 before(async () => {
   if (process.env["DEBUG"]) {
     setLogHandler(console.debug, {
@@ -619,12 +619,12 @@ before(async () => {
     }, {});
   }
 });
-var zip = new AdmZip(join2(__dirname, "../test_data/migration-test-data.zip"));
-var testEnvironment = mkdtempSync(join2(tmpdir(), "deltachat-migration-test-"));
+const zip = new AdmZip(join2(__dirname, "../test_data/migration-test-data.zip"));
+const testEnvironment = mkdtempSync(join2(tmpdir(), "deltachat-migration-test-"));
 zip.extractAllTo(testEnvironment);
 log2.debug({ testEnvironment });
-var versions = await readdir2(testEnvironment);
-var BROKEN_TEST_DATA = [
+const versions = await readdir2(testEnvironment);
+const BROKEN_TEST_DATA = [
   "DeltaChat-1.3.1.AppImage",
   "DeltaChat-1.3.3.AppImage"
 ];

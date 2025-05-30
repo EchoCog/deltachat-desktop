@@ -520,7 +520,7 @@ export class QuantumBeliefPropagation {
 
     // Calculate new amplitude with quantum interference
     const interferenceFactor = Math.cos(phaseDifference)
-    let amplitudeChange = strength * interferenceFactor
+    const amplitudeChange = strength * interferenceFactor
 
     // Apply entanglement effect
     this.updateBelief(targetBelief.id, {

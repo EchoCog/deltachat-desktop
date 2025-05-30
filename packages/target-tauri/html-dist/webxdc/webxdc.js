@@ -1,7 +1,7 @@
 'use strict'
 ;(() => {
-  var S = Object.defineProperty
-  var a = (i, e) => S(i, 'name', { value: e, configurable: !0 })
+  const S = Object.defineProperty
+  const a = (i, e) => S(i, 'name', { value: e, configurable: !0 })
   function l(i, e, s, n) {
     if (s === 'a' && !n)
       throw new TypeError('Private accessor was defined without a getter')
@@ -23,7 +23,7 @@
     return n === 'a' ? o.call(i, s) : o ? (o.value = s) : e.set(i, s), s
   }
   a(m, '__classPrivateFieldSet')
-  var u,
+  let u,
     d,
     w,
     y,
@@ -33,7 +33,7 @@
     return window.__TAURI_INTERNALS__.transformCallback(i, e)
   }
   a(I, 'transformCallback')
-  var v = class {
+  const v = class {
     static {
       a(this, 'Channel')
     }
@@ -44,12 +44,12 @@
         y.set(this, void 0),
         m(this, u, e || (() => {}), 'f'),
         (this.id = I(s => {
-          let n = s.index
+          const n = s.index
           if ('end' in s) {
             n == l(this, d, 'f') ? this.cleanupCallback() : m(this, y, n, 'f')
             return
           }
-          let o = s.message
+          const o = s.message
           if (n == l(this, d, 'f')) {
             for (
               l(this, u, 'f').call(this, o),
@@ -57,7 +57,7 @@
               l(this, d, 'f') in l(this, w, 'f');
 
             ) {
-              let f = l(this, w, 'f')[l(this, d, 'f')]
+              const f = l(this, w, 'f')[l(this, d, 'f')]
               l(this, u, 'f').call(this, f),
                 delete l(this, w, 'f')[l(this, d, 'f')],
                 m(this, d, l(this, d, 'f') + 1, 'f')
@@ -91,7 +91,7 @@
   }
   a(h, 'invoke')
   C = new WeakMap()
-  var x = class {
+  const x = class {
     constructor(e, s) {
       this.sendRealtime = e
       this.leaveRealtime = s
@@ -133,10 +133,10 @@
       f = !1,
       T = !1,
       R = a(async () => {
-        let t = JSON.parse(
+        const t = JSON.parse(
           await h('get_webxdc_updates', { lastKnownSerial: n })
         )
-        for (let r of t) (n = r.max_serial), e?.(r)
+        for (const r of t) (n = r.max_serial), e?.(r)
         o && (o(), (o = null))
       }, 'innerOnStatusUpdate'),
       E = a(async () => {
@@ -167,7 +167,7 @@
         },
         setUpdateListener: a((t, r = 0) => {
           ;(n = r), (e = t)
-          let _ = new Promise((c, p) => {
+          const _ = new Promise((c, p) => {
             o = c
           })
           return E(), _
@@ -199,12 +199,12 @@
               'Error from sendToChat: Invalid empty message, at least one of text or file should be provided'
             )
           let r = a(c => {
-              let p = ';base64,'
+              const p = ';base64,'
               return new Promise((A, g) => {
-                let b = new FileReader()
+                const b = new FileReader()
                 b.readAsDataURL(c),
                   (b.onload = () => {
-                    let L = b.result
+                    const L = b.result
                     A(L.slice(L.indexOf(p) + p.length))
                   }),
                   (b.onerror = () => g(b.error))
@@ -235,15 +235,15 @@
           await h('webxdc_send_to_chat', { options: { file: _, text: t.text } })
         }, 'sendToChat'),
         importFiles: a(t => {
-          let r = document.createElement('input')
+          const r = document.createElement('input')
           ;(r.type = 'file'),
             (r.accept = [...(t.extensions || []), ...(t.mimeTypes || [])].join(
               ','
             )),
             (r.multiple = t.multiple || !1)
-          let _ = new Promise((c, p) => {
+          const _ = new Promise((c, p) => {
             r.onchange = A => {
-              let g = Array.from(r.files || [])
+              const g = Array.from(r.files || [])
               document.body.removeChild(r), c(g)
             }
           })

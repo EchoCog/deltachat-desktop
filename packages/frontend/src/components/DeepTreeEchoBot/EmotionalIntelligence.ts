@@ -714,8 +714,11 @@ export class EmotionalIntelligence {
     const dominantEmotions: [EmotionDimension, number][] = Array.from(
       emotionCounts.entries()
     )
-      .map(([emotion, count]) => [emotion, count / total])
-      .sort((a, b) => b[1] - a[1])
+      .map(([emotion, count]): [EmotionDimension, number] => [
+        emotion,
+        count / total,
+      ])
+      .sort((a, b): number => Number(b[1]) - Number(a[1]))
       .slice(0, 3) // Top 3 emotions
 
     return dominantEmotions

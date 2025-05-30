@@ -1,17 +1,19 @@
-var Pt = Object.create
-var U = Object.defineProperty
-var vt = Object.getOwnPropertyDescriptor
-var Ut = Object.getOwnPropertyNames
-var Ht = Object.getPrototypeOf,
+const Pt = Object.create
+const U = Object.defineProperty
+const vt = Object.getOwnPropertyDescriptor
+const Ut = Object.getOwnPropertyNames
+const Ht = Object.getPrototypeOf,
   Gt = Object.prototype.hasOwnProperty
-var _ = (e, t) => U(e, 'name', { value: t, configurable: !0 })
-var ut = (e, t) => () => (t || e((t = { exports: {} }).exports, t), t.exports),
+const _ = (e, t) => U(e, 'name', { value: t, configurable: !0 })
+const ut = (e, t) => () => (
+    t || e((t = { exports: {} }).exports, t), t.exports
+  ),
   Bt = (e, t) => {
-    for (var r in t) U(e, r, { get: t[r], enumerable: !0 })
+    for (const r in t) U(e, r, { get: t[r], enumerable: !0 })
   },
   Yt = (e, t, r, n) => {
     if ((t && typeof t == 'object') || typeof t == 'function')
-      for (let i of Ut(t))
+      for (const i of Ut(t))
         !Gt.call(e, i) &&
           i !== r &&
           U(e, i, {
@@ -20,7 +22,7 @@ var ut = (e, t) => () => (t || e((t = { exports: {} }).exports, t), t.exports),
           })
     return e
   }
-var ct = (e, t, r) => (
+const ct = (e, t, r) => (
   (r = e != null ? Pt(Ht(e)) : {}),
   Yt(
     t || !e || !e.__esModule
@@ -29,8 +31,8 @@ var ct = (e, t, r) => (
     e
   )
 )
-var Ct = ut((be, It) => {
-  var N = null
+const Ct = ut((be, It) => {
+  let N = null
   typeof WebSocket < 'u'
     ? (N = WebSocket)
     : typeof MozWebSocket < 'u'
@@ -42,23 +44,23 @@ var Ct = ut((be, It) => {
           : typeof self < 'u' && (N = self.WebSocket || self.MozWebSocket)
   It.exports = N
 })
-var Ot = ut((He, Z) => {
+const Ot = ut((He, Z) => {
   function X() {}
   _(X, 'E')
   X.prototype = {
     on: _(function (e, t, r) {
-      var n = this.e || (this.e = {})
+      const n = this.e || (this.e = {})
       return (n[e] || (n[e] = [])).push({ fn: t, ctx: r }), this
     }, 'on'),
     once: _(function (e, t, r) {
-      var n = this
+      const n = this
       function i() {
         n.off(e, i), t.apply(r, arguments)
       }
       return _(i, 'listener'), (i._ = t), this.on(e, i, r)
     }, 'once'),
     emit: _(function (e) {
-      var t = [].slice.call(arguments, 1),
+      let t = [].slice.call(arguments, 1),
         r = ((this.e || (this.e = {}))[e] || []).slice(),
         n = 0,
         i = r.length
@@ -75,11 +77,11 @@ var Ot = ut((He, Z) => {
       return this
     }, 'emit'),
     off: _(function (e, t) {
-      var r = this.e || (this.e = {}),
+      const r = this.e || (this.e = {}),
         n = r[e],
         i = []
       if (n && t)
-        for (var o = 0, a = n.length; o < a; o++)
+        for (let o = 0, a = n.length; o < a; o++)
           n[o].fn !== t && n[o].fn._ !== t && i.push(n[o])
       return i.length ? (r[e] = i) : delete r[e], this
     }, 'off'),
@@ -108,7 +110,7 @@ function g(e, t, r, n, i) {
   return n === 'a' ? i.call(e, r) : i ? (i.value = r) : t.set(e, r), r
 }
 _(g, '__classPrivateFieldSet')
-var S,
+let S,
   d,
   f,
   H,
@@ -118,7 +120,7 @@ function q(e, t = !1) {
   return window.__TAURI_INTERNALS__.transformCallback(e, t)
 }
 _(q, 'transformCallback')
-var M = class {
+const M = class {
   static {
     _(this, 'Channel')
   }
@@ -129,19 +131,19 @@ var M = class {
       H.set(this, void 0),
       g(this, S, t || (() => {}), 'f'),
       (this.id = q(r => {
-        let n = r.index
+        const n = r.index
         if ('end' in r) {
           n == u(this, d, 'f') ? this.cleanupCallback() : g(this, H, n, 'f')
           return
         }
-        let i = r.message
+        const i = r.message
         if (n == u(this, d, 'f')) {
           for (
             u(this, S, 'f').call(this, i), g(this, d, u(this, d, 'f') + 1, 'f');
             u(this, d, 'f') in u(this, f, 'f');
 
           ) {
-            let o = u(this, f, 'f')[u(this, d, 'f')]
+            const o = u(this, f, 'f')[u(this, d, 'f')]
             u(this, S, 'f').call(this, o),
               delete u(this, f, 'f')[u(this, d, 'f')],
               g(this, d, u(this, d, 'f') + 1, 'f')
@@ -174,7 +176,7 @@ async function s(e, t = {}, r) {
   return window.__TAURI_INTERNALS__.invoke(e, t, r)
 }
 _(s, 'invoke')
-var I = class {
+const I = class {
   static {
     _(this, 'Resource')
   }
@@ -330,7 +332,7 @@ var L = class {
       return this[c]()
     }
   }
-var h
+let h
 ;(function (e) {
   ;(e.WINDOW_RESIZED = 'tauri://resize'),
     (e.WINDOW_MOVED = 'tauri://move'),
@@ -352,8 +354,8 @@ async function ht(e, t) {
 }
 _(ht, '_unlisten')
 async function C(e, t, r) {
-  var n
-  let i =
+  let n
+  const i =
     typeof r?.target == 'string'
       ? { kind: 'AnyLabel', label: r.target }
       : (n = r?.target) !== null && n !== void 0
@@ -386,7 +388,7 @@ async function Tt(e, t, r) {
   })
 }
 _(Tt, 'emitTo')
-var B = class e extends I {
+const B = class e extends I {
   static {
     _(this, 'Image')
   }
@@ -423,12 +425,12 @@ function w(e) {
         : e
 }
 _(w, 'transformImage')
-var V
+let V
 ;(function (e) {
   ;(e[(e.Critical = 1)] = 'Critical'),
     (e[(e.Informational = 2)] = 'Informational')
 })(V || (V = {}))
-var K = class {
+let K = class {
     static {
       _(this, 'CloseRequestedEvent')
     }
@@ -468,7 +470,7 @@ var W = ['tauri://created', 'tauri://error'],
       _(this, 'Window')
     }
     constructor(t, r = {}) {
-      var n
+      let n
       ;(this.label = t),
         (this.listeners = Object.create(null)),
         r?.skip ||
@@ -488,7 +490,7 @@ var W = ['tauri://created', 'tauri://error'],
             .catch(async i => this.emit('tauri://error', i))
     }
     static async getByLabel(t) {
-      var r
+      let r
       return (r = (await F()).find(n => n.label === t)) !== null && r !== void 0
         ? r
         : null
@@ -500,13 +502,13 @@ var W = ['tauri://created', 'tauri://error'],
       return F()
     }
     static async getFocusedWindow() {
-      for (let t of await F()) if (await t.isFocused()) return t
+      for (const t of await F()) if (await t.isFocused()) return t
       return null
     }
     async listen(t, r) {
       return this._handleTauriEvent(t, r)
         ? () => {
-            let n = this.listeners[t]
+            const n = this.listeners[t]
             n.splice(n.indexOf(r), 1)
           }
         : C(t, r, { target: { kind: 'Window', label: this.label } })
@@ -514,14 +516,14 @@ var W = ['tauri://created', 'tauri://error'],
     async once(t, r) {
       return this._handleTauriEvent(t, r)
         ? () => {
-            let n = this.listeners[t]
+            const n = this.listeners[t]
             n.splice(n.indexOf(r), 1)
           }
         : Et(t, r, { target: { kind: 'Window', label: this.label } })
     }
     async emit(t, r) {
       if (W.includes(t)) {
-        for (let n of this.listeners[t] || [])
+        for (const n of this.listeners[t] || [])
           n({ event: t, id: -1, payload: r })
         return
       }
@@ -529,7 +531,7 @@ var W = ['tauri://created', 'tauri://error'],
     }
     async emitTo(t, r, n) {
       if (W.includes(r)) {
-        for (let i of this.listeners[r] || [])
+        for (const i of this.listeners[r] || [])
           i({ event: r, id: -1, payload: n })
         return
       }
@@ -836,12 +838,12 @@ var W = ['tauri://created', 'tauri://error'],
     }
     async onCloseRequested(t) {
       return this.listen(h.WINDOW_CLOSE_REQUESTED, async r => {
-        let n = new K(r)
+        const n = new K(r)
         await t(n), n.isPreventDefault() || (await this.destroy())
       })
     }
     async onDragDropEvent(t) {
-      let r = await this.listen(h.DRAG_ENTER, a => {
+      const r = await this.listen(h.DRAG_ENTER, a => {
           t({
             ...a,
             payload: {
@@ -875,7 +877,7 @@ var W = ['tauri://created', 'tauri://error'],
       }
     }
     async onFocusChanged(t) {
-      let r = await this.listen(h.WINDOW_FOCUS, i => {
+      const r = await this.listen(h.WINDOW_FOCUS, i => {
           t({ ...i, payload: !0 })
         }),
         n = await this.listen(h.WINDOW_BLUR, i => {
@@ -896,7 +898,7 @@ var W = ['tauri://created', 'tauri://error'],
 ;(function (e) {
   ;(e.Disabled = 'disabled'), (e.Throttle = 'throttle'), (e.Suspend = 'suspend')
 })(pt || (pt = {}))
-var Rt
+let Rt
 ;(function (e) {
   ;(e.AppearanceBased = 'appearanceBased'),
     (e.Light = 'light'),
@@ -924,7 +926,7 @@ var Rt
     (e.TabbedDark = 'tabbedDark'),
     (e.TabbedLight = 'tabbedLight')
 })(Rt || (Rt = {}))
-var gt
+let gt
 ;(function (e) {
   ;(e.FollowsWindowActiveState = 'followsWindowActiveState'),
     (e.Active = 'active'),
@@ -942,7 +944,7 @@ var J = class e extends I {
     super(t)
   }
   static async load(t, r) {
-    let n = await s('plugin:store|load', { path: t, ...r })
+    const n = await s('plugin:store|load', { path: t, ...r })
     return new e(n)
   }
   static async get(t) {
@@ -954,7 +956,7 @@ var J = class e extends I {
     await s('plugin:store|set', { rid: this.rid, key: t, value: r })
   }
   async get(t) {
-    let [r, n] = await s('plugin:store|get', { rid: this.rid, key: t })
+    const [r, n] = await s('plugin:store|get', { rid: this.rid, key: t })
     return n ? r : void 0
   }
   async has(t) {
@@ -1017,7 +1019,7 @@ async function ft() {
   return await s('plugin:clipboard-manager|read_text')
 }
 _(ft, 'readText')
-var v = class {
+const v = class {
   static {
     _(this, 'RawClient')
   }
@@ -1484,9 +1486,9 @@ var v = class {
     return this._transport.request('misc_send_draft', [t, r])
   }
 }
-var x = {}
+const x = {}
 Bt(x, { BaseTransport: () => b, WebsocketTransport: () => j })
-var O = class {
+const O = class {
   static {
     _(this, 'Emitter')
   }
@@ -1497,11 +1499,11 @@ var O = class {
     return this._on(t, r, n)
   }
   _on(t, r, n) {
-    let i = { callback: r, ctx: n }
+    const i = { callback: r, ctx: n }
     return this.e.has(t) || this.e.set(t, []), this.e.get(t).push(i), this
   }
   once(t, r, n) {
-    let i = _((...o) => {
+    const i = _((...o) => {
       this.off(t, r), r.apply(n, o)
     }, 'listener')
     this._on(t, i, n)
@@ -1517,7 +1519,7 @@ var O = class {
   }
   off(t, r) {
     if (!this.e.has(t)) return
-    let i = this.e.get(t).filter(o => o.callback !== r)
+    const i = this.e.get(t).filter(o => o.callback !== r)
     return i.length ? this.e.set(t, i) : this.e.delete(t), this
   }
 }
@@ -1534,23 +1536,23 @@ var b = class extends O {
   close() {}
   _onmessage(t) {
     if (t.method) {
-      let i = t
+      const i = t
       this.emit('request', i)
     }
     if (!t.id) return
-    let r = t
+    const r = t
     if (!r.id) return
-    let n = this._requests.get(r.id)
+    const n = this._requests.get(r.id)
     n &&
       (this._requests.delete(r.id),
       r.error ? n.reject(r.error) : n.resolve(r.result))
   }
   notification(t, r) {
-    let n = { jsonrpc: '2.0', method: t, id: 0, params: r }
+    const n = { jsonrpc: '2.0', method: t, id: 0, params: r }
     this._send(n)
   }
   request(t, r) {
-    let n = ++this._requestId,
+    const n = ++this._requestId,
       i = { jsonrpc: '2.0', method: t, id: n, params: r }
     return (
       this._send(i),
@@ -1560,7 +1562,7 @@ var b = class extends O {
     )
   }
 }
-var wt = ct(Ct(), 1)
+const wt = ct(Ct(), 1)
 var j = class extends b {
     static {
       _(this, 'WebsocketTransport')
@@ -1573,8 +1575,8 @@ var j = class extends b {
     }
     constructor(t, r) {
       super(), (this.url = t)
-      let n = _(i => {
-        let o = JSON.parse(i.data)
+      const n = _(i => {
+        const o = JSON.parse(i.data)
         this._onmessage(o)
       }, 'onmessage')
       ;(this._socket = new $(t, n, r)),
@@ -1583,7 +1585,7 @@ var j = class extends b {
         this._socket.on('error', i => this.emit('error', i))
     }
     _send(t) {
-      let r = JSON.stringify(t)
+      const r = JSON.stringify(t)
       this._socket.send(r)
     }
     close() {
@@ -1635,7 +1637,7 @@ var j = class extends b {
         }),
         (this.socket.onclose = r => {
           ;(this._connected = !1), this.emit('disconnect')
-          let n = Math.min(
+          const n = Math.min(
             this.options.reconnectInterval *
               Math.pow(this.options.reconnectDecay, this._reconnectAttempts),
             this.options.maxReconnectInterval
@@ -1655,8 +1657,8 @@ var j = class extends b {
       ;(this.closed = !0), this.socket.close()
     }
   }
-var tt = ct(Ot(), 1)
-var k = class extends tt.TinyEmitter {
+const tt = ct(Ot(), 1)
+const k = class extends tt.TinyEmitter {
   static {
     _(this, 'BaseDeltaChat')
   }
@@ -1669,7 +1671,7 @@ var k = class extends tt.TinyEmitter {
   }
   async eventLoop() {
     for (;;) {
-      let t = await this.rpc.getNextEvent()
+      const t = await this.rpc.getNextEvent()
       this.emit(t.event.kind, t.contextId, t.event),
         this.emit('ALL', t.contextId, t.event),
         this.contextEmitters[t.contextId] &&
@@ -1687,7 +1689,7 @@ var k = class extends tt.TinyEmitter {
         this.contextEmitters[t])
   }
 }
-var et
+let et
 ;(function (e) {
   ;(e[(e.DC_CERTCK_ACCEPT_INVALID = 2)] = 'DC_CERTCK_ACCEPT_INVALID'),
     (e[(e.DC_CERTCK_ACCEPT_INVALID_CERTIFICATES = 3)] =
@@ -1945,11 +1947,11 @@ var et
     (e[(e.DC_VIDEOCHATTYPE_JITSI = 2)] = 'DC_VIDEOCHATTYPE_JITSI'),
     (e[(e.DC_VIDEOCHATTYPE_UNKNOWN = 0)] = 'DC_VIDEOCHATTYPE_UNKNOWN')
 })(et || (et = {}))
-var rt = !1,
+let rt = !1,
   bt = new M(),
   Nt = new M()
 s('set_main_window_channels', { jsonrpc: Nt, events: bt })
-var nt = class extends x.BaseTransport {
+const nt = class extends x.BaseTransport {
     constructor(r) {
       super()
       this.callCounterFunction = r
@@ -2016,7 +2018,7 @@ var nt = class extends x.BaseTransport {
       })
     }
     async getDesktopSettings() {
-      let r = {
+      const r = {
           ...{ credentials: void 0, lastAccount: void 0, lastChats: {} },
           bounds: {},
           HTMLEmailWindowBounds: void 0,
@@ -2060,7 +2062,7 @@ var nt = class extends x.BaseTransport {
         await s('change_desktop_settings_apply_side_effects', { key: t })
     }
     async initialize(t, r) {
-      let n = await s('get_frontend_run_config'),
+      const n = await s('get_frontend_run_config'),
         i = {
           'log-debug': n.log_debug,
           'log-to-console': n.log_to_console,
@@ -2077,9 +2079,9 @@ var nt = class extends x.BaseTransport {
           h: !1,
         }
       ;(this.rc_config = i), i['log-debug'] && (rt = !0)
-      let o = await s('get_runtime_info')
+      const o = await s('get_runtime_info')
       this.runtime_info = o
-      let a = { DEBUG: 2, INFO: 3, WARNING: 4, ERROR: 5, CRITICAL: 5 }
+      const a = { DEBUG: 2, INFO: 3, WARNING: 4, ERROR: 5, CRITICAL: 5 }
       t((l, A, _t, ...yt) => {
         let Mt = yt
             .map(D => (typeof D == 'object' ? JSON.stringify(D) : D))
@@ -2096,9 +2098,9 @@ var nt = class extends x.BaseTransport {
             ?.filter(D => D.length > 0)
             .join('@')
         y === 'Error' && (y = 'webview::unknown')
-        let at = y?.split('@')[0]
+        const at = y?.split('@')[0]
         y = `:JS::${l.replace(/\//g, '::')}${at ? `::${at}` : ''}`
-        let lt = a[A]
+        const lt = a[A]
         s('plugin:log|log', {
           level: lt,
           message: Mt,
@@ -2110,13 +2112,13 @@ var nt = class extends x.BaseTransport {
         })
       }, i),
         (this.log = r('runtime/tauri'))
-      let E = await St('config.json')
+      const E = await St('config.json')
       if (!E) throw new Error('Configuration Store was not loaded')
       ;(this.store = E),
         (this.currentLogFileLocation = await s('get_current_logfile')),
         (bt.onmessage = l => {
           if (l.event === 'sendToChat') {
-            let { options: A, account: _t } = l.data
+            const { options: A, account: _t } = l.data
             this.onWebxdcSendToChat?.(
               A.file
                 ? {
@@ -2197,9 +2199,9 @@ var nt = class extends x.BaseTransport {
       await s('download_file', { pathToSource: t, filename: r })
     }
     transformBlobURL(t) {
-      let r = t.match(/.*(:?\\|\/)(.+?)\1dc.db-blobs\1(.*)/)
+      const r = t.match(/.*(:?\\|\/)(.+?)\1dc.db-blobs\1(.*)/)
       if (r) {
-        let n = encodeURIComponent(r[3])
+        const n = encodeURIComponent(r[3])
         return `${this.runtime_info?.tauriSpecific?.scheme.blobs}${r[2]}/${n}`
       }
       return (
@@ -2212,9 +2214,9 @@ var nt = class extends x.BaseTransport {
       )
     }
     transformStickerURL(t) {
-      let r = t.match(/.*(:?\\|\/)(.+?)\1stickers\1(.+?)\1(.+)/)
+      const r = t.match(/.*(:?\\|\/)(.+?)\1stickers\1(.+?)\1(.+)/)
       if (r) {
-        let n = encodeURIComponent(r[3]),
+        const n = encodeURIComponent(r[3]),
           i = encodeURIComponent(r[4])
         return `${this.runtime_info?.tauriSpecific?.scheme.stickers}${r[2]}/${n}/${i}`
       }
@@ -2291,7 +2293,7 @@ var nt = class extends x.BaseTransport {
       return s('change_lang', { locale: t })
     }
     setBadgeCounter(t) {
-      let r = z()
+      const r = z()
       r.setBadgeCount(t === 0 ? void 0 : t),
         xt &&
           r.setOverlayIcon?.(t === 0 ? void 0 : 'images/tray/unread-badge.png'),
@@ -2356,7 +2358,7 @@ var nt = class extends x.BaseTransport {
           ? (t = 'dc:dark')
           : (t = 'dc:light'))
       try {
-        let [r, n] = await s('get_theme', { themeAddress: t })
+        const [r, n] = await s('get_theme', { themeAddress: t })
         return { theme: r, data: n }
       } catch (r) {
         return this.log.error('failed to getActiveTheme:', r), null

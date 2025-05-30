@@ -1,17 +1,17 @@
-var q = Object.create
-var u = Object.defineProperty
-var b = Object.getOwnPropertyDescriptor
-var k = Object.getOwnPropertyNames
-var F = Object.getPrototypeOf,
+const q = Object.create
+const u = Object.defineProperty
+const b = Object.getOwnPropertyDescriptor
+const k = Object.getOwnPropertyNames
+const F = Object.getPrototypeOf,
   y = Object.prototype.hasOwnProperty
-var i = (e, t) => u(e, 'name', { value: t, configurable: !0 })
-var P = (e, t) => () => (t || e((t = { exports: {} }).exports, t), t.exports),
+const i = (e, t) => u(e, 'name', { value: t, configurable: !0 })
+const P = (e, t) => () => (t || e((t = { exports: {} }).exports, t), t.exports),
   x = (e, t) => {
-    for (var _ in t) u(e, _, { get: t[_], enumerable: !0 })
+    for (const _ in t) u(e, _, { get: t[_], enumerable: !0 })
   },
   w = (e, t, _, r) => {
     if ((t && typeof t == 'object') || typeof t == 'function')
-      for (let n of k(t))
+      for (const n of k(t))
         !y.call(e, n) &&
           n !== _ &&
           u(e, n, {
@@ -20,7 +20,7 @@ var P = (e, t) => () => (t || e((t = { exports: {} }).exports, t), t.exports),
           })
     return e
   }
-var U = (e, t, _) => (
+const U = (e, t, _) => (
   (_ = e != null ? q(F(e)) : {}),
   w(
     t || !e || !e.__esModule
@@ -29,8 +29,8 @@ var U = (e, t, _) => (
     e
   )
 )
-var Y = P((et, H) => {
-  var R = null
+const Y = P((et, H) => {
+  let R = null
   typeof WebSocket < 'u'
     ? (R = WebSocket)
     : typeof MozWebSocket < 'u'
@@ -42,23 +42,23 @@ var Y = P((et, H) => {
           : typeof self < 'u' && (R = self.WebSocket || self.MozWebSocket)
   H.exports = R
 })
-var B = P((at, C) => {
+const B = P((at, C) => {
   function I() {}
   i(I, 'E')
   I.prototype = {
     on: function (e, t, _) {
-      var r = this.e || (this.e = {})
+      const r = this.e || (this.e = {})
       return (r[e] || (r[e] = [])).push({ fn: t, ctx: _ }), this
     },
     once: function (e, t, _) {
-      var r = this
+      const r = this
       function n() {
         r.off(e, n), t.apply(_, arguments)
       }
       return i(n, 'listener'), (n._ = t), this.on(e, n, _)
     },
     emit: function (e) {
-      var t = [].slice.call(arguments, 1),
+      let t = [].slice.call(arguments, 1),
         _ = ((this.e || (this.e = {}))[e] || []).slice(),
         r = 0,
         n = _.length
@@ -75,11 +75,11 @@ var B = P((at, C) => {
       return this
     },
     off: function (e, t) {
-      var _ = this.e || (this.e = {}),
+      const _ = this.e || (this.e = {}),
         r = _[e],
         n = []
       if (r && t)
-        for (var o = 0, E = r.length; o < E; o++)
+        for (let o = 0, E = r.length; o < E; o++)
           r[o].fn !== t && r[o].fn._ !== t && n.push(r[o])
       return n.length ? (_[e] = n) : delete _[e], this
     },
@@ -87,7 +87,7 @@ var B = P((at, C) => {
   C.exports = I
   C.exports.TinyEmitter = I
 })
-var S = class {
+const S = class {
   static {
     i(this, 'RawClient')
   }
@@ -554,9 +554,9 @@ var S = class {
     return this._transport.request('misc_send_draft', [t, _])
   }
 }
-var A = {}
+const A = {}
 x(A, { BaseTransport: () => D, WebsocketTransport: () => g })
-var T = class {
+const T = class {
   static {
     i(this, 'Emitter')
   }
@@ -567,11 +567,11 @@ var T = class {
     return this._on(t, _, r)
   }
   _on(t, _, r) {
-    let n = { callback: _, ctx: r }
+    const n = { callback: _, ctx: r }
     return this.e.has(t) || this.e.set(t, []), this.e.get(t).push(n), this
   }
   once(t, _, r) {
-    let n = i((...o) => {
+    const n = i((...o) => {
       this.off(t, _), _.apply(r, o)
     }, 'listener')
     this._on(t, n, r)
@@ -587,7 +587,7 @@ var T = class {
   }
   off(t, _) {
     if (!this.e.has(t)) return
-    let n = this.e.get(t).filter(o => o.callback !== _)
+    const n = this.e.get(t).filter(o => o.callback !== _)
     return n.length ? this.e.set(t, n) : this.e.delete(t), this
   }
 }
@@ -604,23 +604,23 @@ var D = class extends T {
   close() {}
   _onmessage(t) {
     if (t.method) {
-      let n = t
+      const n = t
       this.emit('request', n)
     }
     if (!t.id) return
-    let _ = t
+    const _ = t
     if (!_.id) return
-    let r = this._requests.get(_.id)
+    const r = this._requests.get(_.id)
     r &&
       (this._requests.delete(_.id),
       _.error ? r.reject(_.error) : r.resolve(_.result))
   }
   notification(t, _) {
-    let r = { jsonrpc: '2.0', method: t, id: 0, params: _ }
+    const r = { jsonrpc: '2.0', method: t, id: 0, params: _ }
     this._send(r)
   }
   request(t, _) {
-    let r = ++this._requestId,
+    const r = ++this._requestId,
       n = { jsonrpc: '2.0', method: t, id: r, params: _ }
     return (
       this._send(n),
@@ -630,7 +630,7 @@ var D = class extends T {
     )
   }
 }
-var G = U(Y(), 1)
+const G = U(Y(), 1)
 var g = class extends D {
     static {
       i(this, 'WebsocketTransport')
@@ -643,8 +643,8 @@ var g = class extends D {
     }
     constructor(t, _) {
       super(), (this.url = t)
-      let r = i(n => {
-        let o = JSON.parse(n.data)
+      const r = i(n => {
+        const o = JSON.parse(n.data)
         this._onmessage(o)
       }, 'onmessage')
       ;(this._socket = new O(t, r, _)),
@@ -653,7 +653,7 @@ var g = class extends D {
         this._socket.on('error', n => this.emit('error', n))
     }
     _send(t) {
-      let _ = JSON.stringify(t)
+      const _ = JSON.stringify(t)
       this._socket.send(_)
     }
     close() {
@@ -705,7 +705,7 @@ var g = class extends D {
         }),
         (this.socket.onclose = _ => {
           ;(this._connected = !1), this.emit('disconnect')
-          let r = Math.min(
+          const r = Math.min(
             this.options.reconnectInterval *
               Math.pow(this.options.reconnectDecay, this._reconnectAttempts),
             this.options.maxReconnectInterval
@@ -725,8 +725,8 @@ var g = class extends D {
       ;(this.closed = !0), this.socket.close()
     }
   }
-var l = U(B(), 1)
-var p = class extends l.TinyEmitter {
+const l = U(B(), 1)
+const p = class extends l.TinyEmitter {
   static {
     i(this, 'BaseDeltaChat')
   }
@@ -739,7 +739,7 @@ var p = class extends l.TinyEmitter {
   }
   async eventLoop() {
     for (;;) {
-      let t = await this.rpc.getNextEvent()
+      const t = await this.rpc.getNextEvent()
       this.emit(t.event.kind, t.contextId, t.event),
         this.emit('ALL', t.contextId, t.event),
         this.contextEmitters[t.contextId] &&
@@ -757,7 +757,7 @@ var p = class extends l.TinyEmitter {
         this.contextEmitters[t])
   }
 }
-var N
+let N
 ;(function (e) {
   ;(e[(e.DC_CERTCK_ACCEPT_INVALID = 2)] = 'DC_CERTCK_ACCEPT_INVALID'),
     (e[(e.DC_CERTCK_ACCEPT_INVALID_CERTIFICATES = 3)] =
@@ -1015,7 +1015,7 @@ var N
     (e[(e.DC_VIDEOCHATTYPE_JITSI = 2)] = 'DC_VIDEOCHATTYPE_JITSI'),
     (e[(e.DC_VIDEOCHATTYPE_UNKNOWN = 0)] = 'DC_VIDEOCHATTYPE_UNKNOWN')
 })(N || (N = {}))
-var {
+let {
     app_getPath: W,
     ipcRenderer: s,
     getPathForFile: V,
@@ -1028,9 +1028,9 @@ var {
       super()
       this.callCounterFunction = _
       s.on('json-rpc-message', (r, n) => {
-        let o = JSON.parse(n)
+        const o = JSON.parse(n)
         if (M) {
-          let E = performance.now(),
+          const E = performance.now(),
             a = d.get(o.id)
           d.delete(o.id)
           let v = a != null ? (E - a.sentAt).toFixed(3) : void 0,
@@ -1057,9 +1057,9 @@ var {
       i(this, 'ElectronTransport')
     }
     _send(_) {
-      let r = JSON.stringify(_)
+      const r = JSON.stringify(_)
       if ((s.invoke('json-rpc-request', r), M)) {
-        let n = performance.now()
+        const n = performance.now()
         d.set(_.id, { message: _, sentAt: n }),
           setTimeout(() => {
             d.delete(_.id)
@@ -1098,7 +1098,7 @@ var {
       s.send('ondragstart', t)
     }
     isDroppedFileFromOutside(t) {
-      let _ = V(t)
+      const _ = V(t)
       return !/DeltaChat\/.+?\.sqlite-blobs\//gi.test(_.replace('\\', '/'))
     }
     emitUIFullyReady() {
@@ -1223,7 +1223,7 @@ var {
     }
     transformBlobURL(t) {
       if (!t) return t
-      let _ = t.replace(/\\/g, '/').split('/'),
+      const _ = t.replace(/\\/g, '/').split('/'),
         r = _[_.length - 1]
       return decodeURIComponent(r) === r
         ? t.replace(r, encodeURIComponent(r))
@@ -1235,7 +1235,7 @@ var {
         .replace(/%5C/g, decodeURIComponent)
     }
     async showOpenFileDialog(t) {
-      let { filePaths: _ } = await s.invoke('fileChooser', t)
+      const { filePaths: _ } = await s.invoke('fileChooser', t)
       return _
     }
     openLink(t) {
@@ -1256,7 +1256,7 @@ var {
     }
     initialize(t, _) {
       this.log = _('runtime/electron')
-      let r = (this.rc_config = s.sendSync('get-rc-config'))
+      const r = (this.rc_config = s.sendSync('get-rc-config'))
       return (
         (this.runtime_info = s.sendSync('get-runtime-info')),
         r['log-debug'] && (M = !0),

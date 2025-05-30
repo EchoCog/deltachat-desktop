@@ -27,7 +27,7 @@
         C[f][0].call(
           l.exports,
           function (q) {
-            var r = C[f][1][q]
+            const r = C[f][1][q]
             return p(r ? r : q)
           },
           l,
@@ -67,18 +67,18 @@
               if (91 > m) return m - 65
               if (123 > m) return m - 97 + 26
             }
-            var t = 'undefined' !== typeof Uint8Array ? Uint8Array : Array
+            const t = 'undefined' !== typeof Uint8Array ? Uint8Array : Array
             e.toByteArray = function (m) {
               function f(d) {
                 q[k++] = d
               }
               if (0 < m.length % 4)
                 throw Error('Invalid string. Length must be a multiple of 4')
-              var c = m.length
-              var l =
+              let c = m.length
+              const l =
                 '=' === m.charAt(c - 2) ? 2 : '=' === m.charAt(c - 1) ? 1 : 0
               var q = new t((3 * m.length) / 4 - l)
-              var r = 0 < l ? m.length - 4 : m.length
+              const r = 0 < l ? m.length - 4 : m.length
               var k = 0
               for (c = 0; c < r; c += 4) {
                 var u =
@@ -103,10 +103,10 @@
               return q
             }
             e.fromByteArray = function (m) {
-              var f = m.length % 3,
+              let f = m.length % 3,
                 c = '',
                 l
-              var q = 0
+              let q = 0
               for (l = m.length - f; q < l; q += 3) {
                 var r = (m[q] << 16) + (m[q + 1] << 8) + m[q + 2]
                 r =
@@ -163,7 +163,7 @@
       4: [
         function (C, J, A) {
           ;(function (e) {
-            var p = Object.prototype.toString,
+            const p = Object.prototype.toString,
               t =
                 'function' === typeof e.alloc &&
                 'function' === typeof e.allocUnsafe &&
@@ -173,7 +173,7 @@
                 throw new TypeError('"value" argument must not be a number')
               if ('ArrayBuffer' === p.call(m).slice(8, -1)) {
                 f >>>= 0
-                var l = m.byteLength - f
+                const l = m.byteLength - f
                 if (0 > l) throw new RangeError("'offset' is out of bounds")
                 if (void 0 === c) c = l
                 else if (((c >>>= 0), c > l))
@@ -201,7 +201,7 @@
         function (C, J, A) {
           function e(a, b, h) {
             if (!(this instanceof e)) return new e(a, b, h)
-            var w = typeof a
+            const w = typeof a
             if ('number' === w) var y = 0 < a ? a >>> 0 : 0
             else if ('string' === w) {
               if ('base64' === b)
@@ -233,7 +233,7 @@
             if (e.TYPED_ARRAY_SUPPORT && 'number' === typeof a.byteLength)
               I._set(a)
             else {
-              var K = a
+              const K = a
               if (
                 z(K) ||
                 e.isBuffer(K) ||
@@ -248,7 +248,7 @@
             return I
           }
           function p(a, b, h) {
-            var w = ''
+            let w = ''
             for (h = Math.min(a.length, h); b < h; b++)
               w += String.fromCharCode(a[b])
             return w
@@ -266,13 +266,13 @@
           }
           function f(a, b, h, w) {
             0 > b && (b = 65535 + b + 1)
-            for (var y = 0, I = Math.min(a.length - h, 2); y < I; y++)
+            for (let y = 0, I = Math.min(a.length - h, 2); y < I; y++)
               a[h + y] =
                 (b & (255 << (8 * (w ? y : 1 - y)))) >>> (8 * (w ? y : 1 - y))
           }
           function c(a, b, h, w) {
             0 > b && (b = 4294967295 + b + 1)
-            for (var y = 0, I = Math.min(a.length - h, 4); y < I; y++)
+            for (let y = 0, I = Math.min(a.length - h, 4); y < I; y++)
               a[h + y] = (b >>> (8 * (w ? y : 3 - y))) & 255
           }
           function l(a, b, h, w, y, I) {
@@ -291,10 +291,10 @@
           }
           function k(a) {
             for (var b = [], h = 0; h < a.length; h++) {
-              var w = a.charCodeAt(h)
+              let w = a.charCodeAt(h)
               if (127 >= w) b.push(w)
               else {
-                var y = h
+                let y = h
                 55296 <= w && 57343 >= w && h++
                 w = encodeURIComponent(a.slice(y, h + 1))
                   .substr(1)
@@ -332,7 +332,7 @@
           var G = 1073741823
           e.TYPED_ARRAY_SUPPORT = (function () {
             try {
-              var a = new ArrayBuffer(0),
+              const a = new ArrayBuffer(0),
                 b = new Uint8Array(a)
               b.foo = function () {
                 return 42
@@ -383,13 +383,13 @@
               throw new TypeError('Usage: Buffer.concat(list[, length])')
             if (0 === a.length) return new e(0)
             if (1 === a.length) return a[0]
-            var h
+            let h
             if (void 0 === b)
               for (h = b = 0; h < a.length; h++) b += a[h].length
-            var w = new e(b),
+            let w = new e(b),
               y = 0
             for (h = 0; h < a.length; h++) {
-              var I = a[h]
+              const I = a[h]
               I.copy(w, y)
               y += I.length
             }
@@ -427,7 +427,7 @@
           e.prototype.length = void 0
           e.prototype.parent = void 0
           e.prototype.toString = function (a, b, h) {
-            var w = !1
+            let w = !1
             b >>>= 0
             h = void 0 === h || Infinity === h ? this.length : h >>> 0
             a || (a = 'utf8')
@@ -489,7 +489,7 @@
             return 0 === e.compare(this, a)
           }
           e.prototype.inspect = function () {
-            var a = '',
+            let a = '',
               b = A.INSPECT_MAX_BYTES
             0 < this.length &&
               ((a = this.toString('hex', 0, b).match(/.{2}/g).join(' ')),
@@ -557,8 +557,8 @@
               case 'utf16le':
               case 'utf-16le':
                 y = []
-                for (var I = 0; I < a.length; I++) {
-                  var K = a.charCodeAt(I)
+                for (let I = 0; I < a.length; I++) {
+                  let K = a.charCodeAt(I)
                   w = K >> 8
                   K %= 256
                   y.push(K)
@@ -578,7 +578,7 @@
             }
           }
           e.prototype.slice = function (a, b) {
-            var h = this.length
+            let h = this.length
             a = ~~a
             b = void 0 === b ? h : ~~b
             0 > a ? ((a += h), 0 > a && (a = 0)) : a > h && (a = h)
@@ -622,12 +622,12 @@
           }
           e.prototype.readInt16LE = function (a, b) {
             b || t(a, 2, this.length)
-            var h = this[a] | (this[a + 1] << 8)
+            const h = this[a] | (this[a + 1] << 8)
             return h & 32768 ? h | 4294901760 : h
           }
           e.prototype.readInt16BE = function (a, b) {
             b || t(a, 2, this.length)
-            var h = this[a + 1] | (this[a] << 8)
+            const h = this[a + 1] | (this[a] << 8)
             return h & 32768 ? h | 4294901760 : h
           }
           e.prototype.readInt32LE = function (a, b) {
@@ -794,7 +794,7 @@
               a.length - b < w - h && (w = a.length - b + h)
               w -= h
               if (1e3 > w || !e.TYPED_ARRAY_SUPPORT)
-                for (var y = 0; y < w; y++) a[y + b] = this[y + h]
+                for (let y = 0; y < w; y++) a[y + b] = this[y + h]
               else a._set(this.subarray(h, h + w), b)
             }
           }
@@ -811,7 +811,7 @@
               if ('number' === typeof a) for (; b < h; b++) this[b] = a
               else {
                 a = k(a.toString())
-                for (var w = a.length; b < h; b++) this[b] = a[b % w]
+                for (let w = a.length; b < h; b++) this[b] = a[b % w]
               }
               return this
             }
@@ -831,7 +831,7 @@
               'Buffer.toArrayBuffer not supported in this browser'
             )
           }
-          var D = e.prototype
+          const D = e.prototype
           e._augment = function (a) {
             a.constructor = e
             a._isBuffer = !0
@@ -887,12 +887,12 @@
       6: [
         function (C, J, A) {
           A.read = function (e, p, t, m, f) {
-            var c = 8 * f - m - 1
-            var l = (1 << c) - 1,
+            let c = 8 * f - m - 1
+            let l = (1 << c) - 1,
               q = l >> 1,
               r = -7
             f = t ? f - 1 : 0
-            var k = t ? -1 : 1,
+            let k = t ? -1 : 1,
               u = e[p + f]
             f += k
             t = u & ((1 << -r) - 1)
@@ -910,13 +910,13 @@
             return (u ? -1 : 1) * c * Math.pow(2, t - m)
           }
           A.write = function (e, p, t, m, f, c) {
-            var l,
+            let l,
               q = 8 * c - f - 1,
               r = (1 << q) - 1,
               k = r >> 1,
               u = 23 === f ? Math.pow(2, -24) - Math.pow(2, -77) : 0
             c = m ? 0 : c - 1
-            var d = m ? 1 : -1,
+            const d = m ? 1 : -1,
               g = 0 > p || (0 === p && 0 > 1 / p) ? 1 : 0
             p = Math.abs(p)
             isNaN(p) || Infinity === p
@@ -940,7 +940,7 @@
       ],
       7: [
         function (C, J, A) {
-          var e = Object.prototype.toString
+          const e = Object.prototype.toString
           J.exports =
             Array.isArray ||
             function (p) {
@@ -954,7 +954,7 @@
           ;(function (e) {
             function p(c, l) {
               for (var q = 0, r = c.length - 1; 0 <= r; r--) {
-                var k = c[r]
+                const k = c[r]
                 '.' === k
                   ? c.splice(r, 1)
                   : '..' === k
@@ -970,7 +970,7 @@
                 l(c[r], r, c) && q.push(c[r])
               return q
             }
-            var m =
+            const m =
               /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/
             A.resolve = function () {
               for (
@@ -978,7 +978,7 @@
                 -1 <= q && !l;
                 q--
               ) {
-                var r = 0 <= q ? arguments[q] : e.cwd()
+                const r = 0 <= q ? arguments[q] : e.cwd()
                 if ('string' !== typeof r)
                   throw new TypeError(
                     'Arguments to path.resolve must be strings'
@@ -994,7 +994,7 @@
               return (l ? '/' : '') + c || '.'
             }
             A.normalize = function (c) {
-              var l = A.isAbsolute(c),
+              const l = A.isAbsolute(c),
                 q = '/' === f(c, -1)
               ;(c = p(
                 t(c.split('/'), function (r) {
@@ -1011,7 +1011,7 @@
               return '/' === c.charAt(0)
             }
             A.join = function () {
-              var c = Array.prototype.slice.call(arguments, 0)
+              const c = Array.prototype.slice.call(arguments, 0)
               return A.normalize(
                 t(c, function (l, q) {
                   if ('string' !== typeof l)
@@ -1051,7 +1051,7 @@
             A.sep = '/'
             A.delimiter = ':'
             A.dirname = function (c) {
-              var l = m.exec(c).slice(1)
+              let l = m.exec(c).slice(1)
               c = l[0]
               l = l[1]
               if (!c && !l) return '.'
@@ -1059,7 +1059,7 @@
               return c + l
             }
             A.basename = function (c, l) {
-              var q = m.exec(c).slice(1)[2]
+              let q = m.exec(c).slice(1)[2]
               l &&
                 q.substr(-1 * l.length) === l &&
                 (q = q.substr(0, q.length - l.length))
@@ -1095,11 +1095,11 @@
               window.postMessage &&
               window.addEventListener
             ) {
-              var p = []
+              const p = []
               window.addEventListener(
                 'message',
                 function (t) {
-                  var m = t.source
+                  const m = t.source
                   ;(m !== window && null !== m) ||
                     'process-tick' !== t.data ||
                     (t.stopPropagation(), 0 < p.length && p.shift()())
@@ -1158,7 +1158,7 @@
               : Object.getOwnPropertyNames(this._set).length
           }
           e.prototype.add = function (f, c) {
-            var l = m ? f : p.toSetString(f),
+            const l = m ? f : p.toSetString(f),
               q = m ? this.has(f) : t.call(this._set, l),
               r = this._array.length
             ;(q && !c) || this._array.push(f)
@@ -1190,22 +1190,22 @@
       ],
       11: [
         function (C, J, A) {
-          var e = C('./base64')
+          const e = C('./base64')
           A.encode = function (p) {
-            var t = '',
+            let t = '',
               m = 0 > p ? (-p << 1) + 1 : p << 1
             do (p = m & 31), (m >>>= 5), 0 < m && (p |= 32), (t += e.encode(p))
             while (0 < m)
             return t
           }
           A.decode = function (p, t, m) {
-            var f = p.length,
+            let f = p.length,
               c = 0,
               l = 0
             do {
               if (t >= f)
                 throw Error('Expected more digits in base 64 VLQ value.')
-              var q = e.decode(p.charCodeAt(t++))
+              let q = e.decode(p.charCodeAt(t++))
               if (-1 === q)
                 throw Error('Invalid base64 digit: ' + p.charAt(t - 1))
               var r = !!(q & 32)
@@ -1222,7 +1222,7 @@
       ],
       12: [
         function (C, J, A) {
-          var e =
+          const e =
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.split(
               ''
             )
@@ -1249,7 +1249,7 @@
       13: [
         function (C, J, A) {
           function e(p, t, m, f, c, l) {
-            var q = Math.floor((t - p) / 2) + p,
+            const q = Math.floor((t - p) / 2) + p,
               r = c(m, f[q], !0)
             return 0 === r
               ? q
@@ -1288,12 +1288,12 @@
             this._sorted = !0
             this._last = { generatedLine: -1, generatedColumn: 0 }
           }
-          var p = C('./util')
+          const p = C('./util')
           e.prototype.unsortedForEach = function (t, m) {
             this._array.forEach(t, m)
           }
           e.prototype.add = function (t) {
-            var m = this._last,
+            const m = this._last,
               f = m.generatedLine,
               c = t.generatedLine,
               l = m.generatedColumn,
@@ -1318,13 +1318,13 @@
       15: [
         function (C, J, A) {
           function e(t, m, f) {
-            var c = t[m]
+            const c = t[m]
             t[m] = t[f]
             t[f] = c
           }
           function p(t, m, f, c) {
             if (f < c) {
-              var l = f - 1
+              let l = f - 1
               e(t, Math.round(f + Math.random() * (c - f)), c)
               for (var q = t[c], r = f; r < c; r++)
                 0 >= m(t[r], q) && ((l += 1), e(t, l, r))
@@ -1343,14 +1343,14 @@
       16: [
         function (C, J, A) {
           function e(k, u) {
-            var d = k
+            let d = k
             'string' === typeof k && (d = f.parseSourceMapInput(k))
             return null != d.sections ? new m(d, u) : new p(d, u)
           }
           function p(k, u) {
-            var d = k
+            let d = k
             'string' === typeof k && (d = f.parseSourceMapInput(k))
-            var g = f.getArg(d, 'version'),
+            let g = f.getArg(d, 'version'),
               n = f.getArg(d, 'sources'),
               v = f.getArg(d, 'names', []),
               z = f.getArg(d, 'sourceRoot', null),
@@ -1384,20 +1384,20 @@
                 null
           }
           function m(k, u) {
-            var d = k
+            let d = k
             'string' === typeof k && (d = f.parseSourceMapInput(k))
-            var g = f.getArg(d, 'version')
+            const g = f.getArg(d, 'version')
             d = f.getArg(d, 'sections')
             if (g != this._version) throw Error('Unsupported version: ' + g)
             this._sources = new l()
             this._names = new l()
-            var n = { line: -1, column: 0 }
+            let n = { line: -1, column: 0 }
             this._sections = d.map(function (v) {
               if (v.url)
                 throw Error(
                   'Support for url field in sections not implemented.'
                 )
-              var z = f.getArg(v, 'offset'),
+              const z = f.getArg(v, 'offset'),
                 G = f.getArg(z, 'line'),
                 D = f.getArg(z, 'column')
               if (G < n.line || (G === n.line && D < n.column))
@@ -1444,7 +1444,7 @@
             },
           })
           e.prototype._charIsMappingSeparator = function (k, u) {
-            var d = k.charAt(u)
+            const d = k.charAt(u)
             return ';' === d || ',' === d
           }
           e.prototype._parseMappings = function (k, u) {
@@ -1466,9 +1466,9 @@
               default:
                 throw Error('Unknown order of iteration.')
             }
-            var g = this.sourceRoot
+            const g = this.sourceRoot
             d.map(function (n) {
-              var v = null === n.source ? null : this._sources.at(n.source)
+              let v = null === n.source ? null : this._sources.at(n.source)
               v = f.computeSourceURL(g, v, this._sourceMapURL)
               return {
                 source: v,
@@ -1481,7 +1481,7 @@
             }, this).forEach(k, u)
           }
           e.prototype.allGeneratedPositionsFor = function (k) {
-            var u = f.getArg(k, 'line'),
+            let u = f.getArg(k, 'line'),
               d = {
                 source: f.getArg(k, 'source'),
                 originalLine: u,
@@ -1491,7 +1491,7 @@
               (d.source = f.relative(this.sourceRoot, d.source))
             if (!this._sources.has(d.source)) return []
             d.source = this._sources.indexOf(d.source)
-            var g = []
+            const g = []
             d = this._findMapping(
               d,
               this._originalMappings,
@@ -1501,7 +1501,7 @@
               c.LEAST_UPPER_BOUND
             )
             if (0 <= d) {
-              var n = this._originalMappings[d]
+              let n = this._originalMappings[d]
               if (void 0 === k.column)
                 for (u = n.originalLine; n && n.originalLine === u; )
                   g.push({
@@ -1529,7 +1529,7 @@
           p.prototype = Object.create(e.prototype)
           p.prototype.consumer = e
           p.fromSourceMap = function (k, u) {
-            var d = Object.create(p.prototype),
+            const d = Object.create(p.prototype),
               g = (d._names = l.fromArray(k._names.toArray(), !0)),
               n = (d._sources = l.fromArray(k._sources.toArray(), !0))
             d.sourceRoot = k._sourceRoot
@@ -1540,7 +1540,7 @@
             d.file = k._file
             d._sourceMapURL = u
             for (
-              var v = k._mappings.toArray().slice(),
+              let v = k._mappings.toArray().slice(),
                 z = (d.__generatedMappings = []),
                 G = (d.__originalMappings = []),
                 D = 0,
@@ -1548,7 +1548,7 @@
               D < L;
               D++
             ) {
-              var a = v[D],
+              const a = v[D],
                 b = new t()
               b.generatedLine = a.generatedLine
               b.generatedColumn = a.generatedColumn
@@ -1645,10 +1645,10 @@
             return c.search(k, u, n, v)
           }
           p.prototype.computeColumnSpans = function () {
-            for (var k = 0; k < this._generatedMappings.length; ++k) {
-              var u = this._generatedMappings[k]
+            for (let k = 0; k < this._generatedMappings.length; ++k) {
+              const u = this._generatedMappings[k]
               if (k + 1 < this._generatedMappings.length) {
-                var d = this._generatedMappings[k + 1]
+                const d = this._generatedMappings[k + 1]
                 if (u.generatedLine === d.generatedLine) {
                   u.lastGeneratedColumn = d.generatedColumn - 1
                   continue
@@ -1658,7 +1658,7 @@
             }
           }
           p.prototype.originalPositionFor = function (k) {
-            var u = {
+            let u = {
               generatedLine: f.getArg(k, 'line'),
               generatedColumn: f.getArg(k, 'column'),
             }
@@ -1683,7 +1683,7 @@
                   u,
                   this._sourceMapURL
                 )))
-              var d = f.getArg(k, 'name', null)
+              let d = f.getArg(k, 'name', null)
               null !== d && (d = this._names.at(d))
               return {
                 source: u,
@@ -1704,15 +1704,15 @@
           }
           p.prototype.sourceContentFor = function (k, u) {
             if (!this.sourcesContent) return null
-            var d = k
+            let d = k
             null != this.sourceRoot && (d = f.relative(this.sourceRoot, d))
             if (this._sources.has(d))
               return this.sourcesContent[this._sources.indexOf(d)]
-            var g = this.sources,
+            let g = this.sources,
               n
             for (n = 0; n < g.length; ++n)
               if (g[n] == k) return this.sourcesContent[n]
-            var v
+            let v
             if (null != this.sourceRoot && (v = f.urlParse(this.sourceRoot))) {
               g = d.replace(/^file:\/\//, '')
               if ('file' == v.scheme && this._sources.has(g))
@@ -1724,7 +1724,7 @@
             throw Error('"' + d + '" is not in the SourceMap.')
           }
           p.prototype.generatedPositionFor = function (k) {
-            var u = f.getArg(k, 'source')
+            let u = f.getArg(k, 'source')
             null != this.sourceRoot && (u = f.relative(this.sourceRoot, u))
             if (!this._sources.has(u))
               return { line: null, column: null, lastColumn: null }
@@ -1759,7 +1759,7 @@
             get: function () {
               for (var k = [], u = 0; u < this._sections.length; u++)
                 for (
-                  var d = 0;
+                  let d = 0;
                   d < this._sections[u].consumer.sources.length;
                   d++
                 )
@@ -1768,12 +1768,12 @@
             },
           })
           m.prototype.originalPositionFor = function (k) {
-            var u = {
+            let u = {
                 generatedLine: f.getArg(k, 'line'),
                 generatedColumn: f.getArg(k, 'column'),
               },
               d = c.search(u, this._sections, function (g, n) {
-                var v = g.generatedLine - n.generatedOffset.generatedLine
+                const v = g.generatedLine - n.generatedOffset.generatedLine
                 return v
                   ? v
                   : g.generatedColumn - n.generatedOffset.generatedColumn
@@ -1796,18 +1796,18 @@
             })
           }
           m.prototype.sourceContentFor = function (k, u) {
-            for (var d = 0; d < this._sections.length; d++) {
-              var g = this._sections[d].consumer.sourceContentFor(k, !0)
+            for (let d = 0; d < this._sections.length; d++) {
+              const g = this._sections[d].consumer.sourceContentFor(k, !0)
               if (g) return g
             }
             if (u) return null
             throw Error('"' + k + '" is not in the SourceMap.')
           }
           m.prototype.generatedPositionFor = function (k) {
-            for (var u = 0; u < this._sections.length; u++) {
-              var d = this._sections[u]
+            for (let u = 0; u < this._sections.length; u++) {
+              const d = this._sections[u]
               if (-1 !== d.consumer.sources.indexOf(f.getArg(k, 'source'))) {
-                var g = d.consumer.generatedPositionFor(k)
+                const g = d.consumer.generatedPositionFor(k)
                 if (g)
                   return {
                     line: g.line + (d.generatedOffset.generatedLine - 1),
@@ -1824,15 +1824,15 @@
           m.prototype._parseMappings = function (k, u) {
             this.__generatedMappings = []
             this.__originalMappings = []
-            for (var d = 0; d < this._sections.length; d++)
+            for (let d = 0; d < this._sections.length; d++)
               for (
-                var g = this._sections[d],
+                let g = this._sections[d],
                   n = g.consumer._generatedMappings,
                   v = 0;
                 v < n.length;
                 v++
               ) {
-                var z = n[v],
+                let z = n[v],
                   G = g.consumer._sources.at(z.source)
                 G = f.computeSourceURL(
                   g.consumer.sourceRoot,
@@ -1841,7 +1841,7 @@
                 )
                 this._sources.add(G)
                 G = this._sources.indexOf(G)
-                var D = null
+                let D = null
                 z.name &&
                   ((D = g.consumer._names.at(z.name)),
                   this._names.add(D),
@@ -1894,10 +1894,10 @@
             f = C('./mapping-list').MappingList
           e.prototype._version = 3
           e.fromSourceMap = function (c) {
-            var l = c.sourceRoot,
+            const l = c.sourceRoot,
               q = new e({ file: c.file, sourceRoot: l })
             c.eachMapping(function (r) {
-              var k = {
+              const k = {
                 generated: { line: r.generatedLine, column: r.generatedColumn },
               }
               null != r.source &&
@@ -1911,7 +1911,7 @@
               q.addMapping(k)
             })
             c.sources.forEach(function (r) {
-              var k = r
+              let k = r
               null !== l && (k = t.relative(l, r))
               q._sources.has(k) || q._sources.add(k)
               k = c.sourceContentFor(r)
@@ -1920,7 +1920,7 @@
             return q
           }
           e.prototype.addMapping = function (c) {
-            var l = t.getArg(c, 'generated'),
+            let l = t.getArg(c, 'generated'),
               q = t.getArg(c, 'original', null),
               r = t.getArg(c, 'source', null)
             c = t.getArg(c, 'name', null)
@@ -1939,7 +1939,7 @@
             })
           }
           e.prototype.setSourceContent = function (c, l) {
-            var q = c
+            let q = c
             null != this._sourceRoot && (q = t.relative(this._sourceRoot, q))
             null != l
               ? (this._sourcesContents ||
@@ -1951,7 +1951,7 @@
                   (this._sourcesContents = null))
           }
           e.prototype.applySourceMap = function (c, l, q) {
-            var r = l
+            let r = l
             if (null == l) {
               if (null == c.file)
                 throw Error(
@@ -1959,9 +1959,9 @@
                 )
               r = c.file
             }
-            var k = this._sourceRoot
+            const k = this._sourceRoot
             null != k && (r = t.relative(k, r))
-            var u = new m(),
+            const u = new m(),
               d = new m()
             this._mappings.unsortedForEach(function (g) {
               if (g.source === r && null != g.originalLine) {
@@ -1985,7 +1985,7 @@
             this._sources = u
             this._names = d
             c.sources.forEach(function (g) {
-              var n = c.sourceContentFor(g)
+              const n = c.sourceContentFor(g)
               null != n &&
                 (null != q && (g = t.join(q, g)),
                 null != k && (g = t.relative(k, g)),
@@ -2089,7 +2089,7 @@
             }, this)
           }
           e.prototype.toJSON = function () {
-            var c = {
+            const c = {
               version: this._version,
               sources: this._sources.toArray(),
               names: this._names.toArray(),
@@ -2128,14 +2128,14 @@
             this.$$$isSourceNode$$$ = !0
             null != q && this.add(q)
           }
-          var p = C('./source-map-generator').SourceMapGenerator,
+          const p = C('./source-map-generator').SourceMapGenerator,
             t = C('./util'),
             m = /(\r?\n)/
           e.fromStringWithSourceMap = function (f, c, l) {
             function q(z, G) {
               if (null === z || void 0 === z.source) r.add(G)
               else {
-                var D = l ? t.join(l, z.source) : z.source
+                const D = l ? t.join(l, z.source) : z.source
                 r.add(new e(z.originalLine, z.originalColumn, D, G, z.name))
               }
             }
@@ -2143,7 +2143,7 @@
               k = f.split(m),
               u = 0,
               d = function () {
-                var z = u < k.length ? k[u++] : void 0,
+                const z = u < k.length ? k[u++] : void 0,
                   G = (u < k.length ? k[u++] : void 0) || ''
                 return z + G
               },
@@ -2172,7 +2172,7 @@
             }, this)
             u < k.length && (v && q(v, d()), r.add(k.splice(u).join('')))
             c.sources.forEach(function (z) {
-              var G = c.sourceContentFor(z)
+              const G = c.sourceContentFor(z)
               null != G &&
                 (null != l && (z = t.join(l, z)), r.setSourceContent(z, G))
             })
@@ -2194,7 +2194,7 @@
           }
           e.prototype.prepend = function (f) {
             if (Array.isArray(f))
-              for (var c = f.length - 1; 0 <= c; c--) this.prepend(f[c])
+              for (let c = f.length - 1; 0 <= c; c--) this.prepend(f[c])
             else if (f.$$$isSourceNode$$$ || 'string' === typeof f)
               this.children.unshift(f)
             else
@@ -2218,10 +2218,10 @@
                     })
           }
           e.prototype.join = function (f) {
-            var c,
+            let c,
               l = this.children.length
             if (0 < l) {
-              var q = []
+              const q = []
               for (c = 0; c < l - 1; c++) q.push(this.children[c]), q.push(f)
               q.push(this.children[c])
               this.children = q
@@ -2229,7 +2229,7 @@
             return this
           }
           e.prototype.replaceRight = function (f, c) {
-            var l = this.children[this.children.length - 1]
+            const l = this.children[this.children.length - 1]
             l.$$$isSourceNode$$$
               ? l.replaceRight(f, c)
               : 'string' === typeof l
@@ -2244,20 +2244,20 @@
             for (var c = 0, l = this.children.length; c < l; c++)
               this.children[c].$$$isSourceNode$$$ &&
                 this.children[c].walkSourceContents(f)
-            var q = Object.keys(this.sourceContents)
+            const q = Object.keys(this.sourceContents)
             c = 0
             for (l = q.length; c < l; c++)
               f(t.fromSetString(q[c]), this.sourceContents[q[c]])
           }
           e.prototype.toString = function () {
-            var f = ''
+            let f = ''
             this.walk(function (c) {
               f += c
             })
             return f
           }
           e.prototype.toStringWithSourceMap = function (f) {
-            var c = '',
+            let c = '',
               l = 1,
               q = 0,
               r = new p(f),
@@ -2288,7 +2288,7 @@
                   (r.addMapping({ generated: { line: l, column: q } }),
                   (u = null),
                   (k = !1))
-              for (var G = 0, D = v.length; G < D; G++)
+              for (let G = 0, D = v.length; G < D; G++)
                 10 === v.charCodeAt(G)
                   ? (l++,
                     (q = 0),
@@ -2320,7 +2320,7 @@
               : null
           }
           function p(d) {
-            var g = ''
+            let g = ''
             d.scheme && (g += d.scheme + ':')
             g += '//'
             d.auth && (g += d.auth + '@')
@@ -2330,7 +2330,7 @@
             return g
           }
           function t(d) {
-            var g = d,
+            let g = d,
               n = e(d)
             if (n) {
               if (!n.path) return d
@@ -2355,7 +2355,7 @@
           function m(d, g) {
             '' === d && (d = '.')
             '' === g && (g = '.')
-            var n = e(g),
+            let n = e(g),
               v = e(d)
             v && (d = v.path || '/')
             if (n && !n.scheme) return v && (n.scheme = v.scheme), p(n)
@@ -2375,7 +2375,7 @@
           }
           function q(d) {
             if (!d) return !1
-            var g = d.length
+            let g = d.length
             if (
               9 > g ||
               95 !== d.charCodeAt(g - 1) ||
@@ -2422,7 +2422,7 @@
             '' === d && (d = '.')
             d = d.replace(/\/$/, '')
             for (var n = 0; 0 !== g.indexOf(d + '/'); ) {
-              var v = d.lastIndexOf('/')
+              const v = d.lastIndexOf('/')
               if (0 > v) return g
               d = d.slice(0, v)
               if (d.match(/^([^\/]+:\/)?\/*$/)) return g
@@ -2434,7 +2434,7 @@
           A.toSetString = C ? f : c
           A.fromSetString = C ? f : l
           A.compareByOriginalPositions = function (d, g, n) {
-            var v = r(d.source, g.source)
+            let v = r(d.source, g.source)
             if (0 !== v) return v
             v = d.originalLine - g.originalLine
             if (0 !== v) return v
@@ -2446,7 +2446,7 @@
             return 0 !== v ? v : r(d.name, g.name)
           }
           A.compareByGeneratedPositionsDeflated = function (d, g, n) {
-            var v = d.generatedLine - g.generatedLine
+            let v = d.generatedLine - g.generatedLine
             if (0 !== v) return v
             v = d.generatedColumn - g.generatedColumn
             if (0 !== v || n) return v
@@ -2458,7 +2458,7 @@
             return 0 !== v ? v : r(d.name, g.name)
           }
           A.compareByGeneratedPositionsInflated = function (d, g) {
-            var n = d.generatedLine - g.generatedLine
+            let n = d.generatedLine - g.generatedLine
             if (0 !== n) return n
             n = d.generatedColumn - g.generatedColumn
             if (0 !== n) return n
@@ -2523,8 +2523,8 @@
             }
             function t(x) {
               return function (B) {
-                for (var F = 0; F < x.length; F++) {
-                  var E = x[F](B)
+                for (let F = 0; F < x.length; F++) {
+                  const E = x[F](B)
                   if (E) return E
                 }
                 return null
@@ -2532,26 +2532,26 @@
             }
             function m(x, B) {
               if (!x) return B
-              var F = n.dirname(x),
+              let F = n.dirname(x),
                 E = /^\w+:\/\/[^\/]*/.exec(F)
               E = E ? E[0] : ''
-              var H = F.slice(E.length)
+              const H = F.slice(E.length)
               return E && /^\/\w:/.test(H)
                 ? ((E += '/'),
                   E + n.resolve(F.slice(E.length), B).replace(/\\/g, '/'))
                 : E + n.resolve(F.slice(E.length), B)
             }
             function f(x) {
-              var B = h[x.source]
+              let B = h[x.source]
               if (!B) {
                 var F = N(x.source)
                 F
                   ? ((B = h[x.source] = { url: F.url, map: new g(F.map) }),
                     B.map.sourcesContent &&
                       B.map.sources.forEach(function (E, H) {
-                        var M = B.map.sourcesContent[H]
+                        const M = B.map.sourcesContent[H]
                         if (M) {
-                          var S = m(B.url, E)
+                          const S = m(B.url, E)
                           b[S] = M
                         }
                       }))
@@ -2565,7 +2565,7 @@
                 : x
             }
             function c(x) {
-              var B = /^eval at ([^(]+) \((.+):(\d+):(\d+)\)$/.exec(x)
+              let B = /^eval at ([^(]+) \((.+):(\d+):(\d+)\)$/.exec(x)
               return B
                 ? ((x = f({ source: B[2], line: +B[3], column: B[4] - 1 })),
                   'eval at ' +
@@ -2582,7 +2582,7 @@
                   : x
             }
             function l() {
-              var x = ''
+              let x = ''
               if (this.isNative()) x = 'native'
               else {
                 var B = this.getScriptNameOrSourceURL()
@@ -2594,7 +2594,7 @@
                   (B = this.getColumnNumber()) && (x += ':' + B))
               }
               B = ''
-              var F = this.getFunctionName(),
+              let F = this.getFunctionName(),
                 E = !0,
                 H = this.isConstructor()
               if (this.isToplevel() || H)
@@ -2606,7 +2606,7 @@
               else {
                 H = this.getTypeName()
                 '[object Object]' === H && (H = 'null')
-                var M = this.getMethodName()
+                const M = this.getMethodName()
                 F
                   ? (H && 0 != F.indexOf(H) && (B += H + '.'),
                     (B += F),
@@ -2619,7 +2619,7 @@
               return B
             }
             function q(x) {
-              var B = {}
+              const B = {}
               Object.getOwnPropertyNames(Object.getPrototypeOf(x)).forEach(
                 function (F) {
                   B[F] = /^(?:is|get)/.test(F)
@@ -2635,20 +2635,20 @@
             function r(x, B) {
               void 0 === B && (B = { nextPosition: null, curPosition: null })
               if (x.isNative()) return (B.curPosition = null), x
-              var F = x.getFileName() || x.getScriptNameOrSourceURL()
+              const F = x.getFileName() || x.getScriptNameOrSourceURL()
               if (F) {
-                var E = x.getLineNumber(),
+                let E = x.getLineNumber(),
                   H = x.getColumnNumber() - 1,
                   M =
                     /^v(10\.1[6-9]|10\.[2-9][0-9]|10\.[0-9]{3,}|1[2-9]\d*|[2-9]\d|\d{3,}|11\.11)/,
                   S = M.test
-                var V = 'object' === typeof e && null !== e ? e.version : ''
+                const V = 'object' === typeof e && null !== e ? e.version : ''
                 M = S.call(M, V) ? 0 : 62
                 1 === E && H > M && !p() && !x.isEval() && (H -= M)
-                var O = f({ source: F, line: E, column: H })
+                const O = f({ source: F, line: E, column: H })
                 B.curPosition = O
                 x = q(x)
-                var T = x.getFunctionName
+                const T = x.getFunctionName
                 x.getFunctionName = function () {
                   return null == B.nextPosition
                     ? T()
@@ -2668,7 +2668,7 @@
                 }
                 return x
               }
-              var Q = x.isEval() && x.getEvalOrigin()
+              let Q = x.isEval() && x.getEvalOrigin()
               Q &&
                 ((Q = c(Q)),
                 (x = q(x)),
@@ -2693,12 +2693,12 @@
               return F + H.reverse().join('')
             }
             function u(x) {
-              var B = /\n    at [^(]+ \((.*):(\d+):(\d+)\)/.exec(x.stack)
+              let B = /\n {4}at [^(]+ \((.*):(\d+):(\d+)\)/.exec(x.stack)
               if (B) {
                 x = B[1]
-                var F = +B[2]
+                const F = +B[2]
                 B = +B[3]
-                var E = b[x]
+                let E = b[x]
                 if (!E && v && v.existsSync(x))
                   try {
                     E = v.readFileSync(x, 'utf8')
@@ -2713,15 +2713,15 @@
               return null
             }
             function d() {
-              var x = e.emit
+              const x = e.emit
               e.emit = function (B) {
                 if ('uncaughtException' === B) {
-                  var F = arguments[1] && arguments[1].stack,
+                  let F = arguments[1] && arguments[1].stack,
                     E = 0 < this.listeners(B).length
                   if (F && !E) {
                     F = arguments[1]
                     E = u(F)
-                    var H =
+                    const H =
                       'object' === typeof e && null !== e ? e.stderr : void 0
                     H &&
                       H._handle &&
@@ -2763,11 +2763,11 @@
                   return H ? '' : '/'
                 }))
               if (x in b) return b[x]
-              var B = ''
+              let B = ''
               try {
                 if (v) v.existsSync(x) && (B = v.readFileSync(x, 'utf8'))
                 else {
-                  var F = new XMLHttpRequest()
+                  const F = new XMLHttpRequest()
                   F.open('GET', x, !1)
                   F.send(null)
                   4 === F.readyState && 200 === F.status && (B = F.responseText)
@@ -2805,7 +2805,7 @@
                 : ((E = m(x, E)), (H = K(E)))
               return H ? { url: E, map: H } : null
             })
-            var P = y.slice(0),
+            const P = y.slice(0),
               W = I.slice(0)
             A.wrapCallSite = r
             A.getErrorSource = u
@@ -2830,7 +2830,7 @@
                 (x.overrideRetrieveSourceMap && (I.length = 0),
                 I.unshift(x.retrieveSourceMap))
               if (x.hookRequire && !p()) {
-                var B = J.require('module'),
+                const B = J.require('module'),
                   F = B.prototype._compile
                 F.__sourceMapSupport ||
                   ((B.prototype._compile = function (E, H) {

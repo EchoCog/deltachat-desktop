@@ -1,7 +1,7 @@
 ;(() => {
-  var Ms = Object.defineProperty
-  var y = (n, e) => {
-    for (var t in e) Ms(n, t, { get: e[t], enumerable: !0 })
+  const Ms = Object.defineProperty
+  const y = (n, e) => {
+    for (const t in e) Ms(n, t, { get: e[t], enumerable: !0 })
   }
   function z() {}
   function mt(n) {
@@ -21,7 +21,7 @@
       ? e == e
       : n !== e || (n && typeof n == 'object') || typeof n == 'function'
   }
-  var et
+  let et
   function ie(n, e) {
     return (
       et || (et = document.createElement('a')), (et.href = e), n === et.href
@@ -51,12 +51,12 @@
         )
       }
       _getObserver() {
-        var e
+        let e
         return (e = this._observer) !== null && e !== void 0
           ? e
           : (this._observer = new ResizeObserver(t => {
-              var s
-              for (let r of t)
+              let s
+              for (const r of t)
                 de.entries.set(r.target, r),
                   (s = this._listeners.get(r.target)) === null ||
                     s === void 0 ||
@@ -65,7 +65,7 @@
       }
     }
   de.entries = 'WeakMap' in Rn ? new WeakMap() : void 0
-  var bn = !1
+  let bn = !1
   function As() {
     bn = !0
   }
@@ -119,7 +119,7 @@
   function B(n, e, t) {
     n.classList[t ? 'add' : 'remove'](e)
   }
-  var st = class {
+  const st = class {
     constructor(e = !1) {
       ;(this.is_svg = !1), (this.is_svg = e), (this.e = this.n = null)
     }
@@ -153,7 +153,7 @@
       this.n.forEach(k)
     }
   }
-  var he
+  let he
   function fe(n) {
     he = n
   }
@@ -167,8 +167,8 @@
   function Et(n) {
     Tn().$$.on_destroy.push(n)
   }
-  var se = []
-  var le = [],
+  const se = []
+  let le = [],
     re = [],
     ft = [],
     Fs = Promise.resolve(),
@@ -182,15 +182,15 @@
   function Cn(n) {
     ft.push(n)
   }
-  var _t = new Set(),
+  let _t = new Set(),
     ne = 0
   function kn() {
     if (ne !== 0) return
-    let n = he
+    const n = he
     do {
       try {
         for (; ne < se.length; ) {
-          let e = se[ne]
+          const e = se[ne]
           ne++, fe(e), Os(e.$$)
         }
       } catch (e) {
@@ -198,7 +198,7 @@
       }
       for (fe(null), se.length = 0, ne = 0; le.length; ) le.pop()()
       for (let e = 0; e < re.length; e += 1) {
-        let t = re[e]
+        const t = re[e]
         _t.has(t) || (_t.add(t), t())
       }
       re.length = 0
@@ -209,20 +209,20 @@
   function Os(n) {
     if (n.fragment !== null) {
       n.update(), G(n.before_update)
-      let e = n.dirty
+      const e = n.dirty
       ;(n.dirty = [-1]),
         n.fragment && n.fragment.p(n.ctx, e),
         n.after_update.forEach(ht)
     }
   }
   function js(n) {
-    let e = [],
+    const e = [],
       t = []
     re.forEach(s => (n.indexOf(s) === -1 ? e.push(s) : t.push(s))),
       t.forEach(s => s()),
       (re = e)
   }
-  var tt = new Set(),
+  let tt = new Set(),
     ee
   function ae() {
     ee = { r: 0, c: [], p: ee }
@@ -254,7 +254,7 @@
       _ = p,
       c = {}
     for (; _--; ) c[n[_].key] = _
-    let d = [],
+    const d = [],
       T = new Map(),
       R = new Map(),
       M = []
@@ -266,13 +266,13 @@
         T.set(H, (d[_] = O)),
         H in c && R.set(H, Math.abs(_ - c[H]))
     }
-    let D = new Set(),
+    const D = new Set(),
       X = new Set()
     function V(v) {
       U(v, 1), v.m(a, u), i.set(v.key, v), (u = v.first), h--
     }
     for (; p && h; ) {
-      let v = d[h - 1],
+      const v = d[h - 1],
         H = n[p - 1],
         O = v.key,
         W = H.key
@@ -289,13 +289,13 @@
           : (o(H, i), p--)
     }
     for (; p--; ) {
-      let v = n[p]
+      const v = n[p]
       T.has(v.key) || o(v, i)
     }
     for (; h; ) V(d[h - 1])
     return G(M), d
   }
-  var zs = [
+  const zs = [
       'allowfullscreen',
       'allowpaymentrequest',
       'async',
@@ -324,25 +324,25 @@
     ],
     Ua = new Set([...zs])
   function Mn(n, e, t) {
-    let s = n.$$.props[e]
+    const s = n.$$.props[e]
     s !== void 0 && ((n.$$.bound[s] = t), t(n.$$.ctx[s]))
   }
   function rt(n) {
     n && n.c()
   }
   function me(n, e, t, s) {
-    let { fragment: r, after_update: l } = n.$$
+    const { fragment: r, after_update: l } = n.$$
     r && r.m(e, t),
       s ||
         ht(() => {
-          let i = n.$$.on_mount.map(mt).filter(nt)
+          const i = n.$$.on_mount.map(mt).filter(nt)
           n.$$.on_destroy ? n.$$.on_destroy.push(...i) : G(i),
             (n.$$.on_mount = [])
         }),
       l.forEach(ht)
   }
   function ue(n, e) {
-    let t = n.$$
+    const t = n.$$
     t.fragment !== null &&
       (js(t.after_update),
       G(t.on_destroy),
@@ -355,9 +355,9 @@
       (n.$$.dirty[(e / 31) | 0] |= 1 << e % 31)
   }
   function Y(n, e, t, s, r, l, i, a = [-1]) {
-    let o = he
+    const o = he
     fe(n)
-    let f = (n.$$ = {
+    const f = (n.$$ = {
       fragment: null,
       ctx: [],
       props: l,
@@ -380,7 +380,7 @@
     if (
       ((f.ctx = t
         ? t(n, e.props || {}, (m, p, ...h) => {
-            let _ = h.length ? h[0] : p
+            const _ = h.length ? h[0] : p
             return (
               f.ctx &&
                 r(f.ctx[m], (f.ctx[m] = _)) &&
@@ -397,7 +397,7 @@
     ) {
       if (e.hydrate) {
         As()
-        let m = Hs(e.target)
+        const m = Hs(e.target)
         f.fragment && f.fragment.l(m), m.forEach(k)
       } else f.fragment && f.fragment.c()
       e.intro && U(n.$$.fragment),
@@ -407,16 +407,16 @@
     }
     fe(o)
   }
-  var Ds
+  let Ds
   typeof HTMLElement == 'function' &&
     (Ds = class extends HTMLElement {
       constructor() {
         super(), this.attachShadow({ mode: 'open' })
       }
       connectedCallback() {
-        let { on_mount: n } = this.$$
+        const { on_mount: n } = this.$$
         this.$$.on_disconnect = n.map(mt).filter(nt)
-        for (let e in this.$$.slotted) this.appendChild(this.$$.slotted[e])
+        for (const e in this.$$.slotted) this.appendChild(this.$$.slotted[e])
       }
       attributeChangedCallback(n, e, t) {
         this[n] = t
@@ -429,11 +429,11 @@
       }
       $on(n, e) {
         if (!nt(e)) return z
-        let t = this.$$.callbacks[n] || (this.$$.callbacks[n] = [])
+        const t = this.$$.callbacks[n] || (this.$$.callbacks[n] = [])
         return (
           t.push(e),
           () => {
-            let s = t.indexOf(e)
+            const s = t.indexOf(e)
             s !== -1 && t.splice(s, 1)
           }
         )
@@ -444,17 +444,17 @@
           ((this.$$.skip_bound = !0), this.$$set(n), (this.$$.skip_bound = !1))
       }
     })
-  var q = class {
+  const q = class {
     $destroy() {
       ue(this, 1), (this.$destroy = z)
     }
     $on(e, t) {
       if (!nt(t)) return z
-      let s = this.$$.callbacks[e] || (this.$$.callbacks[e] = [])
+      const s = this.$$.callbacks[e] || (this.$$.callbacks[e] = [])
       return (
         s.push(t),
         () => {
-          let r = s.indexOf(t)
+          const r = s.indexOf(t)
           r !== -1 && s.splice(r, 1)
         }
       )
@@ -466,17 +466,17 @@
     }
   }
   function I(n) {
-    let e = typeof n == 'string' ? n.charCodeAt(0) : n
+    const e = typeof n == 'string' ? n.charCodeAt(0) : n
     return (e >= 97 && e <= 122) || (e >= 65 && e <= 90)
   }
   function $(n) {
-    let e = typeof n == 'string' ? n.charCodeAt(0) : n
+    const e = typeof n == 'string' ? n.charCodeAt(0) : n
     return e >= 48 && e <= 57
   }
   function Z(n) {
     return I(n) || $(n)
   }
-  var An = [
+  const An = [
     'art-lojban',
     'cel-gaulish',
     'no-bok',
@@ -487,7 +487,7 @@
     'zh-min-nan',
     'zh-xiang',
   ]
-  var Rt = {
+  const Rt = {
     'en-gb-oed': 'en-GB-oxendict',
     'i-ami': 'ami',
     'i-bnn': 'bnn',
@@ -515,7 +515,7 @@
     'zh-min-nan': 'nan',
     'zh-xiang': 'hsn',
   }
-  var Is = {}.hasOwnProperty
+  const Is = {}.hasOwnProperty
   function lt(n, e = {}) {
     let t = vn(),
       s = String(n),
@@ -523,7 +523,7 @@
       l = 0
     if (n == null) throw new Error('Expected string, got `' + n + '`')
     if (Is.call(Rt, r)) {
-      let a = Rt[r]
+      const a = Rt[r]
       return (e.normalize === void 0 || e.normalize === null || e.normalize) &&
         typeof a == 'string'
         ? lt(a)
@@ -603,7 +603,7 @@
           Z(r.charCodeAt(a + 2));
 
         ) {
-          let f = a + 1
+          const f = a + 1
           for (a = f + 2, o++; Z(r.charCodeAt(a)); ) {
             if (a - f > 7)
               return i(
@@ -634,7 +634,7 @@
       l = l ? l + 2 : 1
       let a = l
       for (; r.charCodeAt(a) === 45 && Z(r.charCodeAt(a + 1)); ) {
-        let o = l + 1
+        const o = l + 1
         for (a = o; Z(r.charCodeAt(a)); ) {
           if (a - o > 7)
             return i(
@@ -667,7 +667,7 @@
     }
   }
   function wn(n, e, t) {
-    let s = n.slice()
+    const s = n.slice()
     return (s[8] = e[t][0]), (s[9] = e[t][1]), s
   }
   function Ps(n) {
@@ -863,7 +863,7 @@
           t = r[2]
           let i
           for (i = 0; i < t.length; i += 1) {
-            let a = wn(r, t, i)
+            const a = wn(r, t, i)
             s[i] ? s[i].p(a, l) : ((s[i] = jn(a)), s[i].c(), s[i].m(e, null))
           }
           for (; i < s.length; i += 1) s[i].d(1)
@@ -954,12 +954,12 @@
           'result' in m && t(5, (l = m.result))
       }),
       (n.$$.update = () => {
-        if (n.$$.dirty & 32) e: f(l)
+        if (n.$$.dirty & 32) f(l)
       }),
       [s, a, o, u, r, l]
     )
   }
-  var bt = class extends q {
+  const bt = class extends q {
       constructor(e) {
         super(),
           Y(this, e, Bs, qs, K, {
@@ -971,11 +971,11 @@
     },
     Un = bt
   function Dn(n, e, t) {
-    let s = n.slice()
+    const s = n.slice()
     return (s[11] = e[t][0]), (s[12] = e[t][1]), s
   }
   function In(n, e, t) {
-    let s = n.slice()
+    const s = n.slice()
     return (s[15] = e[t]), s
   }
   function Vs(n) {
@@ -1088,7 +1088,7 @@
           h = d[3]
           let R
           for (R = 0; R < h.length; R += 1) {
-            let M = In(d, h, R)
+            const M = In(d, h, R)
             _[R] ? _[R].p(M, T) : ((_[R] = Vn(M)), _[R].c(), _[R].m(t, u))
           }
           for (; R < _.length; R += 1) _[R].d(1)
@@ -1253,7 +1253,7 @@
           t = r[2]
           let i
           for (i = 0; i < t.length; i += 1) {
-            let a = Dn(r, t, i)
+            const a = Dn(r, t, i)
             s[i] ? s[i].p(a, l) : ((s[i] = Gn(a)), s[i].c(), s[i].m(e, null))
           }
           for (; i < s.length; i += 1) s[i].d(1)
@@ -1337,7 +1337,7 @@
       u = !1,
       m = (_, c) => {
         if (_.length <= c) return _
-        let d = [..._]
+        const d = [..._]
           .sort((T, R) => R.locations.length - T.locations.length)
           .slice(0, 3)
           .map(T => T.url)
@@ -1361,12 +1361,12 @@
           'result' in _ && t(7, (l = _.result))
       }),
       (n.$$.update = () => {
-        if (n.$$.dirty & 128) e: p(l)
+        if (n.$$.dirty & 128) p(l)
       }),
       [s, a, o, f, u, h, r, l]
     )
   }
-  var Tt = class extends q {
+  const Tt = class extends q {
       constructor(e) {
         super(),
           Y(this, e, Ks, Gs, K, {
@@ -1378,11 +1378,11 @@
     },
     Jn = Tt
   function Yn(n, e, t) {
-    let s = n.slice()
+    const s = n.slice()
     return (s[10] = e[t][0]), (s[11] = e[t][1]), (s[12] = e), (s[13] = t), s
   }
   function Zn(n, e, t) {
-    let s = n.slice()
+    const s = n.slice()
     return (s[14] = e[t][0]), (s[15] = e[t][1]), (s[16] = e), (s[17] = t), s
   }
   function Xn(n) {
@@ -1415,7 +1415,7 @@
           i = Object.entries(o[1])
           let u
           for (u = 0; u < i.length; u += 1) {
-            let m = Yn(o, i, u)
+            const m = Yn(o, i, u)
             a[u] ? a[u].p(m, f) : ((a[u] = $n(m)), a[u].c(), a[u].m(e, null))
           }
           for (; u < a.length; u += 1) a[u].d(1)
@@ -1582,7 +1582,7 @@
           m = Object.entries(h[11] || {})
           let c
           for (c = 0; c < m.length; c += 1) {
-            let d = Zn(h, m, c)
+            const d = Zn(h, m, c)
             p[c] ? p[c].p(d, _) : ((p[c] = xn(d)), p[c].c(), p[c].m(l, null))
           }
           for (; c < p.length; c += 1) p[c].d(1)
@@ -1650,9 +1650,9 @@
       }),
       (n.$$.update = () => {
         if (n.$$.dirty & 258) {
-          e: if (s && !u) {
+          if (s && !u) {
             t(8, (u = !0))
-            let h = Object.entries(s || {})
+            const h = Object.entries(s || {})
             h.length === 1 &&
               Object.entries(h[0][1])?.length <= 6 &&
               t(7, (m = !0))
@@ -1662,7 +1662,7 @@
       [f, s, r, l, i, a, o, m, u, p]
     )
   }
-  var Ct = class extends q {
+  const Ct = class extends q {
       constructor(e) {
         super(),
           Y(this, e, Ys, Js, K, {
@@ -1677,7 +1677,7 @@
       }
     },
     ns = Ct
-  var kt = {}
+  const kt = {}
   y(kt, {
     comments: () => Xs,
     default: () => $s,
@@ -1704,7 +1704,7 @@
       searching: 'Soek vir [SEARCH_TERM]',
     },
     $s = { thanks_to: Zs, comments: Xs, direction: Qs, strings: xs }
-  var St = {}
+  const St = {}
   y(St, {
     comments: () => tr,
     default: () => rr,
@@ -1735,7 +1735,7 @@
       searching: '\u064A\u0628\u062D\u062B \u0639\u0646 [SEARCH_TERM]...',
     },
     rr = { thanks_to: er, comments: tr, direction: nr, strings: sr }
-  var yt = {}
+  const yt = {}
   y(yt, {
     comments: () => ir,
     default: () => ur,
@@ -1769,7 +1769,7 @@
         '\u0985\u09A8\u09C1\u09B8\u09A8\u09CD\u09A7\u09BE\u09A8 \u099A\u09B2\u099B\u09C7 [SEARCH_TERM]...',
     },
     ur = { thanks_to: lr, comments: ir, direction: ar, strings: or }
-  var Mt = {}
+  const Mt = {}
   y(Mt, {
     comments: () => _r,
     default: () => hr,
@@ -1796,7 +1796,7 @@
       searching: 'Cercant [SEARCH_TERM]...',
     },
     hr = { thanks_to: cr, comments: _r, direction: fr, strings: dr }
-  var At = {}
+  const At = {}
   y(At, {
     comments: () => pr,
     default: () => Rr,
@@ -1823,7 +1823,7 @@
       searching: 'Hled\xE1m [SEARCH_TERM]...',
     },
     Rr = { thanks_to: mr, comments: pr, direction: gr, strings: Er }
-  var vt = {}
+  const vt = {}
   y(vt, {
     comments: () => Tr,
     default: () => Sr,
@@ -1850,7 +1850,7 @@
       searching: 'S\xF8ger efter [SEARCH_TERM]...',
     },
     Sr = { thanks_to: br, comments: Tr, direction: Cr, strings: kr }
-  var wt = {}
+  const wt = {}
   y(wt, {
     comments: () => Mr,
     default: () => wr,
@@ -1877,7 +1877,7 @@
       searching: 'Suche f\xFCr [SEARCH_TERM]',
     },
     wr = { thanks_to: yr, comments: Mr, direction: Ar, strings: vr }
-  var Ht = {}
+  const Ht = {}
   y(Ht, {
     comments: () => Fr,
     default: () => jr,
@@ -1904,7 +1904,7 @@
       searching: 'Searching for [SEARCH_TERM]...',
     },
     jr = { thanks_to: Hr, comments: Fr, direction: Nr, strings: Or }
-  var Ft = {}
+  const Ft = {}
   y(Ft, {
     comments: () => Ur,
     default: () => Pr,
@@ -1931,7 +1931,7 @@
       searching: 'Buscando [SEARCH_TERM]...',
     },
     Pr = { thanks_to: zr, comments: Ur, direction: Dr, strings: Ir }
-  var Nt = {}
+  const Nt = {}
   y(Nt, {
     comments: () => qr,
     default: () => Wr,
@@ -1964,7 +1964,7 @@
         '\u062F\u0631 \u062D\u0627\u0644 \u062C\u0633\u062A\u062C\u0648\u06CC [SEARCH_TERM]...',
     },
     Wr = { thanks_to: Lr, comments: qr, direction: Br, strings: Vr }
-  var Ot = {}
+  const Ot = {}
   y(Ot, {
     comments: () => Kr,
     default: () => Zr,
@@ -1991,7 +1991,7 @@
       searching: 'Haetaan [SEARCH_TERM]...',
     },
     Zr = { thanks_to: Gr, comments: Kr, direction: Jr, strings: Yr }
-  var jt = {}
+  const jt = {}
   y(jt, {
     comments: () => Qr,
     default: () => el,
@@ -2018,7 +2018,7 @@
       searching: 'Recherche [SEARCH_TERM]...',
     },
     el = { thanks_to: Xr, comments: Qr, direction: xr, strings: $r }
-  var zt = {}
+  const zt = {}
   y(zt, {
     comments: () => nl,
     default: () => ll,
@@ -2045,7 +2045,7 @@
       searching: 'Buscando [SEARCH_TERM]...',
     },
     ll = { thanks_to: tl, comments: nl, direction: sl, strings: rl }
-  var Ut = {}
+  const Ut = {}
   y(Ut, {
     comments: () => al,
     default: () => cl,
@@ -2076,7 +2076,7 @@
       searching: '\u05DE\u05D7\u05E4\u05E9 \u05D0\u05EA [SEARCH_TERM]...',
     },
     cl = { thanks_to: il, comments: al, direction: ol, strings: ul }
-  var Dt = {}
+  const Dt = {}
   y(Dt, {
     comments: () => fl,
     default: () => ml,
@@ -2109,7 +2109,7 @@
         '[SEARCH_TERM] \u0915\u0940 \u0916\u094B\u091C \u0915\u0940 \u091C\u093E \u0930\u0939\u0940 \u0939\u0948...',
     },
     ml = { thanks_to: _l, comments: fl, direction: dl, strings: hl }
-  var It = {}
+  const It = {}
   y(It, {
     comments: () => gl,
     default: () => bl,
@@ -2136,7 +2136,7 @@
       searching: 'Pretra\u017Eujem [SEARCH_TERM]...',
     },
     bl = { thanks_to: pl, comments: gl, direction: El, strings: Rl }
-  var Pt = {}
+  const Pt = {}
   y(Pt, {
     comments: () => Cl,
     default: () => yl,
@@ -2163,7 +2163,7 @@
       searching: 'Keres\xE9s a(z) [SEARCH_TERM] kifejez\xE9sre...',
     },
     yl = { thanks_to: Tl, comments: Cl, direction: kl, strings: Sl }
-  var Lt = {}
+  const Lt = {}
   y(Lt, {
     comments: () => Al,
     default: () => Hl,
@@ -2190,7 +2190,7 @@
       searching: 'Mencari [SEARCH_TERM]...',
     },
     Hl = { thanks_to: Ml, comments: Al, direction: vl, strings: wl }
-  var qt = {}
+  const qt = {}
   y(qt, {
     comments: () => Nl,
     default: () => zl,
@@ -2217,7 +2217,7 @@
       searching: 'Cercando [SEARCH_TERM]...',
     },
     zl = { thanks_to: Fl, comments: Nl, direction: Ol, strings: jl }
-  var Bt = {}
+  const Bt = {}
   y(Bt, {
     comments: () => Dl,
     default: () => Ll,
@@ -2248,7 +2248,7 @@
         '[SEARCH_TERM]\u3092\u691C\u7D22\u3057\u3066\u3044\u307E\u3059',
     },
     Ll = { thanks_to: Ul, comments: Dl, direction: Il, strings: Pl }
-  var Vt = {}
+  const Vt = {}
   y(Vt, {
     comments: () => Bl,
     default: () => Gl,
@@ -2277,7 +2277,7 @@
       searching: '[SEARCH_TERM] \uAC80\uC0C9 \uC911...',
     },
     Gl = { thanks_to: ql, comments: Bl, direction: Vl, strings: Wl }
-  var Wt = {}
+  const Wt = {}
   y(Wt, {
     comments: () => Jl,
     default: () => Xl,
@@ -2304,7 +2304,7 @@
       searching: 'Rapu ki [SEARCH_TERM]...',
     },
     Xl = { thanks_to: Kl, comments: Jl, direction: Yl, strings: Zl }
-  var Gt = {}
+  const Gt = {}
   y(Gt, {
     comments: () => xl,
     default: () => ti,
@@ -2331,7 +2331,7 @@
       searching: 'Zoeken naar [SEARCH_TERM]...',
     },
     ti = { thanks_to: Ql, comments: xl, direction: $l, strings: ei }
-  var Kt = {}
+  const Kt = {}
   y(Kt, {
     comments: () => si,
     default: () => ii,
@@ -2358,7 +2358,7 @@
       searching: 'S\xF8ker etter [SEARCH_TERM]',
     },
     ii = { thanks_to: ni, comments: si, direction: ri, strings: li }
-  var Jt = {}
+  const Jt = {}
   y(Jt, {
     comments: () => oi,
     default: () => _i,
@@ -2385,7 +2385,7 @@
       searching: 'Szukam [SEARCH_TERM]...',
     },
     _i = { thanks_to: ai, comments: oi, direction: ui, strings: ci }
-  var Yt = {}
+  const Yt = {}
   y(Yt, {
     comments: () => di,
     default: () => pi,
@@ -2412,7 +2412,7 @@
       searching: 'Pesquisando por [SEARCH_TERM]...',
     },
     pi = { thanks_to: fi, comments: di, direction: hi, strings: mi }
-  var Zt = {}
+  const Zt = {}
   y(Zt, {
     comments: () => Ei,
     default: () => Ti,
@@ -2439,7 +2439,7 @@
       searching: 'Se caut\u0103 dup\u0103: [SEARCH_TERM]...',
     },
     Ti = { thanks_to: gi, comments: Ei, direction: Ri, strings: bi }
-  var Xt = {}
+  const Xt = {}
   y(Xt, {
     comments: () => ki,
     default: () => Mi,
@@ -2473,7 +2473,7 @@
         '\u041F\u043E\u0438\u0441\u043A \u043F\u043E \u0437\u0430\u043F\u0440\u043E\u0441\u0443: [SEARCH_TERM]',
     },
     Mi = { thanks_to: Ci, comments: ki, direction: Si, strings: yi }
-  var Qt = {}
+  const Qt = {}
   y(Qt, {
     comments: () => vi,
     default: () => Fi,
@@ -2506,7 +2506,7 @@
         '\u041F\u0440\u0435\u0442\u0440\u0430\u0433\u0430 \u0442\u0435\u0440\u043C\u0438\u043D\u0430 [SEARCH_TERM]...',
     },
     Fi = { thanks_to: Ai, comments: vi, direction: wi, strings: Hi }
-  var xt = {}
+  const xt = {}
   y(xt, {
     comments: () => Oi,
     default: () => Ui,
@@ -2533,7 +2533,7 @@
       searching: 'S\xF6ker efter [SEARCH_TERM]...',
     },
     Ui = { thanks_to: Ni, comments: Oi, direction: ji, strings: zi }
-  var $t = {}
+  const $t = {}
   y($t, {
     comments: () => Ii,
     default: () => qi,
@@ -2560,7 +2560,7 @@
       searching: 'Kutafuta [SEARCH_TERM]...',
     },
     qi = { thanks_to: Di, comments: Ii, direction: Pi, strings: Li }
-  var en = {}
+  const en = {}
   y(en, {
     comments: () => Vi,
     default: () => Ki,
@@ -2594,7 +2594,7 @@
         '[SEARCH_TERM] \u0BA4\u0BC7\u0B9F\u0BAA\u0BCD\u0BAA\u0B9F\u0BC1\u0B95\u0BBF\u0BA9\u0BCD\u0BB1\u0BA4\u0BC1',
     },
     Ki = { thanks_to: Bi, comments: Vi, direction: Wi, strings: Gi }
-  var tn = {}
+  const tn = {}
   y(tn, {
     comments: () => Yi,
     default: () => Qi,
@@ -2621,7 +2621,7 @@
       searching: '[SEARCH_TERM] ara\u015Ft\u0131r\u0131l\u0131yor...',
     },
     Qi = { thanks_to: Ji, comments: Yi, direction: Zi, strings: Xi }
-  var nn = {}
+  const nn = {}
   y(nn, {
     comments: () => $i,
     default: () => na,
@@ -2655,7 +2655,7 @@
         '\u041F\u043E\u0448\u0443\u043A \u0437\u0430 \u0437\u0430\u043F\u0438\u0442\u043E\u043C: [SEARCH_TERM]',
     },
     na = { thanks_to: xi, comments: $i, direction: ea, strings: ta }
-  var sn = {}
+  const sn = {}
   y(sn, {
     comments: () => ra,
     default: () => aa,
@@ -2683,7 +2683,7 @@
       searching: '\u0110ang t\xECm ki\u1EBFm cho [SEARCH_TERM]...',
     },
     aa = { thanks_to: sa, comments: ra, direction: la, strings: ia }
-  var rn = {}
+  const rn = {}
   y(rn, {
     comments: () => ua,
     default: () => fa,
@@ -2713,7 +2713,7 @@
       searching: '\u6B63\u5728\u641C\u7D22 [SEARCH_TERM]...',
     },
     fa = { thanks_to: oa, comments: ua, direction: ca, strings: _a }
-  var ln = {}
+  const ln = {}
   y(ln, {
     comments: () => ha,
     default: () => ga,
@@ -2743,7 +2743,7 @@
       searching: '\u6B63\u5728\u641C\u7D22 [SEARCH_TERM]...',
     },
     ga = { thanks_to: da, comments: ha, direction: ma, strings: pa }
-  var an = {}
+  const an = {}
   y(an, {
     comments: () => Ra,
     default: () => Ca,
@@ -2773,7 +2773,7 @@
       searching: '\u6B63\u5728\u641C\u7D22 [SEARCH_TERM]...',
     },
     Ca = { thanks_to: Ea, comments: Ra, direction: ba, strings: Ta }
-  var ka = [
+  const ka = [
       kt,
       St,
       yt,
@@ -2855,7 +2855,7 @@
       '../../translations/zh.json',
     ]
   function ls(n, e, t) {
-    let s = n.slice()
+    const s = n.slice()
     return (s[51] = e[t]), s
   }
   function is(n) {
@@ -2863,7 +2863,7 @@
     function r(i) {
       n[37](i)
     }
-    let l = {
+    const l = {
       show_empty_filters: n[5],
       open_filters: n[6],
       available_filters: n[18],
@@ -2883,7 +2883,7 @@
           me(e, i, a), (s = !0)
         },
         p(i, a) {
-          let o = {}
+          const o = {}
           a[0] & 32 && (o.show_empty_filters = i[5]),
             a[0] & 64 && (o.open_filters = i[6]),
             a[0] & 262144 && (o.available_filters = i[18]),
@@ -2929,7 +2929,7 @@
           S(o, e, f), i[t].m(e, null), (r = !0)
         },
         p(o, f) {
-          let u = t
+          const u = t
           ;(t = a(o, f)),
             t === u
               ? i[t].p(o, f)
@@ -2976,7 +2976,7 @@
       p = n[13].results.slice(0, n[17]),
       h = c => c[51].id
     for (let c = 0; c < p.length; c += 1) {
-      let d = ls(n, p, c),
+      const d = ls(n, p, c),
         T = h(d)
       l.set(T, (r[c] = os(T, d)))
     }
@@ -3161,7 +3161,7 @@
           me(e, s, r), (t = !0)
         },
         p(s, r) {
-          let l = {}
+          const l = {}
           r[0] & 4 && (l.show_images = s[2]),
             r[0] & 16 && (l.process_result = s[4]),
             r[0] & 139264 && (l.result = s[51]),
@@ -3193,7 +3193,7 @@
           me(e, s, r), (t = !0)
         },
         p(s, r) {
-          let l = {}
+          const l = {}
           r[0] & 4 && (l.show_images = s[2]),
             r[0] & 16 && (l.process_result = s[4]),
             r[0] & 139264 && (l.result = s[51]),
@@ -3236,7 +3236,7 @@
         },
         p(u, m) {
           e = u
-          let p = s
+          const p = s
           ;(s = f(e, m)),
             s === p
               ? o[s].p(e, m)
@@ -3448,7 +3448,7 @@
   }
   var Oa = n => n.preventDefault()
   function ja(n, e, t) {
-    let s = {},
+    const s = {},
       r = rs.map(E => E.match(/([^\/]+)\.json$/)[1])
     for (let E = 0; E < r.length; E++)
       s[r[E]] = { language: r[E], ...ss[E].strings }
@@ -3487,7 +3487,8 @@
       hn = s.en,
       ds = (E, F, j) => j[E] ?? F[E] ?? ''
     gt(() => {
-      let E = document?.querySelector?.('html')?.getAttribute?.('lang') || 'en',
+      const E =
+          document?.querySelector?.('html')?.getAttribute?.('lang') || 'en',
         F = lt(E.toLocaleLowerCase())
       t(
         19,
@@ -3525,12 +3526,12 @@
                 : console.error('no known script location')
           }
           u || t(24, (u = f ? 12 : 30))
-          let F = { ...(d || {}), excerptLength: u }
+          const F = { ...(d || {}), excerptLength: u }
           await E.options(F)
-          for (let j of T) {
+          for (const j of T) {
             if (!j.bundlePath)
               throw new Error('mergeIndex requires a bundlePath parameter')
-            let L = j.bundlePath
+            const L = j.bundlePath
             delete j.bundlePath, await E.mergeIndex(L, j)
           }
           ;(H = E), hs()
@@ -3542,12 +3543,12 @@
           (!ce || !Object.keys(ce).length) && t(18, (ce = dn)))
       },
       ms = E => {
-        let F = {}
+        const F = {}
         return (
           Object.entries(E)
             .filter(([, j]) => j)
             .forEach(([j]) => {
-              let [L, te] = j.split(/:(.*)$/)
+              const [L, te] = j.split(/:(.*)$/)
               ;(F[L] = F[L] || []), F[L].push(te)
             }),
           F
@@ -3559,7 +3560,7 @@
           t(15, (ut = !1)), _e && clearTimeout(_e)
           return
         }
-        let j = ms(F),
+        const j = ms(F),
           L = () => gs(E, j)
         c > 0 && E
           ? (_e && clearTimeout(_e),
@@ -3578,10 +3579,10 @@
           t(14, (ot = !0)),
           t(15, (ut = !0)),
           await pn()
-        let j = ++_n,
+        const j = ++_n,
           L = { filters: F }
         X && typeof X == 'object' && (L.sort = X)
-        let te = await H.search(E, L)
+        const te = await H.search(E, L)
         _n === j &&
           (te.filters &&
             Object.keys(te.filters)?.length &&
@@ -3591,7 +3592,7 @@
           t(17, (ct = i)))
       },
       Es = () => {
-        let E = W.offsetWidth
+        const E = W.offsetWidth
         E != fs && t(10, (O.style.paddingRight = `${E + 2}px`), O)
       },
       Rs = E => {
@@ -3614,7 +3615,7 @@
         ;(W = E), t(11, W)
       })
     }
-    let Ss = () => {
+    const Ss = () => {
       t(9, (v = '')), O.blur()
     }
     function ys(E) {
@@ -3642,8 +3643,8 @@
           'selected_filters' in E && t(0, (V = E.selected_filters))
       }),
       (n.$$.update = () => {
-        if (n.$$.dirty[0] & 8388608) e: R && (t(9, (v = R)), t(23, (R = '')))
-        if (n.$$.dirty[0] & 513) e: ps(v, V)
+        if (n.$$.dirty[0] & 8388608) R && (t(9, (v = R)), t(23, (R = '')))
+        if (n.$$.dirty[0] & 513) ps(v, V)
       }),
       [
         V,
@@ -3687,7 +3688,7 @@
       ]
     )
   }
-  var on = class extends q {
+  const on = class extends q {
       constructor(e) {
         super(),
           Y(
@@ -3722,7 +3723,7 @@
       }
     },
     _s = on
-  var un
+  let un
   try {
     document?.currentScript &&
       document.currentScript.tagName.toUpperCase() === 'SCRIPT' &&
@@ -3732,10 +3733,10 @@
   } catch {
     un = '/pagefind/'
   }
-  var it = class {
+  const it = class {
     constructor(e) {
       this._pfs = null
-      let t = e.element ?? '[data-pagefind-ui]',
+      const t = e.element ?? '[data-pagefind-ui]',
         s = e.bundlePath ?? un,
         r = e.pageSize ?? 5,
         l = e.resetStyles ?? !0,
@@ -3767,7 +3768,7 @@
         delete e.translations,
         delete e.autofocus,
         delete e.sort
-      let R = t instanceof HTMLElement ? t : document.querySelector(t)
+      const R = t instanceof HTMLElement ? t : document.querySelector(t)
       R
         ? (this._pfs = new _s({
             target: R,
@@ -3796,9 +3797,9 @@
       this._pfs.$$set({ trigger_search_term: e })
     }
     triggerFilters(e) {
-      let t = {}
-      for (let [s, r] of Object.entries(e))
-        if (Array.isArray(r)) for (let l of r) t[`${s}:${l}`] = !0
+      const t = {}
+      for (const [s, r] of Object.entries(e))
+        if (Array.isArray(r)) for (const l of r) t[`${s}:${l}`] = !0
         else t[`${s}:${r}`] = !0
       this._pfs.$$set({ selected_filters: t })
     }

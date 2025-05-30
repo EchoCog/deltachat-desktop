@@ -7,7 +7,7 @@ const networkMoreButton = document.getElementById('toggle_network_more_button')
 
 window.network_enabled = false
 
-let promise = window.htmlview
+const promise = window.htmlview
   .getInfo()
   .then(
     ({

@@ -143,8 +143,8 @@ let wasm_bindgen
       )
       const len0 = WASM_VECTOR_LEN
       wasm.request_indexes(retptr, ptr, ptr0, len0)
-      var r0 = getInt32Memory0()[retptr / 4 + 0]
-      var r1 = getInt32Memory0()[retptr / 4 + 1]
+      const r0 = getInt32Memory0()[retptr / 4 + 0]
+      const r1 = getInt32Memory0()[retptr / 4 + 1]
       deferred2_0 = r0
       deferred2_1 = r1
       return getStringFromWasm0(r0, r1)
@@ -165,8 +165,8 @@ let wasm_bindgen
       )
       const len0 = WASM_VECTOR_LEN
       wasm.request_filter_indexes(retptr, ptr, ptr0, len0)
-      var r0 = getInt32Memory0()[retptr / 4 + 0]
-      var r1 = getInt32Memory0()[retptr / 4 + 1]
+      const r0 = getInt32Memory0()[retptr / 4 + 0]
+      const r1 = getInt32Memory0()[retptr / 4 + 1]
       deferred2_0 = r0
       deferred2_1 = r1
       return getStringFromWasm0(r0, r1)
@@ -181,8 +181,8 @@ let wasm_bindgen
     try {
       const retptr = wasm.__wbindgen_add_to_stack_pointer(-16)
       wasm.request_all_filter_indexes(retptr, ptr)
-      var r0 = getInt32Memory0()[retptr / 4 + 0]
-      var r1 = getInt32Memory0()[retptr / 4 + 1]
+      const r0 = getInt32Memory0()[retptr / 4 + 0]
+      const r1 = getInt32Memory0()[retptr / 4 + 1]
       deferred1_0 = r0
       deferred1_1 = r1
       return getStringFromWasm0(r0, r1)
@@ -197,8 +197,8 @@ let wasm_bindgen
     try {
       const retptr = wasm.__wbindgen_add_to_stack_pointer(-16)
       wasm.filters(retptr, ptr)
-      var r0 = getInt32Memory0()[retptr / 4 + 0]
-      var r1 = getInt32Memory0()[retptr / 4 + 1]
+      const r0 = getInt32Memory0()[retptr / 4 + 0]
+      const r1 = getInt32Memory0()[retptr / 4 + 1]
       deferred1_0 = r0
       deferred1_1 = r1
       return getStringFromWasm0(r0, r1)
@@ -231,8 +231,8 @@ let wasm_bindgen
       )
       const len2 = WASM_VECTOR_LEN
       wasm.search(retptr, ptr, ptr0, len0, ptr1, len1, ptr2, len2, exact)
-      var r0 = getInt32Memory0()[retptr / 4 + 0]
-      var r1 = getInt32Memory0()[retptr / 4 + 1]
+      const r0 = getInt32Memory0()[retptr / 4 + 0]
+      const r1 = getInt32Memory0()[retptr / 4 + 1]
       deferred4_0 = r0
       deferred4_1 = r1
       return getStringFromWasm0(r0, r1)
@@ -310,70 +310,70 @@ let wasm_bindgen
   }
   wasm_bindgen = Object.assign(__wbg_init, { initSync }, __exports)
 })()
-var u8 = Uint8Array
-var u16 = Uint16Array
-var u32 = Uint32Array
-var fleb = new u8([
+const u8 = Uint8Array
+const u16 = Uint16Array
+const u32 = Uint32Array
+const fleb = new u8([
   0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5,
   5, 5, 0, 0, 0, 0,
 ])
-var fdeb = new u8([
+const fdeb = new u8([
   0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11,
   11, 12, 12, 13, 13, 0, 0,
 ])
-var clim = new u8([
+const clim = new u8([
   16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15,
 ])
-var freb = function (eb, start) {
-  var b = new u16(31)
+const freb = function (eb, start) {
+  const b = new u16(31)
   for (var i2 = 0; i2 < 31; ++i2) {
     b[i2] = start += 1 << eb[i2 - 1]
   }
-  var r = new u32(b[30])
+  const r = new u32(b[30])
   for (var i2 = 1; i2 < 30; ++i2) {
-    for (var j = b[i2]; j < b[i2 + 1]; ++j) {
+    for (let j = b[i2]; j < b[i2 + 1]; ++j) {
       r[j] = ((j - b[i2]) << 5) | i2
     }
   }
   return [b, r]
 }
-var _a = freb(fleb, 2)
-var fl = _a[0]
-var revfl = _a[1]
+const _a = freb(fleb, 2)
+const fl = _a[0]
+const revfl = _a[1]
 ;(fl[28] = 258), (revfl[258] = 28)
-var _b = freb(fdeb, 0)
-var fd = _b[0]
-var revfd = _b[1]
-var rev = new u16(32768)
+const _b = freb(fdeb, 0)
+const fd = _b[0]
+const revfd = _b[1]
+const rev = new u16(32768)
 for (i = 0; i < 32768; ++i) {
   x = ((i & 43690) >>> 1) | ((i & 21845) << 1)
   x = ((x & 52428) >>> 2) | ((x & 13107) << 2)
   x = ((x & 61680) >>> 4) | ((x & 3855) << 4)
   rev[i] = (((x & 65280) >>> 8) | ((x & 255) << 8)) >>> 1
 }
-var x
+let x
 var i
-var hMap = function (cd, mb, r) {
-  var s = cd.length
-  var i2 = 0
-  var l = new u16(mb)
+const hMap = function (cd, mb, r) {
+  const s = cd.length
+  let i2 = 0
+  const l = new u16(mb)
   for (; i2 < s; ++i2) {
     if (cd[i2]) ++l[cd[i2] - 1]
   }
-  var le = new u16(mb)
+  const le = new u16(mb)
   for (i2 = 0; i2 < mb; ++i2) {
     le[i2] = (le[i2 - 1] + l[i2 - 1]) << 1
   }
-  var co
+  let co
   if (r) {
     co = new u16(1 << mb)
-    var rvb = 15 - mb
+    const rvb = 15 - mb
     for (i2 = 0; i2 < s; ++i2) {
       if (cd[i2]) {
-        var sv = (i2 << 4) | cd[i2]
-        var r_1 = mb - cd[i2]
-        var v = le[cd[i2] - 1]++ << r_1
-        for (var m = v | ((1 << r_1) - 1); v <= m; ++v) {
+        const sv = (i2 << 4) | cd[i2]
+        const r_1 = mb - cd[i2]
+        let v = le[cd[i2] - 1]++ << r_1
+        for (let m = v | ((1 << r_1) - 1); v <= m; ++v) {
           co[rev[v] >>> rvb] = sv
         }
       }
@@ -388,7 +388,7 @@ var hMap = function (cd, mb, r) {
   }
   return co
 }
-var flt = new u8(288)
+const flt = new u8(288)
 for (i = 0; i < 144; ++i) flt[i] = 8
 var i
 for (i = 144; i < 256; ++i) flt[i] = 9
@@ -397,39 +397,39 @@ for (i = 256; i < 280; ++i) flt[i] = 7
 var i
 for (i = 280; i < 288; ++i) flt[i] = 8
 var i
-var fdt = new u8(32)
+const fdt = new u8(32)
 for (i = 0; i < 32; ++i) fdt[i] = 5
 var i
-var flrm = hMap(flt, 9, 1)
-var fdrm = hMap(fdt, 5, 1)
-var max = function (a) {
-  var m = a[0]
-  for (var i2 = 1; i2 < a.length; ++i2) {
+const flrm = hMap(flt, 9, 1)
+const fdrm = hMap(fdt, 5, 1)
+const max = function (a) {
+  let m = a[0]
+  for (let i2 = 1; i2 < a.length; ++i2) {
     if (a[i2] > m) m = a[i2]
   }
   return m
 }
-var bits = function (d, p, m) {
-  var o = (p / 8) | 0
+const bits = function (d, p, m) {
+  const o = (p / 8) | 0
   return ((d[o] | (d[o + 1] << 8)) >> (p & 7)) & m
 }
-var bits16 = function (d, p) {
-  var o = (p / 8) | 0
+const bits16 = function (d, p) {
+  const o = (p / 8) | 0
   return (d[o] | (d[o + 1] << 8) | (d[o + 2] << 16)) >> (p & 7)
 }
-var shft = function (p) {
+const shft = function (p) {
   return ((p + 7) / 8) | 0
 }
-var slc = function (v, s, e) {
+const slc = function (v, s, e) {
   if (s == null || s < 0) s = 0
   if (e == null || e > v.length) e = v.length
-  var n = new (
+  const n = new (
     v.BYTES_PER_ELEMENT == 2 ? u16 : v.BYTES_PER_ELEMENT == 4 ? u32 : u8
   )(e - s)
   n.set(v.subarray(s, e))
   return n
 }
-var ec = [
+const ec = [
   'unexpected EOF',
   'invalid block type',
   'invalid length/literal',
@@ -445,40 +445,40 @@ var ec = [
   'stream finishing',
   'invalid zip data',
 ]
-var err = function (ind, msg, nt) {
-  var e = new Error(msg || ec[ind])
+const err = function (ind, msg, nt) {
+  const e = new Error(msg || ec[ind])
   e.code = ind
   if (Error.captureStackTrace) Error.captureStackTrace(e, err)
   if (!nt) throw e
   return e
 }
-var inflt = function (dat, buf, st) {
-  var sl = dat.length
+const inflt = function (dat, buf, st) {
+  const sl = dat.length
   if (!sl || (st && st.f && !st.l)) return buf || new u8(0)
-  var noBuf = !buf || st
-  var noSt = !st || st.i
+  const noBuf = !buf || st
+  const noSt = !st || st.i
   if (!st) st = {}
   if (!buf) buf = new u8(sl * 3)
-  var cbuf = function (l2) {
-    var bl = buf.length
+  const cbuf = function (l2) {
+    const bl = buf.length
     if (l2 > bl) {
-      var nbuf = new u8(Math.max(bl * 2, l2))
+      const nbuf = new u8(Math.max(bl * 2, l2))
       nbuf.set(buf)
       buf = nbuf
     }
   }
-  var final = st.f || 0,
+  let final = st.f || 0,
     pos = st.p || 0,
     bt = st.b || 0,
     lm = st.l,
     dm = st.d,
     lbt = st.m,
     dbt = st.n
-  var tbts = sl * 8
+  const tbts = sl * 8
   do {
     if (!lm) {
       final = bits(dat, pos, 1)
-      var type = bits(dat, pos + 1, 3)
+      const type = bits(dat, pos + 1, 3)
       pos += 3
       if (!type) {
         var s = shft(pos) + 4,
@@ -494,21 +494,21 @@ var inflt = function (dat, buf, st) {
         continue
       } else if (type == 1) (lm = flrm), (dm = fdrm), (lbt = 9), (dbt = 5)
       else if (type == 2) {
-        var hLit = bits(dat, pos, 31) + 257,
+        const hLit = bits(dat, pos, 31) + 257,
           hcLen = bits(dat, pos + 10, 15) + 4
-        var tl = hLit + bits(dat, pos + 5, 31) + 1
+        const tl = hLit + bits(dat, pos + 5, 31) + 1
         pos += 14
-        var ldt = new u8(tl)
-        var clt = new u8(19)
+        const ldt = new u8(tl)
+        const clt = new u8(19)
         for (var i2 = 0; i2 < hcLen; ++i2) {
           clt[clim[i2]] = bits(dat, pos + i2 * 3, 7)
         }
         pos += hcLen * 3
-        var clb = max(clt),
+        const clb = max(clt),
           clbmsk = (1 << clb) - 1
-        var clm = hMap(clt, clb, 1)
+        const clm = hMap(clt, clb, 1)
         for (var i2 = 0; i2 < tl; ) {
-          var r = clm[bits(dat, pos, clbmsk)]
+          const r = clm[bits(dat, pos, clbmsk)]
           pos += r & 15
           var s = r >>> 4
           if (s < 16) {
@@ -536,9 +536,9 @@ var inflt = function (dat, buf, st) {
       }
     }
     if (noBuf) cbuf(bt + 131072)
-    var lms = (1 << lbt) - 1,
+    const lms = (1 << lbt) - 1,
       dms = (1 << dbt) - 1
-    var lpos = pos
+    let lpos = pos
     for (; ; lpos = pos) {
       var c = lm[bits16(dat, pos) & lms],
         sym = c >>> 4
@@ -553,14 +553,14 @@ var inflt = function (dat, buf, st) {
         ;(lpos = pos), (lm = null)
         break
       } else {
-        var add = sym - 254
+        let add = sym - 254
         if (sym > 264) {
           var i2 = sym - 257,
             b = fleb[i2]
           add = bits(dat, pos, (1 << b) - 1) + fl[i2]
           pos += b
         }
-        var d = dm[bits16(dat, pos) & dms],
+        const d = dm[bits16(dat, pos) & dms],
           dsym = d >>> 4
         if (!d) err(3)
         pos += d & 15
@@ -574,7 +574,7 @@ var inflt = function (dat, buf, st) {
           break
         }
         if (noBuf) cbuf(bt + 131072)
-        var end = bt + add
+        const end = bt + add
         for (; bt < end; bt += 4) {
           buf[bt] = buf[bt - dt]
           buf[bt + 1] = buf[bt + 1 - dt]
@@ -589,17 +589,17 @@ var inflt = function (dat, buf, st) {
   } while (!final)
   return bt == buf.length ? buf : slc(buf, 0, bt)
 }
-var et = new u8(0)
-var gzs = function (d) {
+const et = new u8(0)
+const gzs = function (d) {
   if (d[0] != 31 || d[1] != 139 || d[2] != 8) err(6, 'invalid gzip data')
-  var flg = d[3]
-  var st = 10
+  const flg = d[3]
+  let st = 10
   if (flg & 4) st += d[10] | ((d[11] << 8) + 2)
-  for (var zs = ((flg >> 3) & 1) + ((flg >> 4) & 1); zs > 0; zs -= !d[st++]);
+  for (let zs = ((flg >> 3) & 1) + ((flg >> 4) & 1); zs > 0; zs -= !d[st++]);
   return st + (flg & 2)
 }
-var gzl = function (d) {
-  var l = d.length
+const gzl = function (d) {
+  const l = d.length
   return (
     (d[l - 4] | (d[l - 3] << 8) | (d[l - 2] << 16) | (d[l - 1] << 24)) >>> 0
   )
@@ -607,18 +607,18 @@ var gzl = function (d) {
 function gunzipSync(data, out) {
   return inflt(data.subarray(gzs(data), -8), out || new u8(gzl(data)))
 }
-var td = typeof TextDecoder != 'undefined' && new TextDecoder()
-var tds = 0
+const td = typeof TextDecoder != 'undefined' && new TextDecoder()
+let tds = 0
 try {
   td.decode(et, { stream: true })
   tds = 1
 } catch (e) {}
-var gz_default = gunzipSync
-var calculate_excerpt_region = (word_positions, excerpt_length) => {
+const gz_default = gunzipSync
+const calculate_excerpt_region = (word_positions, excerpt_length) => {
   if (word_positions.length === 0) {
     return 0
   }
-  let words = []
+  const words = []
   for (const word of word_positions) {
     words[word.location] = words[word.location] || 0
     words[word.location] += word.balanced_score
@@ -644,10 +644,10 @@ var calculate_excerpt_region = (word_positions, excerpt_length) => {
       densest_at.push(i2)
     }
   }
-  let midpoint = densest_at[Math.floor(densest_at.length / 2)]
+  const midpoint = densest_at[Math.floor(densest_at.length / 2)]
   return midpoint
 }
-var build_excerpt = (
+const build_excerpt = (
   content,
   start,
   length,
@@ -655,21 +655,21 @@ var build_excerpt = (
   not_before,
   not_from
 ) => {
-  let is_zws_delimited = content.includes('\u200B')
+  const is_zws_delimited = content.includes('\u200B')
   let fragment_words = []
   if (is_zws_delimited) {
     fragment_words = content.split('\u200B')
   } else {
     fragment_words = content.split(/[\r\n\s]+/g)
   }
-  for (let word of locations) {
+  for (const word of locations) {
     if (fragment_words[word]?.startsWith(`<mark>`)) {
       continue
     }
     fragment_words[word] = `<mark>${fragment_words[word]}</mark>`
   }
-  let endcap = not_from ?? fragment_words.length
-  let startcap = not_before ?? 0
+  const endcap = not_from ?? fragment_words.length
+  const startcap = not_before ?? 0
   if (endcap - startcap < length) {
     length = endcap - startcap
   }
@@ -684,7 +684,7 @@ var build_excerpt = (
     .join(is_zws_delimited ? '' : ' ')
     .trim()
 }
-var calculate_sub_results = (fragment, desired_excerpt_length) => {
+const calculate_sub_results = (fragment, desired_excerpt_length) => {
   const anchors = fragment.anchors
     .filter(a => /h\d/i.test(a.element) && a.text?.length && /\S/.test(a.text))
     .sort((a, b) => a.location - b.location)
@@ -727,7 +727,7 @@ var calculate_sub_results = (fragment, desired_excerpt_length) => {
       results.push(current_anchor)
     }
   }
-  for (let word of fragment.weighted_locations) {
+  for (const word of fragment.weighted_locations) {
     if (!anchors.length || word.location < anchors[0].location) {
       current_anchor.weighted_locations.push(word)
       current_anchor.locations.push(word.location)
@@ -741,14 +741,14 @@ var calculate_sub_results = (fragment, desired_excerpt_length) => {
       try {
         const url_is_fq = /^((https?:)?\/\/)/.test(anchored_url)
         if (url_is_fq) {
-          let fq_url = new URL(anchored_url)
+          const fq_url = new URL(anchored_url)
           fq_url.hash = next_anchor.id
           anchored_url = fq_url.toString()
         } else {
           if (!/^\//.test(anchored_url)) {
             anchored_url = `/${anchored_url}`
           }
-          let fq_url = new URL(`https://example.com${anchored_url}`)
+          const fq_url = new URL(`https://example.com${anchored_url}`)
           fq_url.hash = next_anchor.id
           anchored_url = fq_url.toString().replace(/^https:\/\/example.com/, '')
         }
@@ -771,10 +771,10 @@ var calculate_sub_results = (fragment, desired_excerpt_length) => {
   add_result(anchors[0]?.location)
   return results
 }
-var asyncSleep = async (ms = 100) => {
+const asyncSleep = async (ms = 100) => {
   return new Promise(r => setTimeout(r, ms))
 }
-var PagefindInstance = class {
+const PagefindInstance = class {
   constructor(opts = {}) {
     this.version = pagefind_version
     this.backend = wasm_bindgen
@@ -811,7 +811,7 @@ var PagefindInstance = class {
     this.languages = null
   }
   initPrimary() {
-    let derivedBasePath = import.meta.url.match(/^(.*\/)pagefind.js.*$/)?.[1]
+    const derivedBasePath = import.meta.url.match(/^(.*\/)pagefind.js.*$/)?.[1]
     if (derivedBasePath) {
       this.basePath = derivedBasePath
     } else {
@@ -824,7 +824,7 @@ var PagefindInstance = class {
     }
   }
   defaultBaseUrl() {
-    let default_base = this.basePath.match(/^(.*\/)_?pagefind/)?.[1]
+    const default_base = this.basePath.match(/^(.*\/)_?pagefind/)?.[1]
     return default_base || '/'
   }
   async options(options2) {
@@ -839,8 +839,8 @@ var PagefindInstance = class {
     ]
     for (const [k, v] of Object.entries(options2)) {
       if (k === 'mergeFilter') {
-        let filters2 = this.stringifyFilters(v)
-        let ptr = await this.getPtr()
+        const filters2 = this.stringifyFilters(v)
+        const ptr = await this.getPtr()
         this.raw_ptr = this.backend.add_synthetic_filter(ptr, filters2)
       } else if (k === 'ranking') {
         await this.set_ranking(options2.ranking)
@@ -875,13 +875,13 @@ var PagefindInstance = class {
   }
   async set_ranking(ranking) {
     if (!ranking) return
-    let rankingWeights = {
+    const rankingWeights = {
       term_similarity: ranking.termSimilarity ?? null,
       page_length: ranking.pageLength ?? null,
       term_saturation: ranking.termSaturation ?? null,
       term_frequency: ranking.termFrequency ?? null,
     }
-    let ptr = await this.getPtr()
+    const ptr = await this.getPtr()
     this.raw_ptr = this.backend.set_ranking_weights(
       ptr,
       JSON.stringify(rankingWeights)
@@ -889,17 +889,17 @@ var PagefindInstance = class {
   }
   async init(language, opts) {
     await this.loadEntry()
-    let index = this.findIndex(language)
-    let lang_wasm = index.wasm ? index.wasm : 'unknown'
-    let resources = [this.loadMeta(index.hash)]
+    const index = this.findIndex(language)
+    const lang_wasm = index.wasm ? index.wasm : 'unknown'
+    const resources = [this.loadMeta(index.hash)]
     if (opts.load_wasm === true) {
       resources.push(this.loadWasm(lang_wasm))
     }
     await Promise.all(resources)
     this.raw_ptr = this.backend.init_pagefind(new Uint8Array(this.searchMeta))
     if (Object.keys(this.mergeFilter)?.length) {
-      let filters2 = this.stringifyFilters(this.mergeFilter)
-      let ptr = await this.getPtr()
+      const filters2 = this.stringifyFilters(this.mergeFilter)
+      const ptr = await this.getPtr()
       this.raw_ptr = this.backend.add_synthetic_filter(ptr, filters2)
     }
     if (this.ranking) {
@@ -908,10 +908,10 @@ var PagefindInstance = class {
   }
   async loadEntry() {
     try {
-      let entry_response = await fetch(
+      const entry_response = await fetch(
         `${this.basePath}pagefind-entry.json?ts=${Date.now()}`
       )
-      let entry_json = await entry_response.json()
+      const entry_json = await entry_response.json()
       this.languages = entry_json.languages
       if (entry_json.version !== this.version) {
         if (this.primary) {
@@ -945,7 +945,7 @@ ${e?.toString()}`)
       if (index) return index
       index = this.languages[language.split('-')[0]]
       if (index) return index
-      let topLang = Object.values(this.languages).sort(
+      const topLang = Object.values(this.languages).sort(
         (a, b) => b.page_count - a.page_count
       )
       if (topLang[0]) return topLang[0]
@@ -954,10 +954,10 @@ ${e?.toString()}`)
   }
   async loadMeta(index) {
     try {
-      let compressed_resp = await fetch(
+      const compressed_resp = await fetch(
         `${this.basePath}pagefind.${index}.pf_meta`
       )
-      let compressed_meta = await compressed_resp.arrayBuffer()
+      const compressed_meta = await compressed_resp.arrayBuffer()
       this.searchMeta = this.decompress(
         new Uint8Array(compressed_meta),
         'Pagefind metadata'
@@ -970,8 +970,8 @@ ${e?.toString()}`)
   async loadWasm(language) {
     try {
       const wasm_url = `${this.basePath}wasm.${language}.pagefind`
-      let compressed_resp = await fetch(wasm_url)
-      let compressed_wasm = await compressed_resp.arrayBuffer()
+      const compressed_resp = await fetch(wasm_url)
+      const compressed_wasm = await compressed_resp.arrayBuffer()
       const final_wasm = this.decompress(
         new Uint8Array(compressed_wasm),
         'Pagefind WebAssembly'
@@ -989,10 +989,10 @@ ${e?.toString()}`)
   }
   async _loadGenericChunk(url, method) {
     try {
-      let compressed_resp = await fetch(url)
-      let compressed_chunk = await compressed_resp.arrayBuffer()
-      let chunk = this.decompress(new Uint8Array(compressed_chunk), url)
-      let ptr = await this.getPtr()
+      const compressed_resp = await fetch(url)
+      const compressed_chunk = await compressed_resp.arrayBuffer()
+      const chunk = this.decompress(new Uint8Array(compressed_chunk), url)
+      const ptr = await this.getPtr()
       this.raw_ptr = this.backend[method](ptr, chunk)
     } catch (e) {
       console.error(`Failed to load the index chunk ${url}:
@@ -1017,11 +1017,11 @@ ${e?.toString()}`)
     return await this.loaded_filters[hash]
   }
   async _loadFragment(hash) {
-    let compressed_resp = await fetch(
+    const compressed_resp = await fetch(
       `${this.basePath}fragment/${hash}.pf_fragment`
     )
-    let compressed_fragment = await compressed_resp.arrayBuffer()
-    let fragment = this.decompress(
+    const compressed_fragment = await compressed_resp.arrayBuffer()
+    const fragment = this.decompress(
       new Uint8Array(compressed_fragment),
       `Fragment ${hash}`
     )
@@ -1031,7 +1031,7 @@ ${e?.toString()}`)
     if (!this.loaded_fragments[hash]) {
       this.loaded_fragments[hash] = this._loadFragment(hash)
     }
-    let fragment = await this.loaded_fragments[hash]
+    const fragment = await this.loaded_fragments[hash]
     fragment.weighted_locations = weighted_locations
     fragment.locations = weighted_locations.map(l => l.location)
     if (!fragment.raw_content) {
@@ -1070,16 +1070,16 @@ ${e?.toString()}`)
     if (this.highlightParam === null) {
       return normalized
     }
-    let individual_terms = search_term.split(/\s+/)
+    const individual_terms = search_term.split(/\s+/)
     try {
-      let processed = new URL(normalized)
+      const processed = new URL(normalized)
       for (const term of individual_terms) {
         processed.searchParams.append(this.highlightParam, term)
       }
       return processed.toString()
     } catch (e) {
       try {
-        let processed = new URL(`https://example.com${normalized}`)
+        const processed = new URL(`https://example.com${normalized}`)
         for (const term of individual_terms) {
           processed.searchParams.append(this.highlightParam, term)
         }
@@ -1100,17 +1100,17 @@ ${e?.toString()}`)
     return this.raw_ptr
   }
   parseFilters(str) {
-    let output = {}
+    const output = {}
     if (!str) return output
     for (const block of str.split('__PF_FILTER_DELIM__')) {
-      let [filter, values] = block.split(/:(.*)$/)
+      const [filter, values] = block.split(/:(.*)$/)
       output[filter] = {}
       if (values) {
         for (const valueBlock of values.split('__PF_VALUE_DELIM__')) {
           if (valueBlock) {
-            let extract = valueBlock.match(/^(.*):(\d+)$/)
+            const extract = valueBlock.match(/^(.*):(\d+)$/)
             if (extract) {
-              let [, value, count] = extract
+              const [, value, count] = extract
               output[filter][value] = parseInt(count) ?? count
             }
           }
@@ -1123,8 +1123,8 @@ ${e?.toString()}`)
     return JSON.stringify(obj)
   }
   stringifySorts(obj = {}) {
-    let sorts = Object.entries(obj)
-    for (let [sort, direction] of sorts) {
+    const sorts = Object.entries(obj)
+    for (const [sort, direction] of sorts) {
       if (sorts.length > 1) {
         console.warn(
           `Pagefind was provided multiple sort options in this search, but can only operate on one. Using the ${sort} sort.`
@@ -1141,14 +1141,14 @@ ${e?.toString()}`)
   }
   async filters() {
     let ptr = await this.getPtr()
-    let filters2 = this.backend.request_all_filter_indexes(ptr)
-    let filter_chunks = filters2
+    const filters2 = this.backend.request_all_filter_indexes(ptr)
+    const filter_chunks = filters2
       .split(' ')
       .filter(v => v)
       .map(chunk => this.loadFilterChunk(chunk))
     await Promise.all([...filter_chunks])
     ptr = await this.getPtr()
-    let results = this.backend.filters(ptr)
+    const results = this.backend.filters(ptr)
     return this.parseFilters(results)
   }
   async preload(term, options2 = {}) {
@@ -1160,11 +1160,11 @@ ${e?.toString()}`)
       if (options2.verbose) console.log(str)
     }
     log(`Starting search on ${this.basePath}`)
-    let start = Date.now()
+    const start = Date.now()
     let ptr = await this.getPtr()
-    let filter_only = term === null
+    const filter_only = term === null
     term = term ?? ''
-    let exact_search = /^\s*".+"\s*$/.test(term)
+    const exact_search = /^\s*".+"\s*$/.test(term)
     if (exact_search) {
       log(`Running an exact search`)
     }
@@ -1188,17 +1188,17 @@ ${e?.toString()}`)
         },
       }
     }
-    let sort_list = this.stringifySorts(options2.sort)
+    const sort_list = this.stringifySorts(options2.sort)
     log(`Stringified sort to ${sort_list}`)
     const filter_list = this.stringifyFilters(options2.filters)
     log(`Stringified filters to ${filter_list}`)
-    let index_resp = this.backend.request_indexes(ptr, term)
-    let filter_resp = this.backend.request_filter_indexes(ptr, filter_list)
-    let chunks = index_resp
+    const index_resp = this.backend.request_indexes(ptr, term)
+    const filter_resp = this.backend.request_filter_indexes(ptr, filter_list)
+    const chunks = index_resp
       .split(' ')
       .filter(v => v)
       .map(chunk => this.loadChunk(chunk))
-    let filter_chunks = filter_resp
+    const filter_chunks = filter_resp
       .split(' ')
       .filter(v => v)
       .map(chunk => this.loadFilterChunk(chunk))
@@ -1209,8 +1209,8 @@ ${e?.toString()}`)
       return null
     }
     ptr = await this.getPtr()
-    let searchStart = Date.now()
-    let result = this.backend.search(
+    const searchStart = Date.now()
+    const result = this.backend.search(
       ptr,
       term,
       filter_list,
@@ -1218,21 +1218,21 @@ ${e?.toString()}`)
       exact_search
     )
     log(`Got the raw search result: ${result}`)
-    let [unfilteredResultCount, all_results, filters2, totalFilters] =
+    const [unfilteredResultCount, all_results, filters2, totalFilters] =
       result.split(/:([^:]*):(.*)__PF_UNFILTERED_DELIM__(.*)$/)
-    let filterObj = this.parseFilters(filters2)
-    let totalFilterObj = this.parseFilters(totalFilters)
+    const filterObj = this.parseFilters(filters2)
+    const totalFilterObj = this.parseFilters(totalFilters)
     log(`Remaining filters: ${JSON.stringify(result)}`)
-    let results = all_results.length ? all_results.split(' ') : []
-    let resultsInterface = results.map(result2 => {
-      let [hash, score, all_locations] = result2.split('@')
+    const results = all_results.length ? all_results.split(' ') : []
+    const resultsInterface = results.map(result2 => {
+      const [hash, score, all_locations] = result2.split('@')
       log(`Processing result: 
   hash:${hash}
   score:${score}
   locations:${all_locations}`)
-      let weighted_locations = all_locations.length
+      const weighted_locations = all_locations.length
         ? all_locations.split(',').map(l => {
-            let [weight, balanced_score, location] = l.split('>')
+            const [weight, balanced_score, location] = l.split('>')
             return {
               weight: parseInt(weight) / 24,
               balanced_score: parseFloat(balanced_score),
@@ -1240,7 +1240,7 @@ ${e?.toString()}`)
             }
           })
         : []
-      let locations = weighted_locations.map(l => l.location)
+      const locations = weighted_locations.map(l => l.location)
       return {
         id: hash,
         score: parseFloat(score) * this.indexWeight,
@@ -1271,7 +1271,7 @@ ${e?.toString()}`)
     }
   }
 }
-var Pagefind = class {
+const Pagefind = class {
   constructor(options2 = {}) {
     this.backend = wasm_bindgen
     this.primaryLanguage = 'unknown'
@@ -1301,7 +1301,7 @@ var Pagefind = class {
       )
       return
     }
-    let newInstance = new PagefindInstance({
+    const newInstance = new PagefindInstance({
       primary: false,
       basePath: indexPath,
     })
@@ -1333,7 +1333,7 @@ var Pagefind = class {
     return merged
   }
   async filters() {
-    let filters2 = await Promise.all(this.instances.map(i2 => i2.filters()))
+    const filters2 = await Promise.all(this.instances.map(i2 => i2.filters()))
     return this.mergeFilters(filters2)
   }
   async preload(term, options2 = {}) {
@@ -1353,7 +1353,7 @@ var Pagefind = class {
     return searchResult
   }
   async search(term, options2 = {}) {
-    let search2 = await Promise.all(
+    const search2 = await Promise.all(
       this.instances.map(i2 => i2.search(term, options2))
     )
     const filters2 = this.mergeFilters(search2.map(s => s.filters))
@@ -1376,44 +1376,44 @@ var Pagefind = class {
     }
   }
 }
-var pagefind = void 0
-var initial_options = void 0
-var init_pagefind = () => {
+let pagefind = void 0
+let initial_options = void 0
+const init_pagefind = () => {
   if (!pagefind) {
     pagefind = new Pagefind(initial_options ?? {})
   }
 }
-var options = async new_options => {
+const options = async new_options => {
   if (pagefind) {
     await pagefind.options(new_options)
   } else {
     initial_options = new_options
   }
 }
-var init = async () => {
+const init = async () => {
   init_pagefind()
 }
-var destroy = async () => {
+const destroy = async () => {
   pagefind = void 0
   initial_options = void 0
 }
-var mergeIndex = async (indexPath, options2) => {
+const mergeIndex = async (indexPath, options2) => {
   init_pagefind()
   return await pagefind.mergeIndex(indexPath, options2)
 }
-var search = async (term, options2) => {
+const search = async (term, options2) => {
   init_pagefind()
   return await pagefind.search(term, options2)
 }
-var debouncedSearch = async (term, options2, debounceTimeoutMs = 300) => {
+const debouncedSearch = async (term, options2, debounceTimeoutMs = 300) => {
   init_pagefind()
   return await pagefind.debouncedSearch(term, options2, debounceTimeoutMs)
 }
-var preload = async (term, options2) => {
+const preload = async (term, options2) => {
   init_pagefind()
   return await pagefind.preload(term, options2)
 }
-var filters = async () => {
+const filters = async () => {
   init_pagefind()
   return await pagefind.filters()
 }

@@ -82,7 +82,7 @@ const AICompanionSettings: React.FC = () => {
         aiApiKeys: keys,
       }
 
-      await runtime.setDesktopSettings(updatedSettings)
+      await runtime.setDesktopSettings(updatedSettings, true)
       window.__userFeedback({
         type: 'success',
         text: 'AI API keys saved successfully!',

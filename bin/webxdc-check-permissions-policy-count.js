@@ -19,7 +19,7 @@ async function getRequiredCount(url) {
 
 async function getActualCount(filePath) {
   const fileContent = await fs.readFile(filePath, { encoding: 'utf8' })
-  const count = (fileContent.match(/^    (\/\/ )?".*?=\(\)(, )?",$/gm) ?? [])
+  const count = (fileContent.match(/^ {4}(\/\/ )?".*?=\(\)(, )?",$/gm) ?? [])
     .length
 
   if (count === 0) {

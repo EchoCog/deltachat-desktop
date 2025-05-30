@@ -80,7 +80,7 @@ const BotSettings: React.FC<BotSettingsProps> = ({
         }
 
         // Load advanced cognitive function keys
-        let cognitiveKeys: Partial<
+        const cognitiveKeys: Partial<
           Record<CognitiveFunctionType, CognitiveFunctionConfig>
         > = {}
 

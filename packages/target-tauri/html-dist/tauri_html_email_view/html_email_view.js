@@ -1,7 +1,7 @@
 'use strict'
 ;(() => {
-  var y = Object.defineProperty
-  var a = (e, t) => y(e, 'name', { value: t, configurable: !0 })
+  const y = Object.defineProperty
+  const a = (e, t) => y(e, 'name', { value: t, configurable: !0 })
   function r(e, t, s, n) {
     if (s === 'a' && !n)
       throw new TypeError('Private accessor was defined without a getter')
@@ -23,7 +23,7 @@
     return n === 'a' ? o.call(e, s) : o ? (o.value = s) : t.set(e, s), s
   }
   a(l, '__classPrivateFieldSet')
-  var c,
+  let c,
     i,
     h,
     m,
@@ -33,7 +33,7 @@
     return window.__TAURI_INTERNALS__.transformCallback(e, t)
   }
   a(k, 'transformCallback')
-  var p = class {
+  const p = class {
     static {
       a(this, 'Channel')
     }
@@ -44,12 +44,12 @@
         m.set(this, void 0),
         l(this, c, t || (() => {}), 'f'),
         (this.id = k(s => {
-          let n = s.index
+          const n = s.index
           if ('end' in s) {
             n == r(this, i, 'f') ? this.cleanupCallback() : l(this, m, n, 'f')
             return
           }
-          let o = s.message
+          const o = s.message
           if (n == r(this, i, 'f')) {
             for (
               r(this, c, 'f').call(this, o),
@@ -57,7 +57,7 @@
               r(this, i, 'f') in r(this, h, 'f');
 
             ) {
-              let _ = r(this, h, 'f')[r(this, i, 'f')]
+              const _ = r(this, h, 'f')[r(this, i, 'f')]
               r(this, c, 'f').call(this, _),
                 delete r(this, h, 'f')[r(this, i, 'f')],
                 l(this, i, r(this, i, 'f') + 1, 'f')
@@ -91,7 +91,7 @@
   }
   a(d, 'invoke')
   T = new WeakMap()
-  var E = document.getElementById('subject'),
+  let E = document.getElementById('subject'),
     b = document.getElementById('sender'),
     I = document.getElementById('receive-time'),
     u = document.getElementById('toggle_network'),
@@ -117,7 +117,7 @@
   )
   u.onclick = e => {
     e.preventDefault()
-    let t = !w
+    const t = !w
     d('html_email_set_load_remote_content', { loadRemoteContent: t }).then(
       () => {
         ;(u.checked = t), (w = t)
@@ -133,7 +133,7 @@
       (window.matchMedia('(prefers-color-scheme: dark)').matches
         ? (e = 'dc:dark')
         : (e = 'dc:light'))
-    let [t, s] = await d('get_theme', { themeAddress: e }),
+    const [t, s] = await d('get_theme', { themeAddress: e }),
       n = window.document.getElementById('theme-vars')
     if (!n) throw new Error('#theme-vars element not found')
     n.innerText = s

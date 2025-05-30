@@ -26,12 +26,62 @@ jest.mock('../../../hooks/useTranslationFunction', () => ({
 
 describe('BotSettings', () => {
   const mockSettingsStore = {
+    // Required properties from SettingsStoreState
+    accountId: 1,
+    selfContact: {
+      address: 'test@example.com',
+      displayName: 'Test User',
+      color: '#5555FF',
+      authName: 'Test User',
+      status: 'Available',
+      id: 1,
+      name: 'Test User',
+      profileImage: '',
+      nameAndAddr: 'Test User (test@example.com)',
+      isBlocked: false,
+      isVerified: true,
+      verifier: '',
+      wasSeenRecently: true,
+      lastSeen: new Date().getTime(),
+      isBot: false,
+      isArchiveLink: false,
+    },
+    settings: {},
+    rc: {},
     desktopSettings: {
-      botEnabled: false,
+      // Required base settings from DesktopSettingsType
+      bounds: {},
+      enterKeySends: false,
+      notifications: true,
+      showNotificationContent: true,
+      locale: null,
+      lastAccount: undefined,
+      enableAVCalls: false,
+      enableBroadcastLists: false,
+      enableChatAuditLog: false,
+      enableOnDemandLocationStreaming: false,
+      zoomFactor: 1,
+      activeTheme: 'system',
+      minimizeToTray: true,
+      syncAllAccounts: true,
+      experimentalEnableMarkdownInMessages: false,
+      enableWebxdcDevTools: false,
+      HTMLEmailAskForRemoteLoadingConfirmation: true,
+      HTMLEmailAlwaysLoadRemoteContent: false,
+      enableRelatedChats: false,
+      galleryImageKeepAspectRatio: false,
+      useSystemUIFont: false,
+      contentProtectionEnabled: false,
+      isMentionsEnabled: true,
+      autostart: true,
+
+      // Deep Tree Echo Bot settings
+      deepTreeEchoBotEnabled: true,
       botLearningEnabled: false,
       botPersonality: 'Test personality',
       botApiKey: 'test-api-key',
       botApiEndpoint: 'https://api.example.com',
+      aiApiKeys: [],
     },
     setDesktopSetting: jest.fn(),
   }
@@ -72,7 +122,7 @@ describe('BotSettings', () => {
     })
     fireEvent.click(enableSwitch)
     expect(mockSettingsStore.setDesktopSetting).toHaveBeenCalledWith(
-      'botEnabled',
+      'deepTreeEchoBotEnabled',
       true
     )
 

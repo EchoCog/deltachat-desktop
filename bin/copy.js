@@ -29,7 +29,7 @@ async function copy(source, destination, watch = false) {
     }
     return
   }
-  for (let f of files) {
+  for (const f of files) {
     const pathSource = join(source, f)
     const pathDestination = join(destination, f)
     try {
@@ -73,7 +73,7 @@ async function copy(source, destination, watch = false) {
 
 function main() {
   /** @type {any} TODO type? */
-  let options = {
+  const options = {
     showHelp: false,
     watch: false,
     source: false,
@@ -81,7 +81,7 @@ function main() {
   }
 
   for (let i = 2; i < process.argv.length; i++) {
-    let arg = process.argv[i]
+    const arg = process.argv[i]
     if (arg === '--help' || arg === '-h') {
       options.showHelp = true
       break

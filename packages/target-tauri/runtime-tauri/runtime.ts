@@ -179,6 +179,13 @@ class TauriRuntime implements Runtime {
       notifications: true,
       syncAllAccounts: true,
       autostart: true,
+      // Deep Tree Echo Bot settings - part of our revolutionary AI companion platform
+      deepTreeEchoBotEnabled: false,
+      aiApiKeys: [],
+      botLearningEnabled: false,
+      botPersonality: '',
+      botApiKey: '',
+      botApiEndpoint: '',
     } satisfies Partial<DesktopSettingsType>
 
     const frontendOnly = {
