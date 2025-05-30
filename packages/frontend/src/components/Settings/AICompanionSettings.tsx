@@ -60,7 +60,11 @@ const AICompanionSettings: React.FC = () => {
     const loadKeys = async () => {
       try {
         const settings = await runtime.getDesktopSettings()
-        setApiKeys(settings.aiApiKeys || [])
+        // Extract API keys from the deepTreeEchoBotCognitiveKeys property
+        const cognitiveKeys = settings.deepTreeEchoBotCognitiveKeys
+          ? JSON.parse(settings.deepTreeEchoBotCognitiveKeys)
+          : []
+        setApiKeys(cognitiveKeys)
       } catch (error) {
         console.error('Failed to load API keys:', error)
         window.__userFeedback({
@@ -79,19 +83,27 @@ const AICompanionSettings: React.FC = () => {
       const settings = await runtime.getDesktopSettings()
       const updatedSettings = {
         ...settings,
-        aiApiKeys: keys,
+        // Store API keys in the proper property as JSON string
+        deepTreeEchoBotCognitiveKeys: JSON.stringify(keys),
       }
 
-      await runtime.setDesktopSettings(updatedSettings, true)
+      // Update each setting individually using the correct method
+      await runtime.setDesktopSetting(
+        'deepTreeEchoBotCognitiveKeys',
+        JSON.stringify(keys)
+      )
       window.__userFeedback({
         type: 'success',
         text: 'AI API keys saved successfully!',
       })
 
-      // Update settings store
-      SettingsStoreInstance.setState({
-        desktopSettings: updatedSettings,
-      })
+      // Update settings store with correct typing
+      SettingsStoreInstance.setState(
+        {
+          desktopSettings: updatedSettings,
+        },
+        true
+      )
 
       return true
     } catch (error) {

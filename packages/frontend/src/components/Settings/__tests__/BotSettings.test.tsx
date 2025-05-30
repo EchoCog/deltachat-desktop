@@ -77,11 +77,17 @@ describe('BotSettings', () => {
 
       // Deep Tree Echo Bot settings
       deepTreeEchoBotEnabled: true,
-      botLearningEnabled: false,
-      botPersonality: 'Test personality',
-      botApiKey: 'test-api-key',
-      botApiEndpoint: 'https://api.example.com',
-      aiApiKeys: [],
+      deepTreeEchoBotMemoryEnabled: false,
+      deepTreeEchoBotPersonality: 'Test personality',
+      deepTreeEchoBotApiKey: 'test-api-key',
+      deepTreeEchoBotApiEndpoint: 'https://api.example.com',
+      deepTreeEchoBotVisionEnabled: false,
+      deepTreeEchoBotWebAutomationEnabled: false,
+      deepTreeEchoBotEmbodimentEnabled: false,
+      deepTreeEchoBotPersonaState: '',
+      deepTreeEchoBotMemories: '',
+      deepTreeEchoBotReflections: '',
+      deepTreeEchoBotCognitiveKeys: '',
     },
     setDesktopSetting: jest.fn(),
   }
@@ -132,7 +138,7 @@ describe('BotSettings', () => {
     })
     fireEvent.click(learningSwitch)
     expect(mockSettingsStore.setDesktopSetting).toHaveBeenCalledWith(
-      'botLearningEnabled',
+      'deepTreeEchoBotMemoryEnabled',
       true
     )
 
@@ -140,7 +146,7 @@ describe('BotSettings', () => {
     const apiKeyInput = screen.getByLabelText('API Key:')
     fireEvent.change(apiKeyInput, { target: { value: 'new-api-key' } })
     expect(mockSettingsStore.setDesktopSetting).toHaveBeenCalledWith(
-      'botApiKey',
+      'deepTreeEchoBotApiKey',
       'new-api-key'
     )
 
@@ -150,7 +156,7 @@ describe('BotSettings', () => {
       target: { value: 'https://new-endpoint.com' },
     })
     expect(mockSettingsStore.setDesktopSetting).toHaveBeenCalledWith(
-      'botApiEndpoint',
+      'deepTreeEchoBotApiEndpoint',
       'https://new-endpoint.com'
     )
 
@@ -162,7 +168,7 @@ describe('BotSettings', () => {
       target: { value: 'New personality description' },
     })
     expect(mockSettingsStore.setDesktopSetting).toHaveBeenCalledWith(
-      'botPersonality',
+      'deepTreeEchoBotPersonality',
       'New personality description'
     )
   })

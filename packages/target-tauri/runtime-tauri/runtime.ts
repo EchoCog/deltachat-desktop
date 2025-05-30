@@ -181,11 +181,17 @@ class TauriRuntime implements Runtime {
       autostart: true,
       // Deep Tree Echo Bot settings - part of our revolutionary AI companion platform
       deepTreeEchoBotEnabled: false,
-      aiApiKeys: [],
-      botLearningEnabled: false,
-      botPersonality: '',
-      botApiKey: '',
-      botApiEndpoint: '',
+      deepTreeEchoBotMemoryEnabled: false,
+      deepTreeEchoBotPersonality: '',
+      deepTreeEchoBotApiKey: '',
+      deepTreeEchoBotApiEndpoint: '',
+      deepTreeEchoBotVisionEnabled: false,
+      deepTreeEchoBotWebAutomationEnabled: false,
+      deepTreeEchoBotEmbodimentEnabled: false,
+      deepTreeEchoBotPersonaState: '',
+      deepTreeEchoBotMemories: '',
+      deepTreeEchoBotReflections: '',
+      deepTreeEchoBotCognitiveKeys: '',
     } satisfies Partial<DesktopSettingsType>
 
     const frontendOnly = {

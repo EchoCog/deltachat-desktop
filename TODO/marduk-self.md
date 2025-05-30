@@ -691,7 +691,7 @@ Applying optimizations...
 2025-04-29T13:49:18.571Z [warn]: Error in TypeScript analysis of src/core/monitoring/health-monitor.ts:
 2025-04-29T13:49:18.571Z [warn]: Error in TypeScript analysis of src/core/monitoring/metrics-collector.ts:
 2025-04-29T13:49:18.572Z [warn]: Error in TypeScript analysis of src/core/monitoring/types.ts:
-2025-04-29T13:49:18.572Z [warn]: Error in TypeScript analysis of src/core/notes_manager.ts:
+2025-04-29T13:49:18.572Z [warn]: Error in TypeScript analysis of src/core/notes*manager.ts:
 2025-04-29T13:49:18.573Z [warn]: Error in TypeScript analysis of src/core/services/websocket-service.ts:
 2025-04-29T13:49:18.575Z [warn]: Error in TypeScript analysis of src/core/task/deferred-task-handler.ts:
 2025-04-29T13:49:18.575Z [warn]: Error in TypeScript analysis of src/core/task/task-manager.ts:
@@ -728,7 +728,7 @@ Applying optimizations...
 2025-04-29T13:49:18.588Z [info]: 5. Consolidate redundant items in procedural memory (39% redundancy)
 2025-04-29T13:49:18.588Z [info]: 6. Strengthen temporal connections between related memory items
 2025-04-29T13:49:18.588Z [info]: PHASE 2: Recursive Optimization Cycle - REWIRING THE COGNITIVE MATRIX!
-2025-04-29T13:49:18.588Z [info]: Beginning recursive optimization cycle - reconfiguring the cognitive matrix! _MANIACAL LAUGHTER_
+2025-04-29T13:49:18.588Z [info]: Beginning recursive optimization cycle - reconfiguring the cognitive matrix! \_MANIACAL LAUGHTER*
 2025-04-29T13:49:18.588Z [info]: Starting adaptive memory optimization cycle
 2025-04-29T13:49:18.588Z [info]: Applying optimization rule: Enhance Frequent Access Paths
 2025-04-29T13:49:18.589Z [info]: Applying optimization rule: Increase Confidence for Validated Items
@@ -1916,7 +1916,7 @@ Applying optimizations...
 2025-04-29T13:54:23.240Z [warn]: Error in TypeScript analysis of src/core/monitoring/health-monitor.ts:
 2025-04-29T13:54:23.241Z [warn]: Error in TypeScript analysis of src/core/monitoring/metrics-collector.ts:
 2025-04-29T13:54:23.241Z [warn]: Error in TypeScript analysis of src/core/monitoring/types.ts:
-2025-04-29T13:54:23.242Z [warn]: Error in TypeScript analysis of src/core/notes_manager.ts:
+2025-04-29T13:54:23.242Z [warn]: Error in TypeScript analysis of src/core/notes*manager.ts:
 2025-04-29T13:54:23.243Z [warn]: Error in TypeScript analysis of src/core/services/websocket-service.ts:
 2025-04-29T13:54:23.244Z [warn]: Error in TypeScript analysis of src/core/task/deferred-task-handler.ts:
 2025-04-29T13:54:23.244Z [warn]: Error in TypeScript analysis of src/core/task/task-manager.ts:
@@ -1954,7 +1954,7 @@ Applying optimizations...
 2025-04-29T13:54:23.262Z [info]: 6. Defragment procedural memory subsystem (38% fragmentation)
 2025-04-29T13:54:23.262Z [info]: 7. Strengthen temporal connections between related memory items
 2025-04-29T13:54:23.262Z [info]: PHASE 2: Recursive Optimization Cycle - REWIRING THE COGNITIVE MATRIX!
-2025-04-29T13:54:23.262Z [info]: Beginning recursive optimization cycle - reconfiguring the cognitive matrix! _MANIACAL LAUGHTER_
+2025-04-29T13:54:23.262Z [info]: Beginning recursive optimization cycle - reconfiguring the cognitive matrix! \_MANIACAL LAUGHTER*
 2025-04-29T13:54:23.263Z [info]: Starting adaptive memory optimization cycle
 2025-04-29T13:54:23.263Z [info]: Applying optimization rule: Consolidate Similar Facts
 2025-04-29T13:54:23.263Z [info]: Getting memory subsystem: declarative
