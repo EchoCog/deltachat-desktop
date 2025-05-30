@@ -15,14 +15,19 @@ import { RAGMemoryStore } from './RAGMemoryStore'
 import { SelfReflection } from './SelfReflection'
 import BotSettings from './BotSettings'
 import DeepTreeEchoSettingsScreen from './DeepTreeEchoSettingsScreen'
-import { initDeepTreeEchoBot, saveBotSettings, getBotInstance, cleanupBot } from './DeepTreeEchoIntegration'
-import { 
+import {
+  initDeepTreeEchoBot,
+  saveBotSettings,
+  getBotInstance,
+  cleanupBot,
+} from './DeepTreeEchoIntegration'
+import {
   DeepTreeEchoTestUtil,
   createTestGroup,
   sendTestMessage,
   processMessageWithBot,
   runDemo,
-  cleanup as cleanupTestUtil
+  cleanup as cleanupTestUtil,
 } from './DeepTreeEchoTestUtil'
 
 export {
@@ -45,7 +50,7 @@ export {
   sendTestMessage,
   processMessageWithBot,
   runDemo,
-  cleanupTestUtil
+  cleanupTestUtil,
 }
 
 export type { DeepTreeEchoBotOptions }
@@ -59,5 +64,5 @@ export {
   AdaptivePersonality,
   QuantumBeliefPropagation,
   EmotionalIntelligence,
-  SecureIntegration
-} 
+  SecureIntegration,
+}

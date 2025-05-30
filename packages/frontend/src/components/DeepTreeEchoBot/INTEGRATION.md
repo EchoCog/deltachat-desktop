@@ -25,7 +25,7 @@ import { DeepTreeEchoSettingsScreen } from '../../components/DeepTreeEchoBot'
 return (
   <SettingsContainer>
     {/* Other settings sections */}
-    
+
     {/* Deep Tree Echo Settings */}
     <DeepTreeEchoSettingsScreen />
   </SettingsContainer>
@@ -97,7 +97,10 @@ import { createTestGroup } from '../../components/DeepTreeEchoBot'
 async function createBotGroup() {
   const accounts = await BackendRemote.rpc.getAllAccounts()
   if (accounts.length > 0) {
-    const chatId = await createTestGroup(accounts[0], "Deep Tree Echo Test", [contactId1, contactId2])
+    const chatId = await createTestGroup(accounts[0], 'Deep Tree Echo Test', [
+      contactId1,
+      contactId2,
+    ])
     console.log(`Created test group with ID: ${chatId}`)
   }
 }
@@ -106,11 +109,18 @@ async function createBotGroup() {
 ### Testing Bot Responses
 
 ```jsx
-import { sendTestMessage, processMessageWithBot } from '../../components/DeepTreeEchoBot'
+import {
+  sendTestMessage,
+  processMessageWithBot,
+} from '../../components/DeepTreeEchoBot'
 
 // Send a test message and process it with the bot
 async function testBotResponse(accountId, chatId) {
-  const msgId = await sendTestMessage(accountId, chatId, "Hello, Deep Tree Echo!")
+  const msgId = await sendTestMessage(
+    accountId,
+    chatId,
+    'Hello, Deep Tree Echo!'
+  )
   await processMessageWithBot(accountId, chatId, msgId)
 }
 ```
@@ -189,4 +199,4 @@ If you encounter issues:
 2. Verify API keys are correctly configured
 3. Ensure the bot is properly initialized
 4. Check for conflicts with other DeltaChat components
-5. Run the test demo to verify functionality 
+5. Run the test demo to verify functionality

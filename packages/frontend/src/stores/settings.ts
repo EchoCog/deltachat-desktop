@@ -56,7 +56,7 @@ const settingsKeys = [
 
 export interface DesktopSettingsType {
   // ... existing properties ...
-  
+
   // Deep Tree Echo Bot settings
   botEnabled?: boolean
   botLearningEnabled?: boolean

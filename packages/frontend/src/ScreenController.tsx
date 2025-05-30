@@ -268,8 +268,6 @@ export default class ScreenController extends Component {
     }
   }
 
-
-
   componentWillUnmount() {
     BackendRemote.off('Error', this.onError)
 
@@ -342,9 +340,12 @@ export default class ScreenController extends Component {
     const memoryLayer = MemoryPersistenceLayer.getInstance()
     memoryLayer.initialize().catch(error => {
       console.error('Failed to initialize Memory Persistence Layer:', error)
-      this.userFeedback({type: 'error', text: 'Failed to initialize AI Companion Memory System'})
+      this.userFeedback({
+        type: 'error',
+        text: 'Failed to initialize AI Companion Memory System',
+      })
     })
-    
+
     BackendRemote.on('Error', this.onError)
 
     runtime.onResumeFromSleep = debounce(() => {
@@ -364,8 +365,10 @@ export default class ScreenController extends Component {
 
   render() {
     // Get bot settings from the settings store
-    const botEnabled = SettingsStoreInstance.state?.desktopSettings.deepTreeEchoBotEnabled || false
-    
+    const botEnabled =
+      SettingsStoreInstance.state?.desktopSettings.deepTreeEchoBotEnabled ||
+      false
+
     return (
       <div data-testid={`selected-account:${this.selectedAccountId}`}>
         {this.state.message && (
@@ -377,7 +380,7 @@ export default class ScreenController extends Component {
           </div>
         )}
         {/* Enhanced AI Neighborhood Navigation */}
-        <AINavigation 
+        <AINavigation
           currentScreen={this.state.screen}
           changeScreen={this.changeScreen}
         />
@@ -398,7 +401,9 @@ export default class ScreenController extends Component {
               <ContextMenuProvider>
                 <DialogContextProvider>
                   <RuntimeAdapter accountId={this.selectedAccountId} />
-                  {this.selectedAccountId && <DeepTreeEchoBot enabled={botEnabled} />}
+                  {this.selectedAccountId && (
+                    <DeepTreeEchoBot enabled={botEnabled} />
+                  )}
                   <KeybindingsContextProvider>
                     <div className='main-container-container'>
                       {this.state.smallScreenMode &&

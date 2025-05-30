@@ -8,22 +8,25 @@ type AINavigationProps = {
   changeScreen: (screen: Screens) => void
 }
 
-const AINavigation: React.FC<AINavigationProps> = ({ currentScreen, changeScreen }) => {
+const AINavigation: React.FC<AINavigationProps> = ({
+  currentScreen,
+  changeScreen,
+}) => {
   const isActive = currentScreen === Screens.AINeighborhood
 
   return (
-    <div className="ai-neighborhood-navigation">
-      <button 
+    <div className='ai-neighborhood-navigation'>
+      <button
         className={`ai-neighborhood-button ${isActive ? 'active' : ''}`}
         onClick={() => changeScreen(Screens.AINeighborhood)}
-        title="Enter AI Companion Neighborhood"
+        title='Enter AI Companion Neighborhood'
       >
-        <div className="ai-button-icon-container">
-          <Brain size={24} className="ai-button-icon primary" />
-          <Globe size={16} className="ai-button-icon secondary" />
-          <Sparkles size={12} className="ai-button-icon tertiary" />
+        <div className='ai-button-icon-container'>
+          <Brain size={24} className='ai-button-icon primary' />
+          <Globe size={16} className='ai-button-icon secondary' />
+          <Sparkles size={12} className='ai-button-icon tertiary' />
         </div>
-        <span className="ai-button-text">AI Neighborhood</span>
+        <span className='ai-button-text'>AI Neighborhood</span>
       </button>
     </div>
   )

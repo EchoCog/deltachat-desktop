@@ -14,7 +14,7 @@ describe('LLMService', () => {
       apiEndpoint: 'https://test-api-endpoint.com/v1/chat/completions',
       model: 'test-model',
       temperature: 0.5,
-      maxTokens: 500
+      maxTokens: 500,
     })
   })
 
@@ -29,22 +29,22 @@ describe('LLMService', () => {
           {
             message: {
               role: 'assistant',
-              content: 'This is a test response'
-            }
-          }
-        ]
+              content: 'This is a test response',
+            },
+          },
+        ],
       }
 
       // Setup the fetch mock
       ;(global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
-        json: async () => mockResponse
+        json: async () => mockResponse,
       })
 
       // Create test messages
       const messages: ChatMessage[] = [
         { role: 'system', content: 'You are a helpful assistant' },
-        { role: 'user', content: 'Hello, world!' }
+        { role: 'user', content: 'Hello, world!' },
       ]
 
       // Call the service
@@ -57,14 +57,14 @@ describe('LLMService', () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer test-api-key'
+            Authorization: 'Bearer test-api-key',
           },
           body: JSON.stringify({
             model: 'test-model',
             messages,
             temperature: 0.5,
-            max_tokens: 500
-          })
+            max_tokens: 500,
+          }),
         }
       )
 
@@ -77,16 +77,18 @@ describe('LLMService', () => {
       ;(global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: false,
         status: 400,
-        json: async () => ({ error: 'Bad request' })
+        json: async () => ({ error: 'Bad request' }),
       })
 
       // Create test messages
       const messages: ChatMessage[] = [
-        { role: 'user', content: 'Hello, world!' }
+        { role: 'user', content: 'Hello, world!' },
       ]
 
       // Call the service and expect it to throw
-      await expect(llmService.generateResponse(messages)).rejects.toThrow('API Error')
+      await expect(llmService.generateResponse(messages)).rejects.toThrow(
+        'API Error'
+      )
     })
 
     it('should throw an error when API key is not configured', async () => {
@@ -95,33 +97,44 @@ describe('LLMService', () => {
 
       // Create test messages
       const messages: ChatMessage[] = [
-        { role: 'user', content: 'Hello, world!' }
+        { role: 'user', content: 'Hello, world!' },
       ]
 
       // Call the service and expect it to throw
-      await expect(llmService.generateResponse(messages)).rejects.toThrow('API Key is not configured')
+      await expect(llmService.generateResponse(messages)).rejects.toThrow(
+        'API Key is not configured'
+      )
     })
   })
 
   describe('generateResponseWithContext', () => {
     it('should format messages correctly with conversation history', async () => {
       // Mock the generateResponse method to capture the passed messages
-      const generateResponseSpy = jest.spyOn(llmService, 'generateResponse')
+      const generateResponseSpy = jest
+        .spyOn(llmService, 'generateResponse')
         .mockResolvedValueOnce('Mocked response')
 
       // Test inputs
       const userInput = 'What do you think about that?'
-      const conversationHistory = 'User: Hello\nAssistant: Hi there!\nUser: I have a question'
+      const conversationHistory =
+        'User: Hello\nAssistant: Hi there!\nUser: I have a question'
       const systemPrompt = 'You are a helpful assistant'
 
       // Call the method
-      await llmService.generateResponseWithContext(userInput, conversationHistory, systemPrompt)
+      await llmService.generateResponseWithContext(
+        userInput,
+        conversationHistory,
+        systemPrompt
+      )
 
       // Verify the messages are formatted correctly
       const passedMessages = generateResponseSpy.mock.calls[0][0]
-      
+
       expect(passedMessages).toHaveLength(4) // system + history context + assistant acknowledgment + user input
-      expect(passedMessages[0]).toEqual({ role: 'system', content: systemPrompt })
+      expect(passedMessages[0]).toEqual({
+        role: 'system',
+        content: systemPrompt,
+      })
       expect(passedMessages[1].role).toBe('user')
       expect(passedMessages[1].content).toContain(conversationHistory)
       expect(passedMessages[2].role).toBe('assistant')
@@ -130,7 +143,8 @@ describe('LLMService', () => {
 
     it('should handle empty conversation history', async () => {
       // Mock the generateResponse method
-      const generateResponseSpy = jest.spyOn(llmService, 'generateResponse')
+      const generateResponseSpy = jest
+        .spyOn(llmService, 'generateResponse')
         .mockResolvedValueOnce('Mocked response')
 
       // Test inputs with empty history
@@ -139,14 +153,21 @@ describe('LLMService', () => {
       const systemPrompt = 'You are a helpful assistant'
 
       // Call the method
-      await llmService.generateResponseWithContext(userInput, emptyHistory, systemPrompt)
+      await llmService.generateResponseWithContext(
+        userInput,
+        emptyHistory,
+        systemPrompt
+      )
 
       // Verify the messages are formatted correctly - no history messages should be added
       const passedMessages = generateResponseSpy.mock.calls[0][0]
-      
+
       expect(passedMessages).toHaveLength(2) // Just system + user input
-      expect(passedMessages[0]).toEqual({ role: 'system', content: systemPrompt })
+      expect(passedMessages[0]).toEqual({
+        role: 'system',
+        content: systemPrompt,
+      })
       expect(passedMessages[1]).toEqual({ role: 'user', content: userInput })
     })
   })
-}) 
+})

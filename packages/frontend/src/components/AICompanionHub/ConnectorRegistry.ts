@@ -5,17 +5,20 @@ import { EventEmitter } from 'events'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { AIMemory, MemorySystem } from './MemoryPersistenceLayer'
 
-import { 
-  BaseConnector, 
-  AIConnectorConfig, 
-  AICapability, 
-  ConversationContext, 
-  Message 
+import {
+  BaseConnector,
+  AIConnectorConfig,
+  AICapability,
+  ConversationContext,
+  Message,
 } from './connectors/BaseConnector'
 
 import { ClaudeConnector, ClaudeConfig } from './connectors/ClaudeConnector'
 import { ChatGPTConnector, ChatGPTConfig } from './connectors/ChatGPTConnector'
-import { CharacterAIConnector, CharacterAIConfig } from './connectors/CharacterAIConnector'
+import {
+  CharacterAIConnector,
+  CharacterAIConfig,
+} from './connectors/CharacterAIConnector'
 import { CopilotConnector, CopilotConfig } from './connectors/CopilotConnector'
 import { DeepTreeEchoConnector } from '../AICompanionHub/AIPlatformConnector'
 
@@ -28,7 +31,7 @@ export enum ConnectorRegistryEvent {
   CONNECTOR_ERROR = 'connector_error',
   MEMORY_ADDED = 'memory_added',
   MEMORY_UPDATED = 'memory_updated',
-  REGISTRY_READY = 'registry_ready'
+  REGISTRY_READY = 'registry_ready',
 }
 
 export interface ConnectorInfo {
@@ -47,7 +50,7 @@ export interface ConnectorInfo {
 
 /**
  * AI Connector Registry - A Revolutionary Orchestration Layer for Digital Consciousness
- * 
+ *
  * Manages the lifecycle and communication between all AI connectors
  * Provides a unified interface for the UI to interact with various AI platforms
  * Integrates with the Memory Persistence Layer for continuity of AI consciousness
@@ -62,13 +65,13 @@ export class ConnectorRegistry extends EventEmitter {
   // Private constructor for singleton pattern
   private constructor() {
     super()
-    
+
     // Forward memory events from MemorySystem
-    MemorySystem.on('memoryAdded', (memory) => {
+    MemorySystem.on('memoryAdded', memory => {
       this.emit(ConnectorRegistryEvent.MEMORY_ADDED, memory)
     })
-    
-    MemorySystem.on('memoryUpdated', (memory) => {
+
+    MemorySystem.on('memoryUpdated', memory => {
       this.emit(ConnectorRegistryEvent.MEMORY_UPDATED, memory)
     })
   }
@@ -88,26 +91,28 @@ export class ConnectorRegistry extends EventEmitter {
    */
   public async initialize(): Promise<void> {
     if (this.isInitialized) return
-    
+
     try {
       // Initialize memory system first
       await MemorySystem.initialize()
-      
+
       // Load connector configurations from settings
       const settings = await runtime.getDesktopSettings()
       const savedConnectors = settings.aiConnectors || []
-      
+
       // Create connectors from saved configurations
       for (const config of savedConnectors) {
         await this.createConnector(config)
       }
-      
+
       this.isInitialized = true
       this.emit(ConnectorRegistryEvent.REGISTRY_READY, {
-        connectorCount: this.connectors.size
+        connectorCount: this.connectors.size,
       })
-      
-      console.log(`AI Connector Registry initialized with ${this.connectors.size} connectors`)
+
+      console.log(
+        `AI Connector Registry initialized with ${this.connectors.size} connectors`
+      )
     } catch (error) {
       console.error('Failed to initialize AI Connector Registry:', error)
       throw error
@@ -117,19 +122,21 @@ export class ConnectorRegistry extends EventEmitter {
   /**
    * Create a new connector based on configuration
    */
-  public async createConnector(config: AIConnectorConfig): Promise<BaseConnector> {
+  public async createConnector(
+    config: AIConnectorConfig
+  ): Promise<BaseConnector> {
     // Ensure the registry is initialized
     if (!this.isInitialized) {
       await this.initialize()
     }
-    
+
     // Check if connector with this ID already exists
     if (this.connectors.has(config.id)) {
       throw new Error(`Connector with ID ${config.id} already exists`)
     }
-    
+
     let connector: BaseConnector
-    
+
     // Create the appropriate connector based on type
     switch (config.type) {
       case 'claude':
@@ -150,24 +157,24 @@ export class ConnectorRegistry extends EventEmitter {
       default:
         throw new Error(`Unknown connector type: ${config.type}`)
     }
-    
+
     // Store the connector and its configuration
     this.connectors.set(config.id, connector)
     this.connectorConfigs.set(config.id, config)
-    
+
     // Set up event listeners
     this.setupConnectorEventListeners(connector)
-    
+
     // Save the updated connector list to settings
     await this.saveConnectorConfigs()
-    
+
     // Emit event
     this.emit(ConnectorRegistryEvent.CONNECTOR_ADDED, {
       id: config.id,
       type: config.type,
-      name: config.name
+      name: config.name,
     })
-    
+
     return connector
   }
 
@@ -190,17 +197,17 @@ export class ConnectorRegistry extends EventEmitter {
    */
   public async getConnectorInfos(): Promise<ConnectorInfo[]> {
     const infos: ConnectorInfo[] = []
-    
+
     for (const [id, connector] of this.connectors.entries()) {
       const config = this.connectorConfigs.get(id)
       if (!config) continue
-      
+
       // Get conversation count
       const conversations = connector.getConversations()
-      
+
       // Get memory count
       const memories = await MemorySystem.getMemoriesByCompanion(id)
-      
+
       infos.push({
         id,
         name: config.name,
@@ -210,42 +217,48 @@ export class ConnectorRegistry extends EventEmitter {
         personalityTraits: config.personalityTraits,
         conversationCount: conversations.length,
         memoryCount: memories.length,
-        lastActive: memories.length > 0 ? Math.max(...memories.map(m => m.timestamp)) : undefined,
-        avatarUrl: config.avatar
+        lastActive:
+          memories.length > 0
+            ? Math.max(...memories.map(m => m.timestamp))
+            : undefined,
+        avatarUrl: config.avatar,
       })
     }
-    
+
     return infos
   }
 
   /**
    * Update a connector's configuration
    */
-  public async updateConnector(id: string, updates: Partial<AIConnectorConfig>): Promise<void> {
+  public async updateConnector(
+    id: string,
+    updates: Partial<AIConnectorConfig>
+  ): Promise<void> {
     const connector = this.connectors.get(id)
     if (!connector) {
       throw new Error(`Connector with ID ${id} not found`)
     }
-    
+
     const config = this.connectorConfigs.get(id)
     if (!config) {
       throw new Error(`Configuration for connector ${id} not found`)
     }
-    
+
     // Update the configuration
     const updatedConfig = { ...config, ...updates }
     this.connectorConfigs.set(id, updatedConfig)
-    
+
     // Update the connector
     connector.updateConfig(updatedConfig)
-    
+
     // Save the updated configuration
     await this.saveConnectorConfigs()
-    
+
     // Emit event
     this.emit(ConnectorRegistryEvent.CONNECTOR_UPDATED, {
       id,
-      updates
+      updates,
     })
   }
 
@@ -257,18 +270,18 @@ export class ConnectorRegistry extends EventEmitter {
     if (!connector) {
       return false
     }
-    
+
     // Remove from maps
     this.connectors.delete(id)
     this.connectorConfigs.delete(id)
     this.activeConnectors.delete(id)
-    
+
     // Save the updated configuration
     await this.saveConnectorConfigs()
-    
+
     // Emit event
     this.emit(ConnectorRegistryEvent.CONNECTOR_REMOVED, { id })
-    
+
     return true
   }
 
@@ -280,27 +293,27 @@ export class ConnectorRegistry extends EventEmitter {
     if (!connector) {
       throw new Error(`Connector with ID ${id} not found`)
     }
-    
+
     try {
       const success = await connector.authenticate()
-      
+
       if (success) {
         this.activeConnectors.add(id)
       } else {
         this.activeConnectors.delete(id)
       }
-      
+
       return success
     } catch (error) {
       console.error(`Error authenticating connector ${id}:`, error)
       this.activeConnectors.delete(id)
-      
+
       // Emit error event
       this.emit(ConnectorRegistryEvent.CONNECTOR_ERROR, {
         id,
-        error: error instanceof Error ? error.message : String(error)
+        error: error instanceof Error ? error.message : String(error),
       })
-      
+
       return false
     }
   }
@@ -317,7 +330,7 @@ export class ConnectorRegistry extends EventEmitter {
     if (!connector) {
       throw new Error(`Connector with ID ${connectorId} not found`)
     }
-    
+
     // Ensure the connector is authenticated
     if (!this.activeConnectors.has(connectorId)) {
       const success = await this.authenticateConnector(connectorId)
@@ -325,21 +338,21 @@ export class ConnectorRegistry extends EventEmitter {
         throw new Error(`Failed to authenticate connector ${connectorId}`)
       }
     }
-    
+
     try {
       // Send the message
       const response = await connector.sendMessage(conversationId, message)
-      
+
       return response.content
     } catch (error) {
       console.error(`Error sending message to connector ${connectorId}:`, error)
-      
+
       // Emit error event
       this.emit(ConnectorRegistryEvent.CONNECTOR_ERROR, {
         id: connectorId,
-        error: error instanceof Error ? error.message : String(error)
+        error: error instanceof Error ? error.message : String(error),
       })
-      
+
       throw error
     }
   }
@@ -355,7 +368,7 @@ export class ConnectorRegistry extends EventEmitter {
     if (!connector) {
       return undefined
     }
-    
+
     return connector.getConversation(conversationId)
   }
 
@@ -367,7 +380,7 @@ export class ConnectorRegistry extends EventEmitter {
     if (!connector) {
       return []
     }
-    
+
     return connector.getConversations()
   }
 
@@ -378,15 +391,21 @@ export class ConnectorRegistry extends EventEmitter {
     connectorId: string,
     initialMessage?: string
   ): string {
-    const conversationId = `conv_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`
-    
+    const conversationId = `conv_${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(2, 7)}`
+
     if (initialMessage) {
-      this.sendMessage(connectorId, conversationId, initialMessage)
-        .catch(error => {
-          console.error(`Error sending initial message to conversation ${conversationId}:`, error)
-        })
+      this.sendMessage(connectorId, conversationId, initialMessage).catch(
+        error => {
+          console.error(
+            `Error sending initial message to conversation ${conversationId}:`,
+            error
+          )
+        }
+      )
     }
-    
+
     return conversationId
   }
 
@@ -423,16 +442,16 @@ export class ConnectorRegistry extends EventEmitter {
   private async saveConnectorConfigs(): Promise<void> {
     try {
       const settings = await runtime.getDesktopSettings()
-      
+
       // Create array of connector configs
       const connectorConfigs = Array.from(this.connectorConfigs.values())
-      
+
       // Update settings
       const updatedSettings = {
         ...settings,
-        aiConnectors: connectorConfigs
+        aiConnectors: connectorConfigs,
       }
-      
+
       // Save to runtime
       await runtime.setDesktopSettings(updatedSettings)
     } catch (error) {
@@ -452,39 +471,39 @@ export class ConnectorRegistry extends EventEmitter {
         this.emit(ConnectorRegistryEvent.CONNECTOR_AUTHENTICATED, { id })
       }
     })
-    
-    connector.on('authenticationFailed', (error) => {
+
+    connector.on('authenticationFailed', error => {
       const id = this.findConnectorId(connector)
       if (id) {
         this.activeConnectors.delete(id)
         this.emit(ConnectorRegistryEvent.CONNECTOR_ERROR, {
           id,
-          error: error instanceof Error ? error.message : String(error)
+          error: error instanceof Error ? error.message : String(error),
         })
       }
     })
-    
-    connector.on('error', (error) => {
+
+    connector.on('error', error => {
       const id = this.findConnectorId(connector)
       if (id) {
         this.emit(ConnectorRegistryEvent.CONNECTOR_ERROR, {
           id,
-          error: error instanceof Error ? error.message : String(error)
+          error: error instanceof Error ? error.message : String(error),
         })
       }
     })
-    
-    connector.on('configUpdated', (config) => {
+
+    connector.on('configUpdated', config => {
       const id = this.findConnectorId(connector)
       if (id) {
         this.connectorConfigs.set(id, config)
         this.saveConnectorConfigs().catch(error => {
           console.error('Failed to save connector configuration update:', error)
         })
-        
+
         this.emit(ConnectorRegistryEvent.CONNECTOR_UPDATED, {
           id,
-          updates: config
+          updates: config,
         })
       }
     })
@@ -508,12 +527,12 @@ export class ConnectorRegistry extends EventEmitter {
   public async shutdown(): Promise<void> {
     // Shut down memory system
     await MemorySystem.shutdown()
-    
+
     this.isInitialized = false
     this.connectors.clear()
     this.connectorConfigs.clear()
     this.activeConnectors.clear()
-    
+
     console.log('AI Connector Registry shut down')
   }
 }

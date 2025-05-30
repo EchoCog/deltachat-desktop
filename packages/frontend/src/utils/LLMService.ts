@@ -33,7 +33,7 @@ export class LLMService {
     apiEndpoint: 'https://api.openai.com/v1/chat/completions',
     model: 'gpt-3.5-turbo',
     temperature: 0.7,
-    maxTokens: 1000
+    maxTokens: 1000,
   }
 
   private constructor() {}
@@ -55,7 +55,7 @@ export class LLMService {
   ): Promise<string> {
     try {
       const config = { ...this.config, ...overrideConfig }
-      
+
       if (!config.apiKey) {
         throw new Error('API Key is not configured')
       }
@@ -64,21 +64,23 @@ export class LLMService {
         model: config.model || 'gpt-3.5-turbo',
         messages,
         temperature: config.temperature,
-        max_tokens: config.maxTokens
+        max_tokens: config.maxTokens,
       }
 
       const response = await fetch(config.apiEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${config.apiKey}`
+          Authorization: `Bearer ${config.apiKey}`,
         },
-        body: JSON.stringify(requestPayload)
+        body: JSON.stringify(requestPayload),
       })
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(`API Error: ${response.status} - ${JSON.stringify(errorData)}`)
+        throw new Error(
+          `API Error: ${response.status} - ${JSON.stringify(errorData)}`
+        )
       }
 
       const data = await response.json()
@@ -97,29 +99,30 @@ export class LLMService {
     const messages: ChatMessage[] = [
       {
         role: 'system',
-        content: systemPrompt
-      }
+        content: systemPrompt,
+      },
     ]
 
     // Add conversation history as context if available
     if (conversationHistory && conversationHistory.trim().length > 0) {
       messages.push({
         role: 'user',
-        content: `Here is the recent conversation history for context:\n${conversationHistory}\n\nPlease keep this in mind when responding to my next message.`
+        content: `Here is the recent conversation history for context:\n${conversationHistory}\n\nPlease keep this in mind when responding to my next message.`,
       })
-      
+
       messages.push({
         role: 'assistant',
-        content: "I'll keep this conversation context in mind when responding to your next message."
+        content:
+          "I'll keep this conversation context in mind when responding to your next message.",
       })
     }
 
     // Add the current user message
     messages.push({
       role: 'user',
-      content: userInput
+      content: userInput,
     })
 
     return this.generateResponse(messages)
   }
-} 
+}

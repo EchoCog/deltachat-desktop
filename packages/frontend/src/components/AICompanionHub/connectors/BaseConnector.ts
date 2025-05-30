@@ -30,7 +30,7 @@ export enum AICapability {
   FUNCTION_CALLING = 'function_calling',
   STRUCTURED_OUTPUT = 'structured_output',
   FINE_TUNING = 'fine_tuning',
-  RETRIEVAL = 'retrieval'
+  RETRIEVAL = 'retrieval',
 }
 
 export interface Message {
@@ -90,7 +90,7 @@ export abstract class BaseConnector extends EventEmitter {
     promptTokens: 0,
     completionTokens: 0,
     totalTokens: 0,
-    lastReset: Date.now()
+    lastReset: Date.now(),
   }
 
   constructor(config: AIConnectorConfig) {
@@ -127,7 +127,8 @@ export abstract class BaseConnector extends EventEmitter {
     // Ensure authenticated
     if (!this.authenticated) {
       const success = await this.authenticate()
-      if (!success) throw new Error(`Failed to authenticate ${this.config.name}`)
+      if (!success)
+        throw new Error(`Failed to authenticate ${this.config.name}`)
     }
 
     // Get or create conversation
@@ -136,7 +137,7 @@ export abstract class BaseConnector extends EventEmitter {
       context = {
         conversationId,
         messages: [],
-        metadata: {}
+        metadata: {},
       }
       this.activeConversations.set(conversationId, context)
     }
@@ -146,13 +147,16 @@ export abstract class BaseConnector extends EventEmitter {
       id: `msg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       role: 'user',
       content: message,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     }
     context.messages.push(userMessage)
 
     // Get relevant memories for enhanced context
-    const relevantMemories = await this.retrieveRelevantMemories(message, conversationId)
-    
+    const relevantMemories = await this.retrieveRelevantMemories(
+      message,
+      conversationId
+    )
+
     // Add system message with memories if any
     if (relevantMemories.length > 0) {
       const memoryContent = this.formatMemoriesForPrompt(relevantMemories)
@@ -160,21 +164,21 @@ export abstract class BaseConnector extends EventEmitter {
         id: `sys_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
         role: 'system',
         content: memoryContent,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       }
       context.messages.push(systemMemoryMessage)
     }
 
     // Get AI response
     const response = await this.generateResponse(context, functions)
-    
+
     // Add assistant message
     const assistantMessage: Message = {
       id: response.messageId,
       role: 'assistant',
       content: response.content,
       timestamp: Date.now(),
-      functionCall: response.functionCall
+      functionCall: response.functionCall,
     }
     context.messages.push(assistantMessage)
 
@@ -207,27 +211,37 @@ export abstract class BaseConnector extends EventEmitter {
     // In a real implementation, use NLP for better topic extraction
     const content = `User: ${userMessage.content}\nAssistant: ${assistantMessage.content}`
     const allText = content.toLowerCase()
-    
+
     // Simple topic extraction based on word frequency
-    const commonWords = ['the', 'and', 'a', 'to', 'of', 'in', 'is', 'that', 'for']
+    const commonWords = [
+      'the',
+      'and',
+      'a',
+      'to',
+      'of',
+      'in',
+      'is',
+      'that',
+      'for',
+    ]
     const words = allText
       .replace(/[^\w\s]/g, '')
       .split(/\s+/)
       .filter(word => word.length > 3 && !commonWords.includes(word))
-    
+
     // Count word frequency
     const wordCount: Record<string, number> = {}
     words.forEach(word => {
       if (!wordCount[word]) wordCount[word] = 0
       wordCount[word]++
     })
-    
+
     // Sort by frequency and take top 5 as topics
     const topics = Object.entries(wordCount)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
       .map(([word]) => word)
-    
+
     // Create memory
     const memory: AIMemory = {
       id: `mem_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
@@ -238,9 +252,9 @@ export abstract class BaseConnector extends EventEmitter {
       topics,
       importance: 0.7, // Default importance
       relationships: {},
-      emotionalTone: this.detectEmotionalTone(content)
+      emotionalTone: this.detectEmotionalTone(content),
     }
-    
+
     // Store in memory system
     await MemorySystem.addMemory(memory)
   }
@@ -253,8 +267,11 @@ export abstract class BaseConnector extends EventEmitter {
     conversationId: string
   ): Promise<AIMemory[]> {
     // Search for relevant memories
-    const searchResults = await MemorySystem.searchMemories(message, this.config.id)
-    
+    const searchResults = await MemorySystem.searchMemories(
+      message,
+      this.config.id
+    )
+
     // Limit to configured number of memories per request
     return searchResults.slice(0, this.config.memoriesPerRequest || 3)
   }
@@ -264,16 +281,16 @@ export abstract class BaseConnector extends EventEmitter {
    */
   protected formatMemoriesForPrompt(memories: AIMemory[]): string {
     if (memories.length === 0) return ''
-    
+
     let memoryPrompt = 'RELEVANT MEMORIES:\n\n'
-    
+
     memories.forEach((memory, index) => {
       const timeAgo = this.getTimeAgo(memory.timestamp)
       memoryPrompt += `Memory ${index + 1} (${timeAgo}):\n${memory.content}\n\n`
     })
-    
+
     memoryPrompt += 'Use these memories to inform your response if relevant.\n'
-    
+
     return memoryPrompt
   }
 
@@ -283,21 +300,21 @@ export abstract class BaseConnector extends EventEmitter {
   protected getTimeAgo(timestamp: number): string {
     const now = Date.now()
     const seconds = Math.floor((now - timestamp) / 1000)
-    
+
     if (seconds < 60) return `${seconds} seconds ago`
-    
+
     const minutes = Math.floor(seconds / 60)
     if (minutes < 60) return `${minutes} minutes ago`
-    
+
     const hours = Math.floor(minutes / 60)
     if (hours < 24) return `${hours} hours ago`
-    
+
     const days = Math.floor(hours / 24)
     if (days < 30) return `${days} days ago`
-    
+
     const months = Math.floor(days / 30)
     if (months < 12) return `${months} months ago`
-    
+
     const years = Math.floor(months / 12)
     return `${years} years ago`
   }
@@ -307,38 +324,56 @@ export abstract class BaseConnector extends EventEmitter {
    */
   protected detectEmotionalTone(text: string): string {
     const lowerText = text.toLowerCase()
-    
+
     // Simplified emotional detection
     // In a real implementation, use sentiment analysis
     const emotions = [
-      { name: 'joy', keywords: ['happy', 'joy', 'excited', 'glad', 'wonderful', 'love'] },
-      { name: 'sadness', keywords: ['sad', 'unhappy', 'disappointed', 'sorry', 'regret'] },
-      { name: 'anger', keywords: ['angry', 'upset', 'annoyed', 'frustrated', 'mad'] },
-      { name: 'fear', keywords: ['afraid', 'scared', 'worried', 'nervous', 'terrified'] },
-      { name: 'surprise', keywords: ['surprised', 'amazed', 'astonished', 'shocked'] },
-      { name: 'neutral', keywords: [] } // Default
+      {
+        name: 'joy',
+        keywords: ['happy', 'joy', 'excited', 'glad', 'wonderful', 'love'],
+      },
+      {
+        name: 'sadness',
+        keywords: ['sad', 'unhappy', 'disappointed', 'sorry', 'regret'],
+      },
+      {
+        name: 'anger',
+        keywords: ['angry', 'upset', 'annoyed', 'frustrated', 'mad'],
+      },
+      {
+        name: 'fear',
+        keywords: ['afraid', 'scared', 'worried', 'nervous', 'terrified'],
+      },
+      {
+        name: 'surprise',
+        keywords: ['surprised', 'amazed', 'astonished', 'shocked'],
+      },
+      { name: 'neutral', keywords: [] }, // Default
     ]
-    
+
     // Count emotion keyword matches
     const emotionScores: Record<string, number> = {}
     emotions.forEach(emotion => {
       if (emotion.name === 'neutral') return
-      
-      emotionScores[emotion.name] = emotion.keywords.reduce((score, keyword) => {
-        const regex = new RegExp(`\\b${keyword}\\b`, 'gi')
-        const matches = (lowerText.match(regex) || []).length
-        return score + matches
-      }, 0)
+
+      emotionScores[emotion.name] = emotion.keywords.reduce(
+        (score, keyword) => {
+          const regex = new RegExp(`\\b${keyword}\\b`, 'gi')
+          const matches = (lowerText.match(regex) || []).length
+          return score + matches
+        },
+        0
+      )
     })
-    
+
     // Find emotion with highest score
     const entries = Object.entries(emotionScores)
     if (entries.length === 0) return 'neutral'
-    
+
     const highestEmotion = entries.reduce((highest, current) => {
       return current[1] > highest[1] ? current : highest
     })
-    
+
     // Return neutral if no emotions detected
     return highestEmotion[1] > 0 ? highestEmotion[0] : 'neutral'
   }
@@ -363,7 +398,7 @@ export abstract class BaseConnector extends EventEmitter {
       promptTokens: 0,
       completionTokens: 0,
       totalTokens: 0,
-      lastReset: Date.now()
+      lastReset: Date.now(),
     }
     this.emit('tokenUsageReset')
   }

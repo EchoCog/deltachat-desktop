@@ -251,8 +251,8 @@ export default function Settings({ onClose }: DialogProps) {
             dataTestid='settings-bot'
           />
           <DialogBody>
-            <BotSettings 
-              settingsStore={settingsStore} 
+            <BotSettings
+              settingsStore={settingsStore}
               onNavigateToAdvanced={() => setSettingsMode('advanced')}
             />
           </DialogBody>

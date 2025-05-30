@@ -32,8 +32,10 @@ export class PlaywrightAutomation {
 
     try {
       // We'll use the Node.js integration to run the Playwright server
-      const result = await runtime.runCommand('npx playwright install chromium && node -e "console.log(\'Playwright is ready\')"')
-      
+      const result = await runtime.runCommand(
+        'npx playwright install chromium && node -e "console.log(\'Playwright is ready\')"'
+      )
+
       log.info('Playwright initialization result:', result)
       this.initialized = true
       return true
@@ -59,7 +61,7 @@ export class PlaywrightAutomation {
     try {
       // Use DuckDuckGo as it's more privacy-focused
       const searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(query)}`
-      
+
       // We're using the runtime interface to run a Node.js script that uses Playwright
       const scriptPath = await this.createTempScript(`
         const { chromium } = require('playwright');
@@ -83,9 +85,9 @@ export class PlaywrightAutomation {
           console.log(JSON.stringify(results));
         })();
       `)
-      
+
       const output = await runtime.runCommand(`node "${scriptPath}"`)
-      
+
       // Parse the results
       try {
         const results = JSON.parse(output)
@@ -96,7 +98,7 @@ export class PlaywrightAutomation {
       }
     } catch (error) {
       log.error('Error searching the web:', error)
-      return "I encountered an error while trying to search the web."
+      return 'I encountered an error while trying to search the web.'
     }
   }
 
@@ -134,12 +136,12 @@ export class PlaywrightAutomation {
           console.log(screenshotPath);
         })();
       `)
-      
+
       const screenshotPath = await runtime.runCommand(`node "${scriptPath}"`)
       return screenshotPath.trim()
     } catch (error) {
       log.error('Error capturing webpage:', error)
-      throw new Error("Failed to capture the webpage")
+      throw new Error('Failed to capture the webpage')
     }
   }
 
@@ -159,13 +161,15 @@ export class PlaywrightAutomation {
    * @param results Array of search result objects
    * @returns Formatted string
    */
-  private formatSearchResults(results: Array<{ title: string, snippet: string }>): string {
+  private formatSearchResults(
+    results: Array<{ title: string; snippet: string }>
+  ): string {
     if (!results || results.length === 0) {
       return "I couldn't find any relevant information."
     }
 
     let formattedResults = "Here's what I found:\n\n"
-    
+
     results.forEach((result, index) => {
       formattedResults += `${index + 1}. ${result.title}\n${result.snippet}\n\n`
     })
@@ -179,4 +183,4 @@ export class PlaywrightAutomation {
   public isAvailable(): boolean {
     return this.initialized
   }
-} 
+}

@@ -18,7 +18,7 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
-    
+
     h2 {
       margin: 0;
       font-size: 1.5rem;
@@ -27,13 +27,13 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      
+
       .header-icon {
         color: #3b82f6;
         filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.3));
       }
     }
-    
+
     .close-button {
       background: none;
       border: none;
@@ -41,23 +41,25 @@
       cursor: pointer;
       transition: color 0.2s;
       display: flex;
-      
+
       &:hover {
         color: #475569;
       }
     }
-    
+
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
       height: 1px;
-      background: linear-gradient(to right, 
-        rgba(59, 130, 246, 0), 
-        rgba(59, 130, 246, 0.3), 
-        rgba(59, 130, 246, 0));
+      background: linear-gradient(
+        to right,
+        rgba(59, 130, 246, 0),
+        rgba(59, 130, 246, 0.3),
+        rgba(59, 130, 246, 0)
+      );
     }
   }
 
@@ -68,9 +70,9 @@
     padding: 12px 24px 20px;
     background-color: #f8fafc;
     position: relative;
-    
+
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 30px;
       left: 60px;
@@ -79,7 +81,7 @@
       background-color: #e2e8f0;
       z-index: 1;
     }
-    
+
     .progress-step {
       display: flex;
       flex-direction: column;
@@ -87,7 +89,7 @@
       gap: 8px;
       position: relative;
       z-index: 2;
-      
+
       .step-indicator {
         width: 36px;
         height: 36px;
@@ -101,27 +103,27 @@
         font-weight: 600;
         transition: all 0.3s;
       }
-      
+
       .step-label {
         font-size: 0.8rem;
         color: #64748b;
         transition: color 0.3s;
       }
-      
+
       &.completed {
         .step-indicator {
           background-color: #dbeafe;
           border-color: #60a5fa;
           color: #2563eb;
         }
-        
+
         .step-label {
           color: #2563eb;
         }
-        
+
         cursor: pointer;
       }
-      
+
       &.current {
         .step-indicator {
           background-color: #3b82f6;
@@ -129,7 +131,7 @@
           color: #ffffff;
           box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
         }
-        
+
         .step-label {
           color: #0f172a;
           font-weight: 500;
@@ -141,26 +143,26 @@
   // Breathtaking content area
   .creator-content {
     padding: 24px;
-    
+
     .step {
       h3 {
         margin: 0 0 8px;
         font-size: 1.25rem;
         color: #0f172a;
       }
-      
+
       .step-description {
         margin: 0 0 24px;
         color: #64748b;
       }
-      
+
       // Magnificent platform selection
       &.platform-selection {
         .platform-options {
           display: flex;
           flex-direction: column;
           gap: 12px;
-          
+
           .platform-option {
             display: flex;
             align-items: center;
@@ -171,16 +173,16 @@
             transition: all 0.2s;
             cursor: pointer;
             position: relative;
-            
+
             &:hover {
               border-color: #cbd5e1;
               box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             }
-            
+
             &.selected {
               box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
             }
-            
+
             .platform-icon {
               display: flex;
               align-items: center;
@@ -191,36 +193,36 @@
               margin-right: 16px;
               background-color: #f8fafc;
             }
-            
+
             .platform-info {
               flex: 1;
-              
+
               h4 {
                 margin: 0 0 4px;
                 font-size: 1.05rem;
                 font-weight: 500;
                 color: #0f172a;
               }
-              
+
               p {
                 margin: 0;
                 color: #64748b;
                 font-size: 0.9rem;
               }
             }
-            
+
             .selected-indicator {
               margin-left: 16px;
             }
           }
         }
       }
-      
+
       // Revolutionary personality creation
       &.personality-creation {
         .form-group {
           margin-bottom: 20px;
-          
+
           label {
             display: block;
             margin-bottom: 6px;
@@ -228,39 +230,42 @@
             font-weight: 500;
             color: #334155;
           }
-          
-          input, textarea {
+
+          input,
+          textarea {
             width: 100%;
             padding: 10px 14px;
             border-radius: 6px;
             border: 1px solid #e2e8f0;
             font-size: 0.95rem;
             background-color: #ffffff;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            
+            transition:
+              border-color 0.2s,
+              box-shadow 0.2s;
+
             &:focus {
               border-color: #3b82f6;
               box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
               outline: none;
             }
-            
+
             &::placeholder {
               color: #94a3b8;
             }
           }
-          
+
           textarea {
             resize: vertical;
             min-height: 120px;
           }
         }
       }
-      
+
       // Magnificent API configuration
       &.api-configuration {
         .form-group {
           margin-bottom: 24px;
-          
+
           label {
             display: block;
             margin-bottom: 6px;
@@ -268,10 +273,10 @@
             font-weight: 500;
             color: #334155;
           }
-          
+
           .api-key-input {
             position: relative;
-            
+
             input {
               width: 100%;
               padding: 10px 14px;
@@ -281,21 +286,26 @@
               font-family: monospace;
               letter-spacing: 1px;
               background-color: #ffffff;
-              transition: border-color 0.2s, box-shadow 0.2s;
-              
+              transition:
+                border-color 0.2s,
+                box-shadow 0.2s;
+
               &:focus {
                 border-color: #3b82f6;
                 box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
                 outline: none;
               }
-              
+
               &::placeholder {
-                font-family: system-ui, -apple-system, sans-serif;
+                font-family:
+                  system-ui,
+                  -apple-system,
+                  sans-serif;
                 letter-spacing: normal;
                 color: #94a3b8;
               }
             }
-            
+
             .api-key-info {
               position: absolute;
               right: 12px;
@@ -303,13 +313,13 @@
               transform: translateY(-50%);
               color: #64748b;
               cursor: help;
-              
+
               &:hover .tooltip {
                 opacity: 1;
                 visibility: visible;
                 transform: translateY(0);
               }
-              
+
               .tooltip {
                 position: absolute;
                 bottom: calc(100% + 10px);
@@ -324,9 +334,9 @@
                 visibility: hidden;
                 transform: translateY(6px);
                 transition: all 0.2s;
-                
+
                 &::after {
-                  content: "";
+                  content: '';
                   position: absolute;
                   top: 100%;
                   right: 8px;
@@ -337,32 +347,32 @@
               }
             }
           }
-          
+
           .api-note {
             margin: 6px 0 0;
             font-size: 0.8rem;
             color: #94a3b8;
           }
         }
-        
+
         .personality-traits {
           h4 {
             margin: 0 0 6px;
             font-size: 1.1rem;
             color: #0f172a;
           }
-          
+
           p {
             margin: 0 0 16px;
             color: #64748b;
             font-size: 0.9rem;
           }
-          
+
           .traits-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 16px;
-            
+
             .trait-slider {
               label {
                 display: flex;
@@ -372,14 +382,14 @@
                 font-size: 0.9rem;
                 font-weight: 500;
                 color: #334155;
-                
+
                 .trait-value {
                   font-weight: normal;
                   color: #64748b;
                 }
               }
-              
-              input[type="range"] {
+
+              input[type='range'] {
                 width: 100%;
                 height: 6px;
                 -webkit-appearance: none;
@@ -387,7 +397,7 @@
                 border-radius: 3px;
                 outline: none;
                 margin: 6px 0;
-                
+
                 &::-webkit-slider-thumb {
                   -webkit-appearance: none;
                   width: 18px;
@@ -398,7 +408,7 @@
                   cursor: pointer;
                   border: 2px solid #3b82f6;
                 }
-                
+
                 &::-moz-range-thumb {
                   width: 16px;
                   height: 16px;
@@ -413,14 +423,14 @@
           }
         }
       }
-      
+
       // Breathtaking capabilities selection
       &.capabilities-selection {
         .capabilities-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
           gap: 16px;
-          
+
           .capability-card {
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
@@ -434,30 +444,30 @@
             transition: all 0.2s;
             cursor: pointer;
             position: relative;
-            
+
             &:hover {
               border-color: #cbd5e1;
               box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             }
-            
+
             &.selected {
               border-color: #3b82f6;
               background-color: #eff6ff;
-              
+
               .capability-icon {
                 color: #3b82f6;
               }
-              
+
               .capability-name {
                 color: #1d4ed8;
               }
             }
-            
+
             &.disabled {
               opacity: 0.6;
               cursor: not-allowed;
               pointer-events: none;
-              
+
               .capability-unsupported {
                 position: absolute;
                 top: 6px;
@@ -469,19 +479,19 @@
                 border-radius: 4px;
               }
             }
-            
+
             .capability-icon {
               color: #64748b;
               transition: color 0.2s;
             }
-            
+
             .capability-name {
               font-size: 0.9rem;
               font-weight: 500;
               color: #334155;
               transition: color 0.2s;
             }
-            
+
             .capability-selected {
               position: absolute;
               top: 8px;
@@ -492,7 +502,7 @@
         }
       }
     }
-    
+
     // Error message
     .error-message {
       margin: 20px 0;
@@ -506,51 +516,51 @@
       gap: 10px;
       font-size: 0.9rem;
     }
-    
+
     // Magnificent action buttons
     .creator-actions {
       display: flex;
       justify-content: flex-end;
       gap: 12px;
       margin-top: 24px;
-      
+
       .action-button {
         padding: 10px 20px;
         border-radius: 6px;
         font-weight: 500;
         cursor: pointer;
         transition: all 0.2s;
-        
+
         &.back {
           background-color: #ffffff;
           border: 1px solid #e2e8f0;
           color: #64748b;
-          
+
           &:hover {
             border-color: #cbd5e1;
             color: #475569;
           }
         }
-        
+
         &.next {
           background-color: #3b82f6;
           border: 1px solid #2563eb;
           color: #ffffff;
-          
+
           &:hover {
             background-color: #2563eb;
           }
-          
+
           &.disabled {
             background-color: #93c5fd;
             border-color: #93c5fd;
             cursor: not-allowed;
           }
-          
+
           &.loading {
             padding-left: 42px;
             position: relative;
-            
+
             .spinner {
               width: 18px;
               height: 18px;
@@ -593,7 +603,7 @@
   justify-content: center;
   z-index: 1000;
   padding: 20px;
-  
+
   .ai-companion-creator {
     max-height: 90vh;
     overflow-y: auto;

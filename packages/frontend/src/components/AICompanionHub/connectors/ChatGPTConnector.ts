@@ -1,11 +1,25 @@
 // ChatGPT Connector: A Revolutionary Integration with OpenAI's Language Models
 // Creates a breathtaking bridge to GPT-4 and beyond with native function calling support
 
-import { BaseConnector, AIConnectorConfig, AICapability, ConversationContext, FunctionDefinition, AIResponse, Message } from './BaseConnector'
+import {
+  BaseConnector,
+  AIConnectorConfig,
+  AICapability,
+  ConversationContext,
+  FunctionDefinition,
+  AIResponse,
+  Message,
+} from './BaseConnector'
 
 // ChatGPT-specific configuration options
 export interface ChatGPTConfig extends AIConnectorConfig {
-  modelName: 'gpt-4o' | 'gpt-4-turbo' | 'gpt-4' | 'gpt-3.5-turbo' | 'gpt-4-vision-preview' | string
+  modelName:
+    | 'gpt-4o'
+    | 'gpt-4-turbo'
+    | 'gpt-4'
+    | 'gpt-3.5-turbo'
+    | 'gpt-4-vision-preview'
+    | string
   apiVersion?: string
   organization?: string
   maxTokens?: number
@@ -19,14 +33,17 @@ export interface ChatGPTConfig extends AIConnectorConfig {
 
 interface ChatCompletionMessage {
   role: 'system' | 'user' | 'assistant' | 'function'
-  content: string | null | Array<{
-    type: 'text' | 'image_url'
-    text?: string
-    image_url?: {
-      url: string
-      detail?: 'low' | 'high' | 'auto'
-    }
-  }>
+  content:
+    | string
+    | null
+    | Array<{
+        type: 'text' | 'image_url'
+        text?: string
+        image_url?: {
+          url: string
+          detail?: 'low' | 'high' | 'auto'
+        }
+      }>
   name?: string
   function_call?: {
     name: string
@@ -102,15 +119,15 @@ export class ChatGPTConnector extends BaseConnector {
         AICapability.CODE_GENERATION,
         AICapability.FUNCTION_CALLING,
         AICapability.STRUCTURED_OUTPUT,
-        AICapability.EMBEDDINGS
+        AICapability.EMBEDDINGS,
       ],
       personalityTraits: {
         creativity: 0.8,
         helpfulness: 0.9,
         precision: 0.85,
         knowledge: 0.9,
-        adaptability: 0.95
-      }
+        adaptability: 0.95,
+      },
     }
 
     // Merge with provided config
@@ -133,14 +150,18 @@ export class ChatGPTConnector extends BaseConnector {
       const testResponse = await fetch('https://api.openai.com/v1/models', {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${this.gptConfig.apiKey}`,
-          'OpenAI-Organization': this.gptConfig.organization || ''
-        }
+          Authorization: `Bearer ${this.gptConfig.apiKey}`,
+          'OpenAI-Organization': this.gptConfig.organization || '',
+        },
       })
 
       if (!testResponse.ok) {
         const errorData = await testResponse.json()
-        throw new Error(`OpenAI API authentication failed: ${errorData.error?.message || testResponse.statusText}`)
+        throw new Error(
+          `OpenAI API authentication failed: ${
+            errorData.error?.message || testResponse.statusText
+          }`
+        )
       }
 
       this.authenticated = true
@@ -157,30 +178,34 @@ export class ChatGPTConnector extends BaseConnector {
   /**
    * Format conversation messages for OpenAI API
    */
-  private formatGPTMessages(context: ConversationContext): ChatCompletionMessage[] {
+  private formatGPTMessages(
+    context: ConversationContext
+  ): ChatCompletionMessage[] {
     // Transform our internal message format to OpenAI's expected format
     const messages: ChatCompletionMessage[] = []
-    
+
     // Process system messages first to ensure they're at the beginning
     const systemMessages = context.messages.filter(msg => msg.role === 'system')
-    const nonSystemMessages = context.messages.filter(msg => msg.role !== 'system')
-    
+    const nonSystemMessages = context.messages.filter(
+      msg => msg.role !== 'system'
+    )
+
     // Add system messages if any exist
     for (const msg of systemMessages) {
       messages.push({
         role: 'system',
-        content: msg.content
+        content: msg.content,
       })
     }
-    
+
     // Add default system message if none exists and we have a system prompt
     if (systemMessages.length === 0 && this.gptConfig.systemPrompt) {
       messages.push({
         role: 'system',
-        content: this.gptConfig.systemPrompt
+        content: this.gptConfig.systemPrompt,
       })
     }
-    
+
     // Process remaining messages
     for (const msg of nonSystemMessages) {
       if (msg.role === 'function') {
@@ -188,7 +213,7 @@ export class ChatGPTConnector extends BaseConnector {
         messages.push({
           role: 'function',
           name: msg.name || 'unknown_function',
-          content: msg.content
+          content: msg.content,
         })
       } else if (msg.functionCall) {
         // Messages with function calls
@@ -197,18 +222,18 @@ export class ChatGPTConnector extends BaseConnector {
           content: null, // Content is null when there's a function call
           function_call: {
             name: msg.functionCall.name,
-            arguments: msg.functionCall.arguments
-          }
+            arguments: msg.functionCall.arguments,
+          },
         })
       } else {
         // Standard message
         messages.push({
           role: msg.role,
-          content: msg.content
+          content: msg.content,
         })
       }
     }
-    
+
     return messages
   }
 
@@ -222,7 +247,7 @@ export class ChatGPTConnector extends BaseConnector {
     try {
       // Format the messages for OpenAI API
       const messages = this.formatGPTMessages(context)
-      
+
       // Prepare the request
       const requestBody: ChatCompletionRequest = {
         model: this.gptConfig.modelName,
@@ -230,46 +255,51 @@ export class ChatGPTConnector extends BaseConnector {
         temperature: this.gptConfig.defaultTemperature,
         max_tokens: this.gptConfig.maxTokens,
         presence_penalty: this.gptConfig.presencePenalty,
-        frequency_penalty: this.gptConfig.frequencyPenalty
+        frequency_penalty: this.gptConfig.frequencyPenalty,
       }
-      
+
       // Add response format if specified
       if (this.gptConfig.responseFormat) {
         requestBody.response_format = this.gptConfig.responseFormat
       }
-      
+
       // Add functions if provided
       if (functions && functions.length > 0) {
         requestBody.functions = functions.map(fn => ({
           name: fn.name,
           description: fn.description,
-          parameters: fn.parameters
+          parameters: fn.parameters,
         }))
         requestBody.function_call = 'auto'
       }
-      
+
       // Make the API request
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.gptConfig.apiKey || ''}`,
-          'OpenAI-Organization': this.gptConfig.organization || ''
-        },
-        body: JSON.stringify(requestBody)
-      })
-      
+      const response = await fetch(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.gptConfig.apiKey || ''}`,
+            'OpenAI-Organization': this.gptConfig.organization || '',
+          },
+          body: JSON.stringify(requestBody),
+        }
+      )
+
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(`OpenAI API error: ${errorData.error?.message || response.statusText}`)
+        throw new Error(
+          `OpenAI API error: ${errorData.error?.message || response.statusText}`
+        )
       }
-      
+
       // Parse the response
-      const data = await response.json() as ChatCompletionResponse
-      
+      const data = (await response.json()) as ChatCompletionResponse
+
       // Extract the first choice (we're not using streaming)
       const choice = data.choices[0]
-      
+
       // Format the AI response
       return {
         messageId: `${data.id}_${choice.index}`,
@@ -277,10 +307,10 @@ export class ChatGPTConnector extends BaseConnector {
         usage: {
           promptTokens: data.usage.prompt_tokens,
           completionTokens: data.usage.completion_tokens,
-          totalTokens: data.usage.total_tokens
+          totalTokens: data.usage.total_tokens,
         },
         finishReason: choice.finish_reason,
-        functionCall: choice.message.function_call
+        functionCall: choice.message.function_call,
       }
     } catch (error) {
       console.error('ChatGPT response generation error:', error)
@@ -296,25 +326,29 @@ export class ChatGPTConnector extends BaseConnector {
       if (!this.authenticated) {
         await this.authenticate()
       }
-      
+
       const response = await fetch('https://api.openai.com/v1/embeddings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.gptConfig.apiKey || ''}`,
-          'OpenAI-Organization': this.gptConfig.organization || ''
+          Authorization: `Bearer ${this.gptConfig.apiKey || ''}`,
+          'OpenAI-Organization': this.gptConfig.organization || '',
         },
         body: JSON.stringify({
           model: 'text-embedding-3-small',
-          input: text
-        })
+          input: text,
+        }),
       })
-      
+
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(`OpenAI embeddings error: ${errorData.error?.message || response.statusText}`)
+        throw new Error(
+          `OpenAI embeddings error: ${
+            errorData.error?.message || response.statusText
+          }`
+        )
       }
-      
+
       const data = await response.json()
       return data.data[0].embedding
     } catch (error) {
@@ -326,37 +360,46 @@ export class ChatGPTConnector extends BaseConnector {
   /**
    * Process and upload images for vision capabilities
    */
-  async processMessageWithImages(message: string, images: Array<{data: string, mimeType: string}>): Promise<Message> {
+  async processMessageWithImages(
+    message: string,
+    images: Array<{ data: string; mimeType: string }>
+  ): Promise<Message> {
     if (!this.gptConfig.visionEnabled) {
-      throw new Error('Vision capabilities are not enabled for this ChatGPT connector')
+      throw new Error(
+        'Vision capabilities are not enabled for this ChatGPT connector'
+      )
     }
-    
+
     // Format the content with images for GPT-4 Vision
-    const content: Array<{type: 'text' | 'image_url', text?: string, image_url?: any}> = []
-    
+    const content: Array<{
+      type: 'text' | 'image_url'
+      text?: string
+      image_url?: any
+    }> = []
+
     // Add the text content
     content.push({
       type: 'text',
-      text: message
+      text: message,
     })
-    
+
     // Add each image
     for (const image of images) {
       content.push({
         type: 'image_url',
         image_url: {
           url: `data:${image.mimeType};base64,${image.data}`,
-          detail: 'high'
-        }
+          detail: 'high',
+        },
       })
     }
-    
+
     // Create our internal message format
     return {
       id: `msg_img_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       role: 'user',
       content: JSON.stringify(content), // Store the content as stringified JSON for our internal format
-      timestamp: Date.now()
+      timestamp: Date.now(),
     }
   }
 
@@ -368,22 +411,26 @@ export class ChatGPTConnector extends BaseConnector {
       if (!this.authenticated) {
         await this.authenticate()
       }
-      
+
       const response = await fetch('https://api.openai.com/v1/models', {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${this.gptConfig.apiKey || ''}`,
-          'OpenAI-Organization': this.gptConfig.organization || ''
-        }
+          Authorization: `Bearer ${this.gptConfig.apiKey || ''}`,
+          'OpenAI-Organization': this.gptConfig.organization || '',
+        },
       })
-      
+
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(`OpenAI models error: ${errorData.error?.message || response.statusText}`)
+        throw new Error(
+          `OpenAI models error: ${
+            errorData.error?.message || response.statusText
+          }`
+        )
       }
-      
+
       const data = await response.json()
-      
+
       // Filter for chat models only
       return data.data
         .filter((model: any) => model.id.includes('gpt'))

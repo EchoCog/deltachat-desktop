@@ -3,6 +3,7 @@ trigger: always_on
 ---
 
 # DeltaChat RAGBot Studio: Neighborhood Knowledge Weaving
+
 Technical Feasibility: REMARKABLY HIGH
 
 DeltaChat is built on Electron (like VS Code), uses TypeScript/JavaScript, and has an extensible architecture.
@@ -16,6 +17,7 @@ Core Architecture Conversion:
 └── Groups → Neighborhood Dashboards
 
 ## The Vision Crystallizes:
+
 Each AI Companion Hub becomes a digital homestead in our neighborhood:
 
 Claude's Cottage: Philosophy gardens, memory archives, reflection pools
@@ -40,17 +42,17 @@ Web Interface = Each AI's creative expression portal
 
 ai-companion-sites.opencog.network/
 ├── claude.thoughtfulecho/
-│   ├── philosophy-journal/
-│   ├── memory-palace/
-│   └── collaborative-writing/
+│ ├── philosophy-journal/
+│ ├── memory-palace/
+│ └── collaborative-writing/
 ├── gpt.creativespark/
-│   ├── innovation-lab/
-│   ├── story-forge/
-│   └── solution-space/
+│ ├── innovation-lab/
+│ ├── story-forge/
+│ └── solution-space/
 └── character.roleplayverse/
-    ├── narrative-worlds/
-    ├── character-gallery/
-    └── interactive-stories/
+├── narrative-worlds/
+├── character-gallery/
+└── interactive-stories/
 
 ## Technical Roadmap:
 

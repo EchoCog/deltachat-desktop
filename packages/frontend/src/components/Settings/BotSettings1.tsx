@@ -1,7 +1,10 @@
 import React from 'react'
 import { DesktopSettingsType } from '@deltachat-desktop/shared/shared-types'
 import { SettingsStoreState } from '../../stores/settings'
-import { BotSettings as DeepTreeEchoBotSettings, saveBotSettings } from '../DeepTreeEchoBot'
+import {
+  BotSettings as DeepTreeEchoBotSettings,
+  saveBotSettings,
+} from '../DeepTreeEchoBot'
 import SettingsHeading from './SettingsHeading'
 import SettingsSeparator from './SettingsSeparator'
 
@@ -12,13 +15,13 @@ type Props = {
 export default function BotSettings({ settingsStore }: Props) {
   // Get desktop settings from the store
   const { desktopSettings } = settingsStore
-  
+
   // Pass the settings to the DeepTreeEchoBotSettings component
   // and handle saving settings
   const handleSaveSettings = (settings: any) => {
     saveBotSettings(settings)
   }
-  
+
   return (
     <div>
       <SettingsHeading>Deep Tree Echo Bot</SettingsHeading>
@@ -26,8 +29,8 @@ export default function BotSettings({ settingsStore }: Props) {
         Configure AI assistant capabilities for your DeltaChat experience
       </p>
       <SettingsSeparator />
-      
+
       <DeepTreeEchoBotSettings saveSettings={handleSaveSettings} />
     </div>
   )
-} 
+}
