@@ -22,13 +22,15 @@ export interface DeepTreeEchoBotOptions {
   embodimentEnabled: boolean
   cognitiveKeys: Partial<Record<CognitiveFunctionType, CognitiveFunctionConfig>>
   useParallelProcessing?: boolean
+  version?: string
 }
 
 interface BotSettingsProps {
   saveSettings: (settings: Partial<DeepTreeEchoBotOptions>) => void
+  onNavigateToMain?: () => void
 }
 
-const BotSettings: React.FC<BotSettingsProps> = ({ saveSettings }) => {
+const BotSettings: React.FC<BotSettingsProps> = ({ saveSettings, onNavigateToMain }) => {
   const [settings, setSettings] = useState<DeepTreeEchoBotOptions>({
     enabled: false,
     apiKey: '',
@@ -68,7 +70,8 @@ const BotSettings: React.FC<BotSettingsProps> = ({ saveSettings }) => {
           visionEnabled: desktopSettings.deepTreeEchoBotVisionEnabled || false,
           webAutomationEnabled: desktopSettings.deepTreeEchoBotWebAutomationEnabled || false,
           embodimentEnabled: desktopSettings.deepTreeEchoBotEmbodimentEnabled || false,
-          useParallelProcessing: desktopSettings.deepTreeEchoBotUseParallelProcessing !== false // Default to true
+          useParallelProcessing: true, // Default to true
+          version: '1.0.0' // Default version
         }
         
         // Load advanced cognitive function keys
@@ -128,6 +131,18 @@ const BotSettings: React.FC<BotSettingsProps> = ({ saveSettings }) => {
       activeFunctions: activeFunctions.length,
       totalTokens
     })
+  }
+  
+  // Handle advanced settings navigation or toggle
+  const handleOpenAdvancedSettings = () => {
+    if (onNavigateToMain) {
+      // If navigation callback is provided, use it to navigate to main settings
+      onNavigateToMain()
+    } else {
+      // Otherwise, toggle the advanced settings section visibility
+      setShowAdvancedKeys(!showAdvancedKeys)
+      log.info(`${showAdvancedKeys ? 'Hiding' : 'Showing'} advanced cognitive function settings`)
+    }
   }
   
   // Handle changes to basic settings
@@ -388,13 +403,18 @@ const BotSettings: React.FC<BotSettingsProps> = ({ saveSettings }) => {
       
       <div className='setting-section'>
         <div className='setting-section-header'>
-          <h4>Advanced: Cognitive Function API Keys</h4>
+          <h3>Advanced Cognitive Architecture</h3>
           <button 
             className='toggle-advanced-button'
-            onClick={() => setShowAdvancedKeys(!showAdvancedKeys)}
+            onClick={handleOpenAdvancedSettings}
+            disabled={!settings.enabled}
           >
             {showAdvancedKeys ? 'Hide Advanced Settings' : 'Show Advanced Settings'}
           </button>
+          <p className='setting-description'>
+            Configure specialized cognitive functions with separate API keys for Deep Tree Echo's multi-tiered architecture.
+            Each function handles different aspects of her thinking and memory processes.
+          </p>
         </div>
         
         {showAdvancedKeys && (

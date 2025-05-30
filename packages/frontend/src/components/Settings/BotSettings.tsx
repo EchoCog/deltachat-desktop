@@ -13,9 +13,10 @@ const log = getLogger('render/components/Settings/BotSettings')
 
 type Props = {
   settingsStore: SettingsStoreState
+  onNavigateToAdvanced?: () => void
 }
 
-export default function BotSettings({ settingsStore }: Props) {
+export default function BotSettings({ settingsStore, onNavigateToAdvanced }: Props) {
   const tx = useTranslationFunction()
   const [isLoading, setIsLoading] = useState(true)
   const [personaCore, setPersonaCore] = useState<PersonaCore | null>(null)
@@ -72,6 +73,15 @@ export default function BotSettings({ settingsStore }: Props) {
     loadSettings()
   }, [])
   
+  // Open advanced settings panel
+  const handleOpenAdvancedSettings = () => {
+    if (onNavigateToAdvanced) {
+      onNavigateToAdvanced()
+    } else {
+      log.warn('Navigation to advanced settings not available')
+    }
+  }
+
   // Handle saving settings - uses both the runtime method and the saveBotSettings method
   const handleSaveSetting = async (key: string, value: any) => {
     try {
@@ -282,6 +292,23 @@ export default function BotSettings({ settingsStore }: Props) {
         </p>
       </div>
       
+      <div className='bot-setting-item'>
+        <div className='bot-advanced-settings'>
+          <h3>Advanced Configuration</h3>
+          <button 
+            className='advanced-settings-button'
+            onClick={handleOpenAdvancedSettings}
+            disabled={!botEnabled}
+          >
+            Advanced Settings
+          </button>
+          <p className='setting-description'>
+            Configure more advanced bot features including specialized cognitive functions, 
+            parallel processing, and function-specific API keys.
+          </p>
+        </div>
+      </div>
+
       <div className='bot-setting-item'>
         <h3>Commands</h3>
         <ul className='bot-commands-list'>

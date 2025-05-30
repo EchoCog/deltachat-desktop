@@ -144,7 +144,7 @@ export default function Settings({ onClose }: DialogProps) {
             </SettingsIconButton>
             <ConnectivityButton />
             <SettingsIconButton
-              customIcon={<div className='material-icons'>message</div>}
+              customIcon={<div className='material-icons'>smart_toy</div>}
               onClick={() => setSettingsMode('bot_settings')}
               dataTestid='open-bot-settings'
             >
@@ -251,7 +251,10 @@ export default function Settings({ onClose }: DialogProps) {
             dataTestid='settings-bot'
           />
           <DialogBody>
-            <BotSettings settingsStore={settingsStore} />
+            <BotSettings 
+              settingsStore={settingsStore} 
+              onNavigateToAdvanced={() => setSettingsMode('advanced')}
+            />
           </DialogBody>
         </>
       )}
